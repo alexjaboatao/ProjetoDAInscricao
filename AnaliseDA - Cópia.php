@@ -52,6 +52,7 @@ require_once "selecionarDados.php";
                                                 for ($i=0; $i< 5; $i++){
                                                    $qtdDebitosInscrcao = count(anosInscrever($array[$i], $natureza, $pdo));
 												   echo '<a href="relacao.php?DA=S'.$array[$i].$natureza.' ">'.$qtdDebitosInscrcao.'<br></a>';
+												   //testando github
                                                 }
                                             ?>
                                   </td>
