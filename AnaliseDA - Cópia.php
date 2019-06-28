@@ -81,13 +81,13 @@ require_once "selecionarDados.php";
                                           <?php 
                                                 for ($i=0; $i< 5; $i++){
                                                     $inscreverDesparcelado = count(anosDesparcelados($array[$i], $natureza, $pdo));
-<<<<<<< HEAD
+
 													//comentario alex
                                                    echo '<a href="relacao.php?DA=P'.$array[$i].$natureza.' ">'.$inscreverDesparcelado.'<br></a>';
-=======
+
                                                    echo '<a href="relacao.php?DA=P'.$array[$i].$natureza.' ">'.$inscreverDesparcelado.'<br></a>';
 												   //comentario de teste marina
->>>>>>> master
+
                                                 }
                                             ?>
                                   </td>
