@@ -55,6 +55,7 @@ require_once "selecionarDados.php";
 												   echo '<a href="relacao.php?DA=S'.$array[$i].$natureza.' ">'.$qtdDebitosInscrcao.'<br></a>';
 												   //testando github
 												   //novo teste das ferias de alex 
+												   //novo teste de marina
                                                 }
                                             ?>
                                   </td>
