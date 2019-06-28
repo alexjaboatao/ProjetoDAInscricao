@@ -4,4 +4,8 @@ teste alex
 =======
 
 testemarina
+<<<<<<< Updated upstream
 >>>>>>> master
+=======
+teste alex
+>>>>>>> Stashed changes
