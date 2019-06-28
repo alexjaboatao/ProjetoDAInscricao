@@ -1,2 +1,7 @@
 teste
+<<<<<<< HEAD
 teste alex
+=======
+
+testemarina
+>>>>>>> master
