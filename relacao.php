@@ -17,7 +17,7 @@
 		}
 	function segunda(value){
 		var areaDesparc = document.getElementById('areaDesparc');
-		areaDesparc.select();
+		areaDesparc.select()
 		if (value == 'copy'){
 			document.execCommand('copy')
 			}
@@ -48,15 +48,7 @@ $natureza = substr($tratarInscricao, 5);
                       <div class="card-header" align="center" >
                         <h5><strong>Relação sem interrupção prescricional</strong> <button class="btn btn-primary" onClick="primeira('copy')" id="copiar">Copy</button></h5>
                         </div>
-                        	<textarea id="area" class="form-control">
-								<?php 
-								if(!empty($relacaoInscrever)){
-                                    foreach ($relacaoInscrever as $relacao){
-                                        echo $relacao[0].";";
-                                    }
-								}
-                                ?>
-                      		</textarea>
+       <textarea id="area" class="form-control"><?php if(!empty($relacaoInscrever)){foreach ($relacaoInscrever as $relacao){echo $relacao[0].";";}}?></textarea>
             </div>
             
             <?php } else if($tipo == "P") { $relacaoInscreverParc = anosDesparcelados($ex,$natureza,$pdo); ?>
@@ -65,13 +57,7 @@ $natureza = substr($tratarInscricao, 5);
                       <div class="card-header" align="center">
                         <h5><strong>Relação Desparcelados</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                         </div>
-                        	<textarea id="areaDesparc" class="form-control">
-								<?php 
-                                    foreach ($relacaoInscreverParc as $relacaoParc){
-                                        echo $relacaoParc[0].";";
-                                    }
-                                ?>
-                        	</textarea>
+<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoInscreverParc)){ foreach ($relacaoInscreverParc as $relacaoParc){echo $relacaoParc[0].";";}}?></textarea>
                 </div>
             <?php }?>
         </div>
