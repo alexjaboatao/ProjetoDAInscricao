@@ -16,7 +16,6 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="enviarArquivo.php">Inscrição Imobiliária e Mercantil</a>
               <a class="dropdown-item" href="enviarArquivo.php">Inscrição Indevidas</a>
-              <a class="dropdown-item" href="enviarArquivo.php">Problemas para Inscrição</a>
             </div>
           </li>
           </li>
