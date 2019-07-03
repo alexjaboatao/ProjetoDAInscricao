@@ -14,8 +14,8 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dívida Ativa</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="enviarArquivo.php">Inscrição Imobiliária e Mercantil</a>
-              <a class="dropdown-item" href="enviarArquivo.php">Inscrição Indevidas</a>
+              <a class="dropdown-item" href="TelaEnviarArquivo.php">Inscrição Imobiliária e Mercantil</a>
+              <a class="dropdown-item" href="TelaEnviarArquivo.php">Inscrição Indevidas</a>
             </div>
           </li>
           </li>

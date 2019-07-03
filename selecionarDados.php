@@ -6,26 +6,35 @@ function buscarExercicio($pdo, $natureza){
 	$buscar->execute();
 	return $buscar->fetchAll(PDO::FETCH_NUM);
 	}
-function anosInscrever($array, $natureza, $pdo){
+function anosInscrever($ano, $natureza, $pdo){
 	if ($natureza == "Imobiliária"){
-	$sql = "SELECT Sequencial, `$array`, CpfCnpjProprietário FROM baseacompanhamento$natureza WHERE `$array` != '' AND 
-	`$array` NOT LIKE '%-%' AND `CpfCnpjProprietário` != '' AND `CpfCnpjProprietário` NOT LIKE '999.999.999-99' AND 
-	`CpfCnpjProprietário` NOT LIKE '000.000.000-00' AND `CpfCnpjProprietário` NOT LIKE '00.000.000/0000-00' AND 
-	`CpfCnpjProprietário` NOT LIKE '99.999.999/9999-99' AND (length(`CpfCnpjProprietário`)>=14 AND length(`CpfCnpjProprietário`)<=18) AND 
-	`CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96'";
+	$sql = "SELECT * FROM baseacompanhamento$natureza WHERE 
+		((`$ano` LIKE '%Parcelamento%') OR (`$ano` != '' AND `$ano` NOT LIKE '%-%')) AND 
+		(`CpfCnpjProprietário` != '' AND 
+		`CpfCnpjProprietário` NOT LIKE '999.999.999-99' 
+		AND `CpfCnpjProprietário` NOT LIKE '000.000.000-00' 
+		AND `CpfCnpjProprietário` NOT LIKE '00.000.000/0000-00' 
+		AND `CpfCnpjProprietário` NOT LIKE '99.999.999/9999-99' 
+		AND (length(`CpfCnpjProprietário`)>=14 AND length(`CpfCnpjProprietário`)<=18) AND 
+		`CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96')";
 	$inscricao = $pdo->query($sql);
 	$inscricao->execute();
 	return $inscricao->fetchAll(PDO::FETCH_NUM);
 	} elseif ($natureza == "Mercantil"){
-		$sql = "SELECT InscriçãoMercantil, `$array`, CpfCnpj FROM baseacompanhamento$natureza WHERE `$array` != '' AND 
-		`$array` NOT LIKE '%-%' AND `CpfCnpj` != '' AND `CpfCnpj` NOT LIKE '999.999.999-99' AND `CpfCnpj` NOT LIKE '000.000.000-00' AND 
-		`CpfCnpj` NOT LIKE '00.000.000/0000-00' AND `CpfCnpj` NOT LIKE '99.999.999/9999-99' AND (length(`CpfCnpj`)>=14 AND length(`CpfCnpj`)<=18) AND 
-		`CpfCnpj` NOT LIKE '10.377.679/0001-96'";
+		$sql = "SELECT * FROM baseacompanhamento$natureza WHERE 
+		((`$ano` LIKE '%Parcelamento%') OR (`$ano` != '' AND `$ano` NOT LIKE '%-%')) AND 
+		(`CpfCnpj` != '' AND 
+		`CpfCnpj` NOT LIKE '999.999.999-99' 
+		AND `CpfCnpj` NOT LIKE '000.000.000-00' 
+		AND `CpfCnpj` NOT LIKE '00.000.000/0000-00' 
+		AND `CpfCnpj` NOT LIKE '99.999.999/9999-99' 
+		AND (length(`CpfCnpj`)>=14 AND length(`CpfCnpj`)<=18) AND 
+		`CpfCnpj` NOT LIKE '10.377.679/0001-96')";
 	$inscricao = $pdo->query($sql);
 	$inscricao->execute();
 	return $inscricao->fetchAll(PDO::FETCH_NUM);
-		}
 	}
+}
 function anosDesparcelados($array, $natureza, $pdo){
 	if ($natureza == "Imobiliária"){
 	$sql = "SELECT Sequencial, `$array`, CpfCnpjProprietário FROM baseacompanhamento$natureza WHERE `$array` != '' AND `$array` LIKE '%Parcelamento%' AND 
@@ -66,9 +75,9 @@ function retornarProblemasCadastroCPFCNPJ($ano, $natureza, $pdo){
 			AND ((`$ano` != '' AND `$ano` LIKE '%Parcelamento%') OR (`$ano` != '' AND `$ano` NOT LIKE '%-%'))";
 	
 		}
-	$inscricao = $pdo->query($sql);
-	$inscricao->execute();
-	return $inscricao->fetchAll(PDO::FETCH_NUM);
+		$inscricao = $pdo->query($sql);
+		$inscricao->execute();
+		return $inscricao->fetchAll(PDO::FETCH_NUM);
 	}
 	
 function retornarDebitosLancadosCNPJPrefeitura($ano, $natureza, $pdo){
@@ -86,6 +95,33 @@ function retornarDebitosLancadosCNPJPrefeitura($ano, $natureza, $pdo){
 	$inscricao = $pdo->query($sql);
 	$inscricao->execute();
 	return $inscricao->fetchAll(PDO::FETCH_NUM);
-	}
+}
+
+function retornarLancamentosRetroativos($ano, $natureza, $pdo){
+	if ($natureza == "Imobiliária"){
+	$sql = "SELECT * FROM `baseacompanhamento$natureza` WHERE 
+		`CpfCnpjProprietário` NOT LIKE '' AND 
+		`CpfCnpjProprietário` NOT LIKE '999.999.999-99' AND 
+		`CpfCnpjProprietário` NOT LIKE '000.000.000-00' AND 
+		`CpfCnpjProprietário` NOT LIKE '00.000.000/0000-00' AND 
+		`CpfCnpjProprietário` NOT LIKE '99.999.999/9999-99' AND 
+		(length(`CpfCnpjProprietário`)>=14 AND length(`CpfCnpjProprietário`)<=18) AND 
+		(`$ano` NOT LIKE '%Parcelamento%' AND `$ano` LIKE '%Lançado%')";
+	
+	} elseif ($natureza == "Mercantil"){
+		$sql = "SELECT * FROM `baseacompanhamento$natureza` WHERE 
+		`CpfCnpj` NOT LIKE '' AND 
+		`CpfCnpj` NOT LIKE '999.999.999-99' AND 
+		`CpfCnpj` NOT LIKE '000.000.000-00' AND 
+		`CpfCnpj` NOT LIKE '00.000.000/0000-00' AND 
+		`CpfCnpj` NOT LIKE '99.999.999/9999-99' AND 
+		(length(`CpfCnpj`)>=14 AND length(`CpfCnpj`)<=18) AND 
+		(`$ano` NOT LIKE '%Parcelamento%' AND `$ano` LIKE '%Lançado%')";
+	
+		}
+	$inscricao = $pdo->query($sql);
+	$inscricao->execute();
+	return $inscricao->fetchAll(PDO::FETCH_NUM);
+}
 	
 ?>

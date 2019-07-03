@@ -22,7 +22,7 @@
                                  <div class="card" style="width: 21rem;  height:13rem; ">
                                       <div class="card-header"><strong>Upload dos Arquivos</strong></div>     
                                             <div class="card-body">
-                                                    <form method="post" name="upload" action="tratamento_v3.php" enctype="multipart/form-data" >
+                                                <form method="post" name="upload" action="tratamento_v3.php" enctype="multipart/form-data" >
                                                     <div class="form-group"> 
                                                         <div class="custom-file">
                                                             <input type="file" name="arquivo" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
@@ -48,7 +48,7 @@
 											  
 											  if ($tabelaImobiliaria !== ""){
 												  ?>
-                                                 <form method="post" action="AnaliseDA.php">
+                                                 <form method="post" action="TelaResultadoInscricaoDA.php">
                                                  	<input type="hidden" name="natureza" value="Imobiliária">
                                      				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário</button>
                                                  </form>
@@ -60,7 +60,7 @@
 											  foreach ($buscarTabelaMercantil as $tabelaMercantil): endforeach;
 											  
 												 if ($tabelaMercantil !== ""){?>
-                                                 <form method="post" action="AnaliseDA.php">
+                                                 <form method="post" action="TelaResultadoInscricaoDA.php">
                                                  	<input type="hidden" name="natureza" value="Mercantil">
                                      				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil</button>
                                                  </form>

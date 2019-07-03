@@ -32,8 +32,8 @@
 				fclose($objeto);
 				
 								/*		*/
-		} else {
-			echo "<script>window.location='enviarArquivo.php';alert('Não foi enviado arquivo!');</script>" ;
+			} else {
+				echo "<script>window.location='enviarArquivo.php';alert('Não foi enviado arquivo!');</script>" ;
 			}
         ?>
 </body>

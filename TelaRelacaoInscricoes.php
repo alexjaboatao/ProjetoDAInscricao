@@ -87,6 +87,15 @@ $natureza = substr($tratarInscricao, 5);
                     </div>
 					<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosCNPJPrefeitura)){ foreach ($relacaoDebitosLancadosCNPJPrefeitura as $inscricaoLancPrefeitura){echo $inscricaoLancPrefeitura[0].";";}}?></textarea>
                 </div>
+			
+			<?php } else if($tipo == "R") { $relacaoDebitosLancadosRetroativamente = retornarLancamentosRetroativos($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Relação Débitos Lançados Retroativamente</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosRetroativamente)){ foreach ($relacaoDebitosLancadosRetroativamente as $inscricaoLancRetroativo){echo $inscricaoLancRetroativo[0].";";}}?></textarea>
+                </div>
             <?php }?>
         </div>
      </div>
