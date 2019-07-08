@@ -3,15 +3,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Sistema de Análise da Dívida ativa</title>
-</head>
 <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.css">
 <script src="bootstrap-4.3.1-dist/js/bootstrap.js"></script>
-<body>
+</head>
+ <body>
+ 
 <?php 
 require_once "menu.php";
 require_once "conexao.php";
 require_once "selecionarDados.php";
-require_once "GeracaoCI.php";
 	$pdo = conectar();
 	$natureza = $_POST["natureza"];
 	$bucarExercicio = buscarExercicio($pdo,$natureza);
@@ -25,6 +25,7 @@ require_once "GeracaoCI.php";
 	$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));
 	
  ?>
+
  <div class="container">
   	<div class="card">
     	<div class="card-header" align="center">
@@ -58,7 +59,7 @@ require_once "GeracaoCI.php";
                                 </tr>
                             </table>
                        <br>
-       <h6 style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Não foram considerados os débitos dos cadastros sem identificação do sujeito passivo.</h6>
+       <h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Não foram considerados os débitos dos cadastros sem identificação do sujeito passivo.</h6>
                 </div>  
              </div>
              <div class="float-left">
@@ -89,12 +90,12 @@ require_once "GeracaoCI.php";
                                 </tr>
                             </table>
                              <br>
-       <h6 style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Não foram considerados os débitos dos cadastros sem identificação do sujeito passivo.</h6>
+       <h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Não foram considerados os débitos dos cadastros sem identificação do sujeito passivo.</h6>
                   </div>
              </div>
         </div>
         </div>
-		
+<br>
 		<div class="card">
     	<div class="card-header" align="center">
             <h5><strong>Débitos Não Inscritos em Dívida Ativa <h4 style="color: #C00"><strong><?php echo $natureza; ?></strong></h4></strong></h5>
@@ -128,7 +129,7 @@ require_once "GeracaoCI.php";
                                 </tr>
 								<tr>
                                   <td width="80" align="left">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+                                    <button id="chamarFomulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
                                   </td>
                                   <td width="120" align="center" >
                                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
@@ -136,7 +137,7 @@ require_once "GeracaoCI.php";
                                 </tr>
                             </table>
                        <br>
-       <h6 style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Estão considerados débitos com CPF/CNPJ em branco, inválidos ou fora do padrão.</h6>
+       <h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Estão considerados débitos com CPF/CNPJ em branco, inválidos ou fora do padrão.</h6>
                 </div>  
              </div>
              <div class="float-left">
@@ -175,7 +176,7 @@ require_once "GeracaoCI.php";
 							</tr>
 						</table>
 						<br>
-						<h6 style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos de débitos no CNPJ 10.377.679/0001-96.</h6>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos de débitos no CNPJ 10.377.679/0001-96.</h6>
 				</div>
              </div>
 			 <div class="float-left">
@@ -214,14 +215,55 @@ require_once "GeracaoCI.php";
 							</tr>
 						</table>
 						<br>
-						<h6 style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos de débitos no CNPJ 10.377.679/0001-96.</h6>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos de débitos no CNPJ 10.377.679/0001-96.</h6>
 				</div>
              </div>
         </div>
         </div>
 </div>
-  
+<div id="formulario">
+  <p class="validateTips" align="center">Preencher dados para a C.I.</p>
+ 
+  <form action="GeracaoCI.php" method="post" enctype="multipart/form-data">
+    <fieldset>
+      <label for="ci">Nº da C.I.</label>
+      <input type="text" name="nCI" id="name" value="" class="form-control">
+      <label for="destinatario">Destinatário</label>
+      <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" value="" class="form-control">
+      <hr>
+      <input type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">
+    </fieldset>
+  </form>
+</div>
          
 <?php desconectar($pdo);?>
 </body>
+<link rel="stylesheet" href="js/jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.css">
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<script>
+	$(function(){
+		$( "#formulario" ).dialog({
+      autoOpen: false,
+	  modal: true,
+	  height: 400,
+      width: 450,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+	
+	$( "#chamarFomulario" ).on( "click", function() { $( "#formulario" ).dialog( "open" ); });
+
+    });	
+	
+</script>
+
 </html>
