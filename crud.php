@@ -26,53 +26,35 @@ function criarTabelaBaseAcomp($arquivo, $natureza, $pdo){
 	
 function incluirDadosBaseAcomp($arquivo, $natureza, $objeto, $pdo){
 
-	$colunas = "";
 	$cont = count($arquivo)-1;
-	for ($i2=0;$i2<$cont;$i2++){
+	$arraycabecalho = array();
 	
-		if($natureza == "Imobiliária"){
-			
-			if($i2!= $cont-1){
-				$colunas = $colunas."`$arquivo[$i2]`,";				
-				
-			}else{
-				$colunas = $colunas."`$arquivo[$i2]`";
-			}
-
-		}elseif($natureza == "Mercantil"){
-		
-		
-			if($i2!= $cont-1){
-				$colunas = $colunas."`$arquivo[$i2]`,";				
-				
-			}else{
-				$colunas = $colunas."`$arquivo[$i2]`";
-			}				
-			
-		}
+	for ($i2=0;$i2<$cont;$i2++){
+		$arraycabecalho[$i2] = $arquivo[$i2];
 	}
 	
 	while(($arquivo1=fgetcsv($objeto, 0, ";"))!== false){
-	
-		$cont1 = count($arquivo1);
+		
+		$cont = count($arquivo1)-1;
+		$colunas = "";
 		$valores = "";
-		for($a=0;$a<$cont1;$a++){
-				if($a!= $cont1-1){
-					$valores = $valores."'".$arquivo1[$a]."',";					
-					
-				}else{
-					$valores = $valores."'".$arquivo1[$a]."'";
-				}
-				
-			}
+		
+		for($a=0;$a<$cont;$a++){
 			
+			if($a!= $cont-1){
+				$colunas = $colunas."`".$arraycabecalho[$a]."`,";
+				$valores = $valores."'".addslashes($arquivo1[$a])."',";					
+				
+			}else{
+				$colunas = $colunas."`".$arraycabecalho[$a]."`";
+				$valores = $valores."'".addslashes($arquivo1[$a])."'";
+			}
+		}
+		
 			$insert = "insert into BaseAcompanhamento$natureza(".utf8_encode("$colunas) values ($valores)");
 			$inserir = $pdo->prepare($insert);
 			$inserir->execute();
-	}								
-	echo "<script>window.location='enviarArquivo.php';alert('Inclusão dos dados com sucesso!');</script>" ;
-	
-		
+	}
 }
 
 

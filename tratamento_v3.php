@@ -30,10 +30,9 @@
 				desconectar($pdo);
 				
 				fclose($objeto);
-				
-								/*		*/
+
 			} else {
-				echo "<script>window.location='enviarArquivo.php';alert('Não foi enviado arquivo!');</script>" ;
+				echo "<script>window.location='TelaEnviarArquivo.php';alert('Não foi enviado arquivo!');</script>" ;
 			}
         ?>
 </body>
