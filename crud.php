@@ -26,7 +26,7 @@ function criarTabelaBaseAcomp($arquivo, $natureza, $pdo){
 	
 function incluirDadosBaseAcomp($arquivo, $natureza, $objeto, $pdo){
 
-	$cont = count($arquivo)-1;
+	$cont = count($arquivo);
 	$arraycabecalho = array();
 	
 	for ($i2=0;$i2<$cont;$i2++){
@@ -35,7 +35,7 @@ function incluirDadosBaseAcomp($arquivo, $natureza, $objeto, $pdo){
 	
 	while(($arquivo1=fgetcsv($objeto, 0, ";"))!== false){
 		
-		$cont = count($arquivo1)-1;
+		$cont = count($arquivo1);
 		$colunas = "";
 		$valores = "";
 		
@@ -55,6 +55,7 @@ function incluirDadosBaseAcomp($arquivo, $natureza, $objeto, $pdo){
 			$inserir = $pdo->prepare($insert);
 			$inserir->execute();
 	}
+	echo "<script>window.location='TelaEnviarArquivo.php';alert('Dados enviados com sucesso!');</script>" ;
 }
 
 
