@@ -22,8 +22,7 @@ require_once "selecionarDados.php";
 	$ex2 = substr(implode($bucarExercicio[$anos5 + 1]), 0, 4),
 	$ex3 = substr(implode($bucarExercicio[$anos5 + 2]), 0, 4),
 	$ex4 = substr(implode($bucarExercicio[$anos5 + 3]), 0, 4),
-	$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));
-	
+	$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));	
  ?>
 
  <div class="container">
@@ -96,7 +95,7 @@ require_once "selecionarDados.php";
         </div>
         </div>
 <br>
-		<div class="card">
+		<div class="card" style="m">
     	<div class="card-header" align="center">
             <h5><strong>Débitos Não Inscritos em Dívida Ativa <h4 style="color: #C00"><strong><?php echo $natureza; ?></strong></h4></strong></h5>
         </div>
@@ -129,7 +128,7 @@ require_once "selecionarDados.php";
                                 </tr>
 								<tr>
                                   <td width="80" align="left">
-                                    <button id="chamarFomulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+                                    <button id="chamarFormulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
                                   </td>
                                   <td width="120" align="center" >
                                     <button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
@@ -168,7 +167,7 @@ require_once "selecionarDados.php";
 							</tr>
 							<tr>
 							  <td width="80" align="left">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+								<button type="submit" id="chamarFormulario2" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
 							  </td>
 							  <td width="120" align="center" >
 								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
@@ -207,7 +206,7 @@ require_once "selecionarDados.php";
 							</tr>
 							<tr>
 							  <td width="80" align="left">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
 							  </td>
 							  <td width="120" align="center" >
 								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
@@ -221,23 +220,58 @@ require_once "selecionarDados.php";
         </div>
         </div>
 </div>
-<div id="formulario">
-  <p class="validateTips" align="center">Preencher dados para a C.I.</p>
+<div id="gerarCIProblemasCadastroCPFCNPJ">
+  <p class="validateTips" align="center">Preencher dados para a C.I. - Problemas no CNPJ/CPF</p>
  
-  <form action="GeracaoCI.php" method="post" enctype="multipart/form-data">
+  <form action="GeracaoCI.php" target="_blank" method="post" enctype="multipart/form-data">
     <fieldset>
       <label for="ci">Nº da C.I.</label>
       <input type="text" name="nCI" id="name" value="" class="form-control">
       <label for="destinatario">Destinatário</label>
       <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="" class="form-control">
+      <label for="text">Cargo do destinatário: </label>
+      <input type="text" name="cargo" id="cargo" value="" class="form-control">
+      <input type="hidden" name="natureza" value="<?php echo $natureza;?>">
       <hr>
-      <input type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="Gerar" style="font-size:12px">
     </fieldset>
   </form>
 </div>
-         
+<div id="gerarCILancadosCNPJPrefeitura">
+  <p class="validateTips" align="center">Preencher dados para a C.I. - CNPJ da Prefeitura</p>
+  
+  <form action="GeracaoCI2.php" target="_blank" method="post" enctype="multipart/form-data">
+    <fieldset>
+      <label for="ci">Nº da C.I.</label>
+      <input type="text" name="nCI" id="name" value="" class="form-control">
+      <label for="destinatario">Destinatário</label>
+      <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
+      <label for="text">Cargo do destinatário: </label>
+      <input type="text" name="cargo" id="cargo" value="" class="form-control">
+      <input type="hidden" name="natureza" value="<?php echo $natureza;?>">
+      <hr>
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="Gerar" style="font-size:12px">
+    </fieldset>
+  </form>
+</div>
+<div id="gerarCILancamentosRetroativos">
+  <p class="validateTips" align="center">Preencher dados para a C.I. - Lançamento retroativo</p>
+ 
+  <form action="GeracaoCI3.php" target="_blank" method="post" enctype="multipart/form-data">
+    <fieldset>
+      <label for="ci">Nº da C.I.</label>
+      <input type="text" name="nCI" id="name" value="" class="form-control">
+      <label for="destinatario">Destinatário</label>
+      <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
+      <label for="text">Cargo do destinatário: </label>
+      <input type="text" name="cargo" id="cargo" value="" class="form-control">
+      <input type="hidden" name="natureza" value="<?php echo $natureza;?>">
+      <hr>
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="Gerar" style="font-size:12px">
+    </fieldset>
+  </form>
+</div>
+ 
 <?php desconectar($pdo);?>
 </body>
 <link rel="stylesheet" href="js/jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.min.css">
@@ -245,22 +279,60 @@ require_once "selecionarDados.php";
 <script src="js/jquery-ui-1.12.1.custom/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 <script>
 	$(function(){
-		$( "#formulario" ).dialog({
-      autoOpen: false,
-	  modal: true,
-	  height: 400,
-      width: 450,
-      show: {
-        effect: "blind",
-        duration: 1000
-      },
-      hide: {
-        effect: "explode",
-        duration: 1000
-      }
-    });
-	
-	$( "#chamarFomulario" ).on( "click", function() { $( "#formulario" ).dialog( "open" ); });
+		$( "#gerarCIProblemasCadastroCPFCNPJ" ).dialog({
+		  autoOpen: false,
+		  modal: true,
+		  height: 400,
+		  width: 450,
+		  show: {
+			effect: "blind",
+			duration: 1000
+		  },
+		  hide: {
+			effect: "explode",
+			duration: 1000
+		  }
+		});
+		
+		$( "#chamarFormulario" ).on( "click", function() { $( "#gerarCIProblemasCadastroCPFCNPJ" ).dialog( "open" ); });
+
+    });	
+	$(function(){
+		$( "#gerarCILancadosCNPJPrefeitura" ).dialog({
+		  autoOpen: false,
+		  modal: true,
+		  height: 400,
+		  width: 450,
+		  show: {
+			effect: "blind",
+			duration: 1000
+		  },
+		  hide: {
+			effect: "explode",
+			duration: 1000
+		  }
+		});
+		
+		$( "#chamarFormulario2" ).on( "click", function() { $( "#gerarCILancadosCNPJPrefeitura" ).dialog( "open" ); });
+
+    });	
+	$(function(){
+		$( "#gerarCILancamentosRetroativos" ).dialog({
+		  autoOpen: false,
+		  modal: true,
+		  height: 400,
+		  width: 450,
+		  show: {
+			effect: "blind",
+			duration: 1000
+		  },
+		  hide: {
+			effect: "explode",
+			duration: 1000
+		  }
+		});
+		
+		$( "#chamarFormulario3" ).on( "click", function() { $( "#gerarCILancamentosRetroativos" ).dialog( "open" ); });
 
     });	
 	
