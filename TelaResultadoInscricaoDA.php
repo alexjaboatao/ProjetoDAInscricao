@@ -22,8 +22,7 @@ require_once "selecionarDados.php";
 	$ex2 = substr(implode($bucarExercicio[$anos5 + 1]), 0, 4),
 	$ex3 = substr(implode($bucarExercicio[$anos5 + 2]), 0, 4),
 	$ex4 = substr(implode($bucarExercicio[$anos5 + 3]), 0, 4),
-	$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));
-	
+	$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));	
  ?>
 
  <div class="container">
@@ -96,7 +95,7 @@ require_once "selecionarDados.php";
         </div>
         </div>
 <br>
-		<div class="card">
+		<div class="card" style="m">
     	<div class="card-header" align="center">
             <h5><strong>Débitos Não Inscritos em Dívida Ativa <h4 style="color: #C00"><strong><?php echo $natureza; ?></strong></h4></strong></h5>
         </div>
