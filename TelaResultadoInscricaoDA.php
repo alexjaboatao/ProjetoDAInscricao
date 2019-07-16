@@ -232,6 +232,7 @@ require_once "selecionarDados.php";
       <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
       <label for="text">Cargo do destinatário: </label>
       <input type="text" name="cargo" id="cargo" value="" class="form-control">
+      <input type="hidden" name="natureza" value="<?php echo $natureza;?>">
       <hr>
       <input type="submit" class="btn btn-primary btn-lg btn-block" value="Gerar" style="font-size:12px">
     </fieldset>
@@ -239,7 +240,7 @@ require_once "selecionarDados.php";
 </div>
 <div id="gerarCILancadosCNPJPrefeitura">
   <p class="validateTips" align="center">Preencher dados para a C.I. - CNPJ da Prefeitura</p>
- 
+  
   <form action="GeracaoCI2.php" target="_blank" method="post" enctype="multipart/form-data">
     <fieldset>
       <label for="ci">Nº da C.I.</label>
@@ -248,6 +249,7 @@ require_once "selecionarDados.php";
       <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
       <label for="text">Cargo do destinatário: </label>
       <input type="text" name="cargo" id="cargo" value="" class="form-control">
+      <input type="hidden" name="natureza" value="<?php echo $natureza;?>">
       <hr>
       <input type="submit" class="btn btn-primary btn-lg btn-block" value="Gerar" style="font-size:12px">
     </fieldset>
@@ -264,6 +266,7 @@ require_once "selecionarDados.php";
       <input type="text" name="destinatario" id="destinatario" value="" class="form-control">
       <label for="text">Cargo do destinatário: </label>
       <input type="text" name="cargo" id="cargo" value="" class="form-control">
+      <input type="hidden" name="natureza" value="<?php echo $natureza;?>">
       <hr>
       <input type="submit" class="btn btn-primary btn-lg btn-block" value="Gerar" style="font-size:12px">
     </fieldset>
