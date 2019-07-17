@@ -5,6 +5,10 @@
 	
 	setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 	$dataatual = strftime('%d de %B de %Y', strtotime('today'));
+	$nci = $_POST['nCI'];
+	$destinatario = $_POST['destinatario'];
+	$cargo = $_POST['cargo'];
+	$natureza = $_POST['natureza'];
 	
 	$conteudoCI = "
 		<html>
@@ -85,16 +89,13 @@
 			   </center>
 		   </div>
 		   
-		   <b style='text-align: left'>CI nº 087/2019 – GTIAD/CADA</b>
-		   <p style='text-align: right; font-size: 15px;'>Jaboatão dos Guararapes, </p>
-		   <?php
-		   echo $dataatual;
-		   ?>
+		   <b style='text-align: left'>CI nº {$nci} – GTIAD/CADA</b>
+		   <p style='text-align: right; font-size: 15px;'>Jaboatão dos Guararapes, {$dataatual} </p>
 		   
 		   <div id='formatacaoDestinatario'>
 			 A(o) Sr(a).<br />
-			 Destinatario<br />
-			 Cargo Destinatario<br /><br /><br />
+			 {$destinatario}<br />
+			 {$cargo}<br /><br /><br />
 		   </div>
 		   
 		   <div id='formatacaoTitulo'>
@@ -103,7 +104,7 @@
 		   </div>
 		   
 		   <div id='formatacaoTexto'>
-			 <p>Prezado(a) Sr(a). Luciana,<br/></p>
+			 <p>Prezado(a),<br/></p>
 			 <p>Cumprimentando-a cordialmente, servimo-nos da oportunidade para solicitar a confirmação quanto a 
 			notificação dos débitos mercantis lançados retroativamente que se encontram no arquivo que segue em anexo no e-mail com assunto 
 			“Confirmação de notificações” enviado em 10/06/2019. Necessitamos desta confirmação para realizar as inscrições em Dívida Ativa.
