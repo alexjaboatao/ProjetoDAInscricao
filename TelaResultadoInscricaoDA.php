@@ -1,29 +1,36 @@
 ﻿<!DOCTYPE HTML>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Sistema de Análise da Dívida ativa</title>
-<link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.css">
-<script src="bootstrap-4.3.1-dist/js/bootstrap.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Sistema de Análise da Dívida ativa</title>
+	<link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.css">
+	<script src="bootstrap-4.3.1-dist/js/bootstrap.js"></script>
+	
+	<script lang="javascript" src="js/jquery-3.4.1.min.js"></script>
+	<script lang="javascript" src="js/xlsx.full.min.js"></script>
+	<script lang="javascript" src="js/FileSaver.min.js"></script>
+
 </head>
- <body>
- 
-<?php 
-require_once "menu.php";
-require_once "conexao.php";
-require_once "selecionarDados.php";
-	$pdo = conectar();
-	$natureza = $_POST["natureza"];
-	$bucarExercicio = buscarExercicio($pdo,$natureza);
-	$qtdColuna = count($bucarExercicio);
-	$anos5 = $qtdColuna - 5;
-	$array5ultimosAnos = array(
-	$ex1 = substr(implode($bucarExercicio[$anos5]), 0, 4),
-	$ex2 = substr(implode($bucarExercicio[$anos5 + 1]), 0, 4),
-	$ex3 = substr(implode($bucarExercicio[$anos5 + 2]), 0, 4),
-	$ex4 = substr(implode($bucarExercicio[$anos5 + 3]), 0, 4),
-	$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));	
- ?>
+<body>
+
+	<?php 
+		require_once "menu.php";
+		require_once "conexao.php";
+		require_once "selecionarDados.php";
+		//include 'PHPExcel\Classes\PHPExcel.php';
+
+		$pdo = conectar();
+		$natureza = $_POST["natureza"];
+		$bucarExercicio = buscarExercicio($pdo,$natureza);
+		$qtdColuna = count($bucarExercicio);
+		$anos5 = $qtdColuna - 5;
+		$array5ultimosAnos = array(
+		$ex1 = substr(implode($bucarExercicio[$anos5]), 0, 4),
+		$ex2 = substr(implode($bucarExercicio[$anos5 + 1]), 0, 4),
+		$ex3 = substr(implode($bucarExercicio[$anos5 + 2]), 0, 4),
+		$ex4 = substr(implode($bucarExercicio[$anos5 + 3]), 0, 4),
+		$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));	
+	 ?>
 
  <div class="container">
   	<div class="card">
@@ -128,10 +135,103 @@ require_once "selecionarDados.php";
                                 </tr>
 								<tr>
                                   <td width="80" align="left">
-                                    <button id="chamarFormulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+										<button id="chamarFormulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
                                   </td>
                                   <td width="120" align="center" >
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+									<button id="gerarCSVProblemaCPFCNPJ" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+									
+									<script>
+		
+										var wb = XLSX.utils.book_new();
+										
+										wb.Props = {
+											Title: "SheetJS Tutorial",
+											Subject: "Test file",
+											Author: "Red Stapler",
+											CreatedDate: new Date(2019,07,31)
+										};
+										
+										wb.SheetsNames.push("Test Sheet");
+										var ws_data = [['hello' , 'world']];  //a row with 2 columns
+										var ws = XLSX.utils.aoa_to_sheet(ws_data);
+										wb.Sheets["Test Sheet"] = ws;
+										
+										var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+										
+										function s2ab(s) { 
+											var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+											var view = new Uint8Array(buf);  //create uint8array as viewer
+											for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+											return buf;    
+										}
+										
+										$('#gerarCSVProblemaCPFCNPJ').click(function(){
+										   saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+										});
+									
+									</script>
+									
+									<?php 
+									
+										/*$objPHPExcel = new PHPExcel();
+										
+										for ($i=0; $i< 5; $i++){
+										   $tabelaProblemasCpfCnpj = retornarProblemasCadastroCPFCNPJ($array5ultimosAnos[$i], $natureza, $pdo);
+										   
+											
+										     if($natureza == "Imobiliária"){
+												 
+												 $objWorkSheet = $objPHPExcel->createSheet($i);
+												//criando cabeçalho
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A1', 'InscriçãoImobiliária');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('B1', 'Sequencial');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('C1', 'CpfCnpjProprietário');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('D1', 'NomeProprietário');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('E1', 'Natureza');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('F1', 'EndereçoImóvel');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('G1', 'Regional');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('H1', $array5ultimosAnos[$i]);
+												
+												foreach($tabelaProblemasCpfCnpj as $linha){  
+													$l=2;
+													for($c=0; $c<8; $c++){
+														$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A'.$l, $linha[$c]);
+														$l++;
+														//echo $linha[$c];
+													 }
+												}
+											 }elseif($natureza == "Mercantil"){
+												
+												$objWorkSheet = $objPHPExcel->createSheet($i);
+												//criando cabeçalho
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A1', 'InscriçãoMercantil');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('B1', 'CpfCnpj');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('C1', 'RazãoSocial');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('D1', 'Endereço');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('E1', 'Situação');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('F1', 'TipoPessoa');
+												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('G1', $array5ultimosAnos[$i]);
+												
+												foreach($tabelaProblemasCpfCnpj as $linha){  
+													$l=2;
+													for($c=0; $c<7; $c++){
+														$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A'.$l, $linha[$c]);
+														$l++;
+														//echo $linha[$c];
+													 }
+												}
+											 }
+										   }
+										   
+										   //formata o cabeçalho
+											header('Content-Type: application/vnd.ms-excel');
+											header('Content-Disposition: attachment;filename="lista.xls"');
+											header('Cache-Control: max-age=50000');
+											
+											$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+											$objWriter->save('php://output');*/
+									?>
+									
                                   </td>
                                 </tr>
                             </table>
@@ -214,7 +314,7 @@ require_once "selecionarDados.php";
 							</tr>
 						</table>
 						<br>
-						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos de débitos no CNPJ 10.377.679/0001-96.</h6>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos retroativos de débitos que necessitam de confirmação sobre a notificação para inscrição em D.A..</h6>
 				</div>
              </div>
         </div>
@@ -223,7 +323,7 @@ require_once "selecionarDados.php";
 <div id="gerarCIProblemasCadastroCPFCNPJ">
   <p class="validateTips" align="center">Preencher dados para a C.I. - Problemas no CNPJ/CPF</p>
  
-  <form action="GeracaoCI.php" target="_blank" method="post" enctype="multipart/form-data">
+  <form action="GeracaoCIProblemasCpfCnpj.php" target="_blank" method="post" enctype="multipart/form-data">
     <fieldset>
       <label for="ci">Nº da C.I.</label>
       <input type="text" name="nCI" id="name" value="" class="form-control">
@@ -240,7 +340,7 @@ require_once "selecionarDados.php";
 <div id="gerarCILancadosCNPJPrefeitura">
   <p class="validateTips" align="center">Preencher dados para a C.I. - CNPJ da Prefeitura</p>
   
-  <form action="GeracaoCI2.php" target="_blank" method="post" enctype="multipart/form-data">
+  <form action="GeracaoCICnpjPrefeitura.php" target="_blank" method="post" enctype="multipart/form-data">
     <fieldset>
       <label for="ci">Nº da C.I.</label>
       <input type="text" name="nCI" id="name" value="" class="form-control">
@@ -257,7 +357,7 @@ require_once "selecionarDados.php";
 <div id="gerarCILancamentosRetroativos">
   <p class="validateTips" align="center">Preencher dados para a C.I. - Lançamento retroativo</p>
  
-  <form action="GeracaoCI3.php" target="_blank" method="post" enctype="multipart/form-data">
+  <form action="GeracaoCILancRetroativos.php" target="_blank" method="post" enctype="multipart/form-data">
     <fieldset>
       <label for="ci">Nº da C.I.</label>
       <input type="text" name="nCI" id="name" value="" class="form-control">

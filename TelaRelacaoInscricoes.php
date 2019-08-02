@@ -58,7 +58,18 @@ $natureza = substr($tratarInscricao, 5);
 					<div class="card-header" align="center" >
 						<h5><strong>Relação sem interrupção prescricional</strong> <button class="btn btn-primary" onClick="primeira('copy')" id="copiar">Copy</button></h5>
 					</div>
-					<textarea id="area" class="form-control"><?php if(!empty($relacaoInscrever)){foreach ($relacaoInscrever as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="area" class="form-control"><?php if(!empty($relacaoInscrever)){foreach ($relacaoInscrever as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="area" class="form-control"><?php if(!empty($relacaoInscrever)){foreach ($relacaoInscrever as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+					
 				</div>
             
             <?php } else if($tipo == "P") { $relacaoInscreverParc = anosDesparcelados($ex,$natureza,$pdo); ?>
@@ -67,7 +78,17 @@ $natureza = substr($tratarInscricao, 5);
                     <div class="card-header" align="center">
                         <h5><strong>Relação Desparcelados</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
-					<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoInscreverParc)){ foreach ($relacaoInscreverParc as $relacaoParc){echo $relacaoParc[0].";";}}?></textarea>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoInscreverParc)){ foreach ($relacaoInscreverParc as $relacaoParc){echo $relacaoParc[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoInscreverParc)){ foreach ($relacaoInscreverParc as $relacaoParc){echo $relacaoParc[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
                 </div>
 			
 			<?php } else if($tipo == "C") { $relacaoProblemasCadastroCPFCNPJ = retornarProblemasCadastroCPFCNPJ($ex,$natureza,$pdo); ?>
@@ -76,7 +97,17 @@ $natureza = substr($tratarInscricao, 5);
                     <div class="card-header" align="center">
                         <h5><strong>Relação Débitos com Problemas Cadastrais no CPF/CNPJ</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
-					<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoProblemasCadastroCPFCNPJ)){ foreach ($relacaoProblemasCadastroCPFCNPJ as $inscricaoProblemaCadastro){echo $inscricaoProblemaCadastro[0].";";}}?></textarea>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoProblemasCadastroCPFCNPJ)){ foreach ($relacaoProblemasCadastroCPFCNPJ as $inscricaoProblemaCadastro){echo $inscricaoProblemaCadastro[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoProblemasCadastroCPFCNPJ)){ foreach ($relacaoProblemasCadastroCPFCNPJ as $inscricaoProblemaCadastro){echo $inscricaoProblemaCadastro[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
                 </div>
 			
 			<?php } else if($tipo == "L") { $relacaoDebitosLancadosCNPJPrefeitura = retornarDebitosLancadosCNPJPrefeitura($ex,$natureza,$pdo); ?>
@@ -85,7 +116,17 @@ $natureza = substr($tratarInscricao, 5);
                     <div class="card-header" align="center">
                         <h5><strong>Relação Débitos Lançados no CNPJ da Prefeitura</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
-					<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosCNPJPrefeitura)){ foreach ($relacaoDebitosLancadosCNPJPrefeitura as $inscricaoLancPrefeitura){echo $inscricaoLancPrefeitura[0].";";}}?></textarea>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosCNPJPrefeitura)){ foreach ($relacaoDebitosLancadosCNPJPrefeitura as $inscricaoLancPrefeitura){echo $inscricaoLancPrefeitura[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosCNPJPrefeitura)){ foreach ($relacaoDebitosLancadosCNPJPrefeitura as $inscricaoLancPrefeitura){echo $inscricaoLancPrefeitura[0].";";}}?></textarea>
+					
+					 <?php }?>
+				
                 </div>
 			
 			<?php } else if($tipo == "R") { $relacaoDebitosLancadosRetroativamente = retornarLancamentosRetroativos($ex,$natureza,$pdo); ?>
@@ -94,7 +135,17 @@ $natureza = substr($tratarInscricao, 5);
                     <div class="card-header" align="center">
                         <h5><strong>Relação Débitos Lançados Retroativamente</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
-					<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosRetroativamente)){ foreach ($relacaoDebitosLancadosRetroativamente as $inscricaoLancRetroativo){echo $inscricaoLancRetroativo[0].";";}}?></textarea>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosRetroativamente)){ foreach ($relacaoDebitosLancadosRetroativamente as $inscricaoLancRetroativo){echo $inscricaoLancRetroativo[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosRetroativamente)){ foreach ($relacaoDebitosLancadosRetroativamente as $inscricaoLancRetroativo){echo $inscricaoLancRetroativo[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
                 </div>
             <?php }?>
         </div>
