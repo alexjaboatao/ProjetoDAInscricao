@@ -7,8 +7,6 @@
 	<script src="bootstrap-4.3.1-dist/js/bootstrap.js"></script>
 	
 	<script lang="javascript" src="js/jquery-3.4.1.min.js"></script>
-	<script lang="javascript" src="js/xlsx.full.min.js"></script>
-	<script lang="javascript" src="js/FileSaver.min.js"></script>
 
 </head>
 <body>
@@ -17,7 +15,6 @@
 		require_once "menu.php";
 		require_once "conexao.php";
 		require_once "selecionarDados.php";
-		//include 'PHPExcel\Classes\PHPExcel.php';
 
 		$pdo = conectar();
 		$natureza = $_POST["natureza"];
@@ -139,98 +136,6 @@
                                   </td>
                                   <td width="120" align="center" >
 									<button id="gerarCSVProblemaCPFCNPJ" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
-									
-									<script>
-		
-										var wb = XLSX.utils.book_new();
-										
-										wb.Props = {
-											Title: "SheetJS Tutorial",
-											Subject: "Test file",
-											Author: "Red Stapler",
-											CreatedDate: new Date(2019,07,31)
-										};
-										
-										wb.SheetsNames.push("Test Sheet");
-										var ws_data = [['hello' , 'world']];  //a row with 2 columns
-										var ws = XLSX.utils.aoa_to_sheet(ws_data);
-										wb.Sheets["Test Sheet"] = ws;
-										
-										var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-										
-										function s2ab(s) { 
-											var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
-											var view = new Uint8Array(buf);  //create uint8array as viewer
-											for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
-											return buf;    
-										}
-										
-										$('#gerarCSVProblemaCPFCNPJ').click(function(){
-										   saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
-										});
-									
-									</script>
-									
-									<?php 
-									
-										/*$objPHPExcel = new PHPExcel();
-										
-										for ($i=0; $i< 5; $i++){
-										   $tabelaProblemasCpfCnpj = retornarProblemasCadastroCPFCNPJ($array5ultimosAnos[$i], $natureza, $pdo);
-										   
-											
-										     if($natureza == "Imobiliária"){
-												 
-												 $objWorkSheet = $objPHPExcel->createSheet($i);
-												//criando cabeçalho
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A1', 'InscriçãoImobiliária');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('B1', 'Sequencial');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('C1', 'CpfCnpjProprietário');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('D1', 'NomeProprietário');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('E1', 'Natureza');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('F1', 'EndereçoImóvel');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('G1', 'Regional');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('H1', $array5ultimosAnos[$i]);
-												
-												foreach($tabelaProblemasCpfCnpj as $linha){  
-													$l=2;
-													for($c=0; $c<8; $c++){
-														$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A'.$l, $linha[$c]);
-														$l++;
-														//echo $linha[$c];
-													 }
-												}
-											 }elseif($natureza == "Mercantil"){
-												
-												$objWorkSheet = $objPHPExcel->createSheet($i);
-												//criando cabeçalho
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A1', 'InscriçãoMercantil');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('B1', 'CpfCnpj');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('C1', 'RazãoSocial');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('D1', 'Endereço');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('E1', 'Situação');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('F1', 'TipoPessoa');
-												$objPHPExcel->setActiveSheetIndex($i)->setCellValue('G1', $array5ultimosAnos[$i]);
-												
-												foreach($tabelaProblemasCpfCnpj as $linha){  
-													$l=2;
-													for($c=0; $c<7; $c++){
-														$objPHPExcel->setActiveSheetIndex($i)->setCellValue('A'.$l, $linha[$c]);
-														$l++;
-														//echo $linha[$c];
-													 }
-												}
-											 }
-										   }
-										   
-										   //formata o cabeçalho
-											header('Content-Type: application/vnd.ms-excel');
-											header('Content-Disposition: attachment;filename="lista.xls"');
-											header('Cache-Control: max-age=50000');
-											
-											$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-											$objWriter->save('php://output');*/
-									?>
 									
                                   </td>
                                 </tr>
