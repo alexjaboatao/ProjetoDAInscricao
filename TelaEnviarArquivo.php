@@ -11,12 +11,16 @@
 	require_once "menu.php"; 
 	require_once "conexao.php";
 	require_once "selecionarDados.php";
+	$tipo = $_GET["tipo"];
+	
+	
+	
 	$pdo = conectar();
 ?>
     <div class="container" align="center">
         
         <div class="card">
-                  <div class="card-header"><strong>Análise dos débitos Imobiliário e Mercantil para Inscrição em Dívida Ativa</strong></div>     
+                  <div class="card-header"><strong>Análise dos débitos Imobiliário e Mercantil para <?php echo $tipo; ?> em Dívida Ativa</strong></div>     
                   		<div class="card-body">
                         	<div class="float-left" style="margin-left:30px;">
                                  <div class="card" style="width: 21rem;  height:13rem; ">
