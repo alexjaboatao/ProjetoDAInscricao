@@ -13,8 +13,6 @@
 	require_once "selecionarDados.php";
 	$tipo = $_GET["tipo"];
 	
-	
-	
 	$pdo = conectar();
 ?>
     <div class="container" align="center">
@@ -32,6 +30,7 @@
                                                             <input type="file" name="arquivo" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
                                                             <label class="custom-file-label" for="inputGroupFile04">Enviar Arquivo</label>
                                                         </div>
+                                                        <input type="hidden" value="<?php echo $tipo; ?>" name="tipo">
                                                     </div>
                                                     <div class="form-group">
                                                         <input type="submit" value="Enviar" class="btn btn-primary btn-lg btn-block">
