@@ -1,5 +1,9 @@
 ﻿<?php 
 require_once "conexao.php";
+
+//bla bla teste
+// blablbla marina
+
 function buscarExercicio($pdo, $natureza){
 	$sql = "show COLUMNS FROM baseacompanhamento$natureza";
 	$buscar = $pdo->prepare($sql);
