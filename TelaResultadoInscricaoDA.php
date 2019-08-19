@@ -62,7 +62,7 @@
                                 </tr>
                             </table>
                        <br>
-       <h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Não foram considerados os débitos dos cadastros sem identificação do sujeito passivo.</h6>
+					<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Não foram considerados os débitos dos cadastros sem identificação do sujeito passivo.</h6>
                 </div>  
              </div>
              <div class="float-left">
