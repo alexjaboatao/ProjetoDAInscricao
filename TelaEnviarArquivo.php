@@ -45,15 +45,16 @@
                                       <div class="card-header"><strong>Base de Acompanhamento</strong></div>     
                                             <div class="card-body">
                                               <?php 
+											  if($tipo == "Inscrição"){
 											  $buscarTabelaImobiliaria = buscarExercicio($pdo, "Imobiliária");
 											  foreach ($buscarTabelaImobiliaria as $tabelaImobiliaria): endforeach;
 											  
 											  
-											  if ($tabelaImobiliaria !== ""){
+											  	if ($tabelaImobiliaria !== ""){
 												  ?>
                                                  <form method="post" action="TelaResultadoInscricaoDA.php">
                                                  	<input type="hidden" name="natureza" value="Imobiliária">
-                                     				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário</button>
+                                     				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário - Inscrição</button>
                                                  </form>
                                                  <br>
                                                  <?php 
@@ -65,9 +66,39 @@
 												 if ($tabelaMercantil !== ""){?>
                                                  <form method="post" action="TelaResultadoInscricaoDA.php">
                                                  	<input type="hidden" name="natureza" value="Mercantil">
-                                     				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil</button>
+                                     				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil - Inscrição</button>
                                                  </form>
-										       <?php }?>
+                                                 <br>
+										       <?php 
+											   			}
+											    }
+											   
+											   if ($tipo == "Remessa"){
+												    $buscarTabelaImobiliaria = buscarExercicio($pdo, "Imobiliáriadat");
+											  		foreach ($buscarTabelaImobiliaria as $tabelaImobiliaria): endforeach;
+													if ($tabelaImobiliaria !== ""){
+												   
+											   ?>
+                                                <form method="post" action="TelaResultadoRemessaDA.php">
+                                                 	<input type="hidden" name="natureza" value="Imobiliária">
+                                     				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário - Remessa</button>
+                                                 </form>
+                                                 <br>
+                                                 <?php 
+												 	} 
+													 $buscarTabelaMercantil = buscarExercicio($pdo, "Mercantildat");
+											         foreach ($buscarTabelaMercantil as $tabelaMercantil): endforeach;
+											  
+												 	if ($tabelaMercantil !== ""){
+												 ?>
+                                                 <form method="post" action="TelaResultadoRemessaDA.php">
+                                                 	<input type="hidden" name="natureza" value="Mercantil">
+                                     				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil - Remessa</button>
+                                                 </form>
+                                                 <?php 
+												 	} 
+												}
+												 ?>
                                  			</div>	
                             	</div>
               
