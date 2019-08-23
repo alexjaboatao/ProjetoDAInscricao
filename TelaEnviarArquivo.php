@@ -14,6 +14,7 @@
 	$tipo = $_GET["tipo"];
 	
 	$pdo = conectar();
+	
 ?>
     <div class="container" align="center">
         
@@ -75,12 +76,13 @@
 											   
 											   if ($tipo == "Remessa"){
 												    $buscarTabelaImobiliaria = buscarExercicio($pdo, "Imobiliáriadat");
-											  		foreach ($buscarTabelaImobiliaria as $tabelaImobiliaria): endforeach;
+											  		foreach ($buscarTabelaImobiliaria as $tabelaImobiliaria): $tabelaImobiliaria[0]; endforeach;
 													if ($tabelaImobiliaria !== ""){
 												   
 											   ?>
                                                 <form method="post" action="TelaResultadoRemessaDA.php">
-                                                 	<input type="hidden" name="natureza" value="Imobiliária">
+                                                 	<input type="hidden" name="natureza" value="Imobiliáriadat">
+													<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<count($buscarTabelaImobiliaria); $i++){echo $buscarTabelaImobiliaria[$i][0].",";}?>">
                                      				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário - Remessa</button>
                                                  </form>
                                                  <br>
@@ -92,7 +94,9 @@
 												 	if ($tabelaMercantil !== ""){
 												 ?>
                                                  <form method="post" action="TelaResultadoRemessaDA.php">
-                                                 	<input type="hidden" name="natureza" value="Mercantil">
+                                                 	<input type="hidden" name="natureza" value="Mercantildat">
+													<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<$qtdColuna; $i++){echo $buscarExercicio[$i][0].",";}?>">
+													<input type="hidden" name="tipoacao" value="anosRemessa">
                                      				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil - Remessa</button>
                                                  </form>
                                                  <?php 

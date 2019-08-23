@@ -36,36 +36,17 @@ function criarTabelaBaseAcompRemessa($arquivo, $natureza, $pdo){
 	$maisclounas = 0;
 	for ($i=0;$i<$cont;$i++){
 		
-		if($natureza == "Imobiliária"){
+		if($i>10){
 			
-			if($i>10){
-				
-				$segunda = $segunda."`".$arquivo[$i]."` double NOT NULL,";
-				$segunda = $segunda."`Situacao_".$arquivo[$i]."` varchar(255) NOT NULL,";
-				$segunda = $segunda."`DataSituacao_".$arquivo[$i]."` datetime NOT NULL,";
-				
-			}else{
-				
-				$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
-			}
-				
-
-		}elseif($natureza == "Mercantil"){
+			$segunda = $segunda."`".$arquivo[$i]."` double NOT NULL,";
+			$segunda = $segunda."`Situacao_".$arquivo[$i]."` varchar(255) NOT NULL,";
+			$segunda = $segunda."`DataSituacao_".$arquivo[$i]."` datetime NOT NULL,";
 			
-			if($i>6){
-				
-				$segunda = $segunda."`".$arquivo[$i]."` double NOT NULL,";
-				$segunda = $segunda."`Situacao_".$arquivo[$i]."` varchar(255) NOT NULL,";
-				$segunda = $segunda."`DataSituacao_".$arquivo[$i]."` datetime NOT NULL,";
-				
-			}else{
-				
-				$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
-				
-			}
+		}else{
 			
-			
-		}			
+			$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
+		}
+						
 	}
 
 	$segunda = $segunda." PRIMARY KEY ($arquivo[0])";
@@ -73,7 +54,7 @@ function criarTabelaBaseAcompRemessa($arquivo, $natureza, $pdo){
 	$criarTabela = $pdo->prepare($consulta);
 	$criarTabela->execute();
     echo "<script>alert('Tabela criada com sucesso!');</script>" ;
-	}
+}
 
 	
 function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
@@ -214,7 +195,7 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 					$valores = $valores."'".addslashes($dataSituacao)."'";
 					$incrementacoluna = $incrementacoluna+1;
 					
-				}elseif($a>6){
+				}elseif($a>10){
 					
 					$valorSeparado =  explode("-", $arquivo1[$a]);
 					$valorTurmaPonto = str_replace(".","", $valorSeparado[0]);

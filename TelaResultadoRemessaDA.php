@@ -18,10 +18,17 @@
 
 		$pdo = conectar();
 		$natureza = $_POST["natureza"];
-		$bucarExercicio = buscarExercicio($pdo,$natureza);
-		$qtdColuna = count($bucarExercicio);
+		$buscarExercicio = buscarExercicio($pdo,$natureza);
+		$qtdColuna = count($buscarExercicio);
 		$anos5 = $qtdColuna;
-			
+		
+		$exercicios = $_POST['matrizExercicios'];
+		$exercicios = substr($exercicios, 0,strlen($exercicios)-1);
+		$arrayExercicios = explode(",",$exercicios);
+		
+		$select = retornaAnosRemessa($natureza, $arrayExercicios, $pdo);
+		criarViews($select, $natureza, $pdo);
+		
 	 ?>
 
  <div class="container">
@@ -38,7 +45,7 @@
                             <table align="center">
 								<tr width="80" style="font-size:12px">
                                   <td>
-									<strong>QTD de Sequenciais:<?php ?>	</strong>
+									<strong>QTD de Sequenciais: <?php $retornoSelect = selectCountAnosRemessa($natureza, $pdo); echo $retornoSelect[0][0];?></strong>
                                   </td>
                                 </tr>
                                 <tr width="80" style="font-size:12px">
@@ -48,9 +55,11 @@
                                 </tr>
                                 <tr width="120" align="center">
                                   <td>
-                                        <form method="post" action="TelaResultadoInscricaoDA.php">
-                                         <input type="hidden" name="natureza" value="Imobiliária">
-                                        <button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar Remessa </button>
+                                        <form method="post" action="GeracaoCSV.php">
+											<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+											<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<$qtdColuna; $i++){echo $buscarExercicio[$i][0].",";}?>">
+											<input type="hidden" name="tipoacao" value="anosRemessa">
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar Remessa </button>
                                         </form>
                                    </td>
                                 </tr>
