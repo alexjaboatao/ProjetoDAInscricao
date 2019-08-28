@@ -95,7 +95,7 @@
 												 ?>
                                                  <form method="post" action="TelaResultadoRemessaDA.php">
                                                  	<input type="hidden" name="natureza" value="Mercantildat">
-													<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<$qtdColuna; $i++){echo $buscarExercicio[$i][0].",";}?>">
+													<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<count($buscarTabelaMercantil); $i++){echo $buscarTabelaMercantil[$i][0].",";}?>">
 													<input type="hidden" name="tipoacao" value="anosRemessa">
                                      				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil - Remessa</button>
                                                  </form>

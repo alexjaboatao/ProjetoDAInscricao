@@ -38,7 +38,7 @@ function criarTabelaBaseAcompRemessa($arquivo, $natureza, $pdo){
 		
 		if($i>10){
 			
-			$segunda = $segunda."`".$arquivo[$i]."` double NOT NULL,";
+			$segunda = $segunda."`".$arquivo[$i]."` decimal (10,2) NOT NULL,";
 			$segunda = $segunda."`Situacao_".$arquivo[$i]."` varchar(255) NOT NULL,";
 			$segunda = $segunda."`DataSituacao_".$arquivo[$i]."` datetime NOT NULL,";
 			

@@ -26,8 +26,14 @@
 		$exercicios = substr($exercicios, 0,strlen($exercicios)-1);
 		$arrayExercicios = explode(",",$exercicios);
 		
-		$select = retornaAnosRemessa($natureza, $arrayExercicios, $pdo);
-		criarViews($select, $natureza, $pdo);
+		$selectAnosRemessa = retornaAnosRemessa($natureza, $arrayExercicios, $pdo);
+		criarViewAnosRemessa($selectAnosRemessa, $natureza, $pdo);
+		
+		$selectAnosRemessaPrescritos = retornaPrescritosRemessa($natureza, $arrayExercicios, $pdo);
+		criarViewRemessaPrecrita($selectAnosRemessaPrescritos, $natureza, $pdo);
+		
+		$selectProblemasCadastroRemessa = retornaProblemasCadastroRemessa($natureza);
+		criarViewProblemasCadastroRemessa($selectProblemasCadastroRemessa, $natureza, $pdo);
 		
 	 ?>
 
@@ -50,7 +56,7 @@
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor Total da Remessa:<?php ?></strong>
+									<strong>Valor Total da Remessa: R$ <?php $retornoSelectSum = selectSumAnosRemessa($natureza, $pdo); echo number_format($retornoSelectSum[0][0],2,",","."); ?></strong>
                                   </td>
                                 </tr>
                                 <tr width="120" align="center">
@@ -83,12 +89,12 @@
                             <table align="center" width="280">
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>QTD de Sequenciais:<?php ?>	</strong>
+									<strong>QTD de Sequenciais: <?php $retornoSelect = selectCountRemessaPrecrita($natureza, $pdo); echo $retornoSelect[0][0];?>	</strong>
                                   </td>
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor em Aberto:<?php ?></strong>
+									<strong>Valor em Aberto: R$ <?php $retornoSelectSum = selectSumRemessaPrecrita($natureza, $pdo); echo number_format($retornoSelectSum[0][0],2,",",".") ;?></strong>
                                   </td>
                                 </tr>
 								<tr>
@@ -96,7 +102,13 @@
 										<button id="chamarFormulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
                                   </td>
                                   <td width="120" align="center" >
-									<button id="gerarCSVProblemaCPFCNPJ" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+									<form method="post" action="GeracaoCSV.php">
+										<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+										<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<$qtdColuna; $i++){echo $buscarExercicio[$i][0].",";}?>">
+										<input type="hidden" name="tipoacao" value="RemessaPrescritos">
+										<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+									</form>
+									
 									
                                   </td>
                                 </tr>
@@ -113,12 +125,12 @@
 						<table align="center" width="280">
 							<tr width="80" style="font-size:12px">
                                   <td>
-									<strong>QTD de Sequenciais:<?php ?>	</strong>
+									<strong>QTD de Sequenciais: <?php $retornoSelect = selectCountProblemasCadastroRemessa($natureza, $pdo); echo $retornoSelect[0][0];?>	</strong>
                                   </td>
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor em Aberto:<?php ?></strong>
+									<strong>Valor em Aberto: R$ <?php?></strong>
                                   </td>
                                 </tr>
 							<tr>
