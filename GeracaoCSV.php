@@ -14,18 +14,25 @@ $arrayExercicios = explode(",",$exercicios);
 
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename=data.csv');
-ini_set('memory_limit', '-1');
 
 if($tipoacao == "anosRemessa"){
-	gerarCSVanosRemessa($natureza, $arrayExercicios, $pdo);
+	gerarCSVanosRemessa($natureza, $pdo);
 	
 }elseif($tipoacao == "RemessaPrescritos"){
-	gerarCSVRemessaPrescrita($natureza, $arrayExercicios, $pdo);
+	gerarCSVRemessaPrescrita($natureza, $pdo);
+	
+}elseif($tipoacao == "RemessaProblemasCadastro"){
+	gerarCSVRemessaProblemasCadastro($natureza, $pdo);
+	
+}elseif($tipoacao == "RemessaExigSuspensa"){
+	gerarCSVRemessaExigSuspensa($natureza, $pdo);
+	
 }
 
 
-function gerarCSVanosRemessa($natureza, $arrayExercicios, $pdo){
-
+function gerarCSVanosRemessa($natureza, $pdo){
+		
+		ini_set('memory_limit', '-1');
 		$saida = fopen('php://output', 'w');
 		
 		if($natureza == "Mercantildat"){
@@ -46,8 +53,9 @@ function gerarCSVanosRemessa($natureza, $arrayExercicios, $pdo){
 	}
 }
 
-function gerarCSVRemessaPrescrita($natureza, $arrayExercicios, $pdo){
+function gerarCSVRemessaPrescrita($natureza, $pdo){
 	
+		ini_set('memory_limit', '-1');
 		$saida = fopen('php://output', 'w');
 		
 		$cabecalho = selectCabecalhoViewRemessaPrescrita($natureza, $pdo);
@@ -72,6 +80,64 @@ function gerarCSVRemessaPrescrita($natureza, $arrayExercicios, $pdo){
 			
 			}
 		}
+}
+
+function gerarCSVRemessaProblemasCadastro($natureza, $pdo){
+	
+	ini_set('memory_limit', '-1');
+	$saida = fopen('php://output', 'w');
+	
+	$cabecalho = selectCabecalhoViewRemessaProblemasCadastro($natureza, $pdo);
+	$arraycabecalho = array();
+	for($b=0; $b<count($cabecalho); $b++){
+		array_push($arraycabecalho, $cabecalho[$b][0]);
+	}
+	
+	if($natureza == "Mercantildat"){
+		fputcsv($saida, $arraycabecalho, ";"); 
+		
+	}elseif ($natureza == "Imobiliáriadat"){
+		fputcsv($saida, $arraycabecalho, ";"); 
+	}
+	
+	$linhas = selectTudoViewRemessaProblemasCadastro($natureza, $pdo);
+	
+	if(!empty($linhas)){ 
+		foreach ($linhas as $linha){
+		
+			fputcsv($saida, $linha, ';');
+		
+		}
+	}
+}
+
+function gerarCSVRemessaExigSuspensa($natureza, $pdo){
+	
+	ini_set('memory_limit', '-1');
+	$saida = fopen('php://output', 'w');
+	
+	$cabecalho = selectCabecalhoViewRemessaExigSuspensa($natureza, $pdo);
+	$arraycabecalho = array();
+	for($b=0; $b<count($cabecalho); $b++){
+		array_push($arraycabecalho, $cabecalho[$b][0]);
+	}
+	
+	if($natureza == "Mercantildat"){
+		fputcsv($saida, $arraycabecalho, ";"); 
+		
+	}elseif ($natureza == "Imobiliáriadat"){
+		fputcsv($saida, $arraycabecalho, ";"); 
+	}
+	
+	$linhas = selectTudoViewRemessaExigSuspensa($natureza, $pdo);
+	
+	if(!empty($linhas)){ 
+		foreach ($linhas as $linha){
+		
+			fputcsv($saida, $linha, ';');
+		
+		}
+	}
 }
 
 
