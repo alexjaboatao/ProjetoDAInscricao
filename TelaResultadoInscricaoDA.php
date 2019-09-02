@@ -18,15 +18,8 @@
 
 		$pdo = conectar();
 		$natureza = $_POST["natureza"];
-		$bucarExercicio = buscarExercicio($pdo,$natureza);
-		$qtdColuna = count($bucarExercicio);
-		$anos5 = $qtdColuna - 5;
-		$array5ultimosAnos = array(
-		$ex1 = substr(implode($bucarExercicio[$anos5]), 0, 4),
-		$ex2 = substr(implode($bucarExercicio[$anos5 + 1]), 0, 4),
-		$ex3 = substr(implode($bucarExercicio[$anos5 + 2]), 0, 4),
-		$ex4 = substr(implode($bucarExercicio[$anos5 + 3]), 0, 4),
-		$ex5 = substr(implode($bucarExercicio[$anos5 + 4]), 0, 4));	
+		$buscarExercicio = buscarExercicio($pdo,$natureza);
+		$qtdColuna = count($buscarExercicio);	
 	 ?>
 
  <div class="container">
@@ -45,17 +38,17 @@
                                   <td width="50" align="left">
                                     <strong>
                                   	<?php 
-                                            for ($i=0; $i< 5; $i++){
-                                                echo $array5ultimosAnos[$i].":<br>";
+                                          for ($i=11; $i< $qtdColuna; $i++){
+                                                echo $buscarExercicio[$i][0].":<br>";
                                             }
                                         ?>
                                      </strong>
                                   </td>
                                   <td width="50" align="center" >
                                           <?php 
-                                                for ($i=0; $i< 5; $i++){
-                                                   $qtdDebitosInscricao = count(anosInscrever($array5ultimosAnos[$i], $natureza, $pdo));
-												   echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$array5ultimosAnos[$i].$natureza.' ">'.$qtdDebitosInscricao.'<br></a>';
+                                                for ($i=11; $i< $qtdColuna; $i++){
+                                                   $qtdDebitosInscricao = count(anosInscrever($buscarExercicio[$i][0], $natureza, $pdo));
+												   echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdDebitosInscricao.'<br></a>';
                                                 }
                                             ?>
                                   </td>
@@ -75,8 +68,8 @@
                                   <td width="50" align="left">
                                     <strong>
                                   	<?php 
-                                            for ($i=0; $i< 5; $i++){
-                                                echo $array5ultimosAnos[$i].":<br>";
+                                           for ($i=11; $i< $qtdColuna; $i++){
+                                                echo $buscarExercicio[$i][0].":<br>";
                                             }
                                         ?>
                                      </strong>
@@ -84,9 +77,9 @@
                                   <td width="50" align="center" >
                                           <?php 
 												
-											   for ($i=0; $i< 5; $i++){
-                                                   $inscreverDesparcelado = count(anosDesparcelados($array5ultimosAnos[$i], $natureza, $pdo));
-                                                   echo '<a href="TelaRelacaoInscricoes.php?DA=P'.$array5ultimosAnos[$i].$natureza.' ">'.$inscreverDesparcelado.'<br></a>';
+											   for ($i=11; $i< $qtdColuna; $i++){
+                                                   $inscreverDesparcelado = count(anosDesparcelados($buscarExercicio[$i][0], $natureza, $pdo));
+                                                   echo '<a href="TelaRelacaoInscricoes.php?DA=P'.$buscarExercicio[$i][0].$natureza.' ">'.$inscreverDesparcelado.'<br></a>';
                                                 }
                                             ?>
                                   </td>
@@ -114,18 +107,18 @@
                                   <td width="50" align="left">
                                     <strong>
                                   	<?php 
-                                            for ($i=0; $i< 5; $i++){
-                                                echo $array5ultimosAnos[$i].":<br>";
+                                            for ($i=11; $i< $qtdColuna; $i++){
+                                                echo $buscarExercicio[$i][0].":<br>";
                                             }
                                         ?>
                                      </strong>
                                   </td>
                                   <td width="50" align="center" >
                                           <?php 
-                                                for ($i=0; $i<5; $i++){
+                                                for ($i=11; $i< $qtdColuna; $i++){
                                                    
-												   $qtdDebitosProblemaCPFCNPJ = count(retornarProblemasCadastroCPFCNPJ($array5ultimosAnos[$i], $natureza, $pdo));
-												   echo '<a href="TelaRelacaoInscricoes.php?DA=C'.$array5ultimosAnos[$i].$natureza.' ">'.$qtdDebitosProblemaCPFCNPJ.'<br></a>';
+												   $qtdDebitosProblemaCPFCNPJ = count(retornarProblemasCadastroCPFCNPJ($buscarExercicio[$i][0], $natureza, $pdo));
+												   echo '<a href="TelaRelacaoInscricoes.php?DA=C'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdDebitosProblemaCPFCNPJ.'<br></a>';
                                                 }
                                             ?>
                                   </td>
@@ -135,8 +128,12 @@
 										<button id="chamarFormulario" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
                                   </td>
                                   <td width="120" align="center" >
-									<button id="gerarCSVProblemaCPFCNPJ" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
-									
+                                     <form method="post" action="GeracaoCSV.php">
+                                      <input type="hidden" name="matrizExercicios" value="<?php  for ($i=11; $i< $qtdColuna; $i++){ echo $buscarExercicio[$i][0].","; }?>">
+                                      <input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+                                      <input type="hidden" name="tipoacao" value="ProblemaCadastroInscricao">
+                                      <button id="gerarCSVProblemaCPFCNPJ" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                     </form>
                                   </td>
                                 </tr>
                             </table>
@@ -154,8 +151,8 @@
 							  <td width="50" align="left">
 								<strong>
 								<?php 
-										for ($i=0; $i< 5; $i++){
-											echo $array5ultimosAnos[$i].":<br>";
+										for ($i=11; $i< $qtdColuna; $i++){
+											echo $buscarExercicio[$i][0].":<br>";
 										}
 									?>
 								 </strong>
@@ -163,9 +160,9 @@
 							  <td width="50" align="center" >
 									  <?php 
 											
-										  for ($i=0; $i< 5; $i++){
-											   $qtdDebitosLancadosCNPJPrefeitura = count(retornarDebitosLancadosCNPJPrefeitura($array5ultimosAnos[$i], $natureza, $pdo));
-											   echo '<a href="TelaRelacaoInscricoes.php?DA=L'.$array5ultimosAnos[$i].$natureza.' ">'.$qtdDebitosLancadosCNPJPrefeitura.'<br></a>';
+										  for ($i=11; $i< $qtdColuna; $i++){
+											   $qtdDebitosLancadosCNPJPrefeitura = count(retornarDebitosLancadosCNPJPrefeitura($buscarExercicio[$i][0], $natureza, $pdo));
+											   echo '<a href="TelaRelacaoInscricoes.php?DA=L'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdDebitosLancadosCNPJPrefeitura.'<br></a>';
 											}
 										?>
 							  </td>
@@ -175,7 +172,9 @@
 								<button type="submit" id="chamarFormulario2" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
 							  </td>
 							  <td width="120" align="center" >
+                              <form action="GeracaoCSV.php">
 								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                </form>
 							  </td>
 							</tr>
 						</table>
@@ -193,8 +192,8 @@
 							  <td width="50" align="left">
 								<strong>
 								<?php 
-										for ($i=0; $i< 5; $i++){
-											echo $array5ultimosAnos[$i].":<br>";
+										for ($i=11; $i< $qtdColuna; $i++){
+											echo $buscarExercicio[$i][0].":<br>";
 										}
 									?>
 								 </strong>
@@ -202,9 +201,9 @@
 							  <td width="50" align="center" >
 									  <?php 
 											
-										  for ($i=0; $i< 5; $i++){
-											   $qtdLacadosRetroativos = count(retornarLancamentosRetroativos($array5ultimosAnos[$i], $natureza, $pdo));
-											   echo '<a href="TelaRelacaoInscricoes.php?DA=R'.$array5ultimosAnos[$i].$natureza.' ">'.$qtdLacadosRetroativos.'<br></a>';
+										  for ($i=11; $i< $qtdColuna; $i++){
+											   $qtdLacadosRetroativos = count(retornarLancamentosRetroativos($buscarExercicio[$i][0], $natureza, $pdo));
+											   echo '<a href="TelaRelacaoInscricoes.php?DA=R'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdLacadosRetroativos.'<br></a>';
 											}
 										?>
 							  </td>
@@ -214,7 +213,9 @@
 								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
 							  </td>
 							  <td width="120" align="center" >
+                              <form action="GeracaoCSV.php">
 								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                </form>
 							  </td>
 							</tr>
 						</table>
