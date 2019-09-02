@@ -32,8 +32,11 @@
 		$selectAnosRemessaPrescritos = retornaPrescritosRemessa($natureza, $arrayExercicios, $pdo);
 		criarViewRemessaPrecrita($selectAnosRemessaPrescritos, $natureza, $pdo);
 		
-		$selectProblemasCadastroRemessa = retornaProblemasCadastroRemessa($natureza);
+		$selectProblemasCadastroRemessa = retornaProblemasCadastroRemessa($natureza, $arrayExercicios);
 		criarViewProblemasCadastroRemessa($selectProblemasCadastroRemessa, $natureza, $pdo);
+		
+		$selectExigSuspensaRemessa = retornaExigSuspensaRemessa($natureza,$arrayExercicios);
+		criarViewExigSuspensaRemessa($selectExigSuspensaRemessa, $natureza, $pdo);
 		
 	 ?>
 
@@ -130,7 +133,7 @@
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor em Aberto: R$ <?php?></strong>
+									<strong>Valor em Aberto: R$ <?php $retornoSelectSum = selectSumProblemasCadastroRemessa($natureza, $pdo); echo number_format($retornoSelectSum[0][0],2,",",".") ;?></strong>
                                   </td>
                                 </tr>
 							<tr>
@@ -138,7 +141,13 @@
 								<button type="submit" id="chamarFormulario2" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
 							  </td>
 							  <td width="120" align="center" >
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+								<form method="post" action="GeracaoCSV.php">
+									<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+									<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<$qtdColuna; $i++){echo $buscarExercicio[$i][0].",";}?>">
+									<input type="hidden" name="tipoacao" value="RemessaProblemasCadastro">
+									<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+								</form>
+								
 							  </td>
 							</tr>
 						</table>
@@ -154,20 +163,26 @@
 						<table align="center" width="280">
 							<tr width="80" style="font-size:12px">
                                   <td>
-									<strong>QTD de Sequenciais:<?php ?>	</strong>
+									<strong>QTD de Sequenciais: <?php $retornoSelect = selectCountExigSuspensaRemessa($natureza, $pdo); echo $retornoSelect[0][0];?>	</strong>
                                   </td>
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor em Aberto:<?php ?></strong>
+									<strong>Valor em Aberto:R$ <?php $retornoSelectSum = selectSumExigSuspensaRemessa($natureza, $pdo); echo number_format($retornoSelectSum[0][0],2,",",".") ;?></strong>
                                   </td>
                                 </tr>
 							<tr>
 							  <td width="80" align="left">
 								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
 							  </td>
-							  <td width="120" align="center" >
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+							  <td width="120" align="center" >								
+								<form method="post" action="GeracaoCSV.php">
+									<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+									<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<$qtdColuna; $i++){echo $buscarExercicio[$i][0].",";}?>">
+									<input type="hidden" name="tipoacao" value="RemessaExigSuspensa">
+									<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+								</form>
+								
 							  </td>
 							</tr>
 						</table>

@@ -139,133 +139,100 @@ function retornarLancamentosRetroativos($ano, $natureza, $pdo){
 	return $inscricao->fetchAll(PDO::FETCH_NUM);
 }
 
-function criarViewAnosRemessa($select, $natureza, $pdo){
-	if($natureza == "Mercantildat"){
-		$criarview = "CREATE OR REPLACE VIEW view_remessaanos_MercDAT AS ".$select;
-	}elseif($natureza == "Imobiliáriadat"){
-		$criarview = "CREATE OR REPLACE VIEW view_remessaanos_ImobDAT AS ".$select;
-	}
-	
-	$view = $pdo->query($criarview);
-	$view->execute();
-}
-
-
-function selectCountAnosRemessa($natureza, $pdo){
-	
-	if($natureza == "Mercantildat"){
-		$sql = "SELECT COUNT(*) FROM view_remessaanos_MercDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO'";
-	}elseif($natureza == "Imobiliáriadat"){
-		$sql = "SELECT COUNT(*) FROM view_remessaanos_ImobDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO'";
-	}
-	
-	$select = $pdo->query($sql);
-	$select->execute();
-	return $select->fetchAll(PDO::FETCH_NUM);
-	
-}
-
-function selectSumAnosRemessa($natureza, $pdo){
-	
-	if($natureza == "Mercantildat"){
-		$sql = "SELECT ROUND(SUM(SOMAREMESSA),2) AS TOTAL FROM view_remessaanos_mercDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO'";
-	}elseif($natureza == "Imobiliáriadat"){
-		$sql = "SELECT ROUND(SUM(SOMAREMESSA),2) AS TOTAL FROM view_remessaanos_imobDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO'";
-	}
-	
-	$select = $pdo->query($sql);
-	$select->execute();
-	return $select->fetchAll(PDO::FETCH_NUM);
-	
-}
-
-function selectTudoViewDAT($natureza, $pdo){
-	
-	if($natureza == "Mercantildat"){
-		$sql = "SELECT * FROM view_remessaanos_MercDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO'";
-	}elseif($natureza = "Imobiliáriadat"){
-		$sql = "SELECT * FROM view_remessaanos_ImobDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO'";
-	}
-	
-	$select = $pdo->query($sql);
-	$select->execute();
-	return $select->fetchAll(PDO::FETCH_NUM);
-}
-
 
 function retornaAnosRemessa($natureza, $arrayexercicios, $pdo){
+
+	$sql1if = "";
+	$sql2if = "";
+	$sql3if = "";
+	$sql4if = "";
+	$sqlSomatorio = "(CASE WHEN ((";
+	$sqlAnosConcat = "CONCAT(";
+	$sqlCDAConcat = "CONCAT(";
 	
-	if ($natureza == "Imobiliáriadat"){
+	$numerocolunas = count($arrayexercicios);
+				
+	for($i=0; $i<$numerocolunas-8; $i=$i+4){
 		
-		$sql = "SELECT dat.Sequencial, ";
-		$sql1if = "";
-		$sql2if = "";
-		$sql3if = "";
-		$sql4if = "";
-		$sqlSomatorio = "(CASE WHEN ((";
-		$sqlAnosConcat = "CONCAT(";
-		
-		$numerocolunas = count($arrayexercicios);
-					
-		for($i=0; $i<$numerocolunas-6; $i=$i+3){
+		//primeira condição do SELECT (anos anteriores)
+		if($i<count($arrayexercicios)-12){
+			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
+			AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN dat.".$arrayexercicios[$i]." ELSE 0 END + ";
 			
-			//primeira condição do SELECT (anos anteriores)
-			if($i<count($arrayexercicios)-9){
-				$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
-				AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN dat.".$arrayexercicios[$i]." ELSE 0 END + ";
-				
-				$sqlAnosConcat = $sqlAnosConcat."CASE WHEN (
-				TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN '".$arrayexercicios[$i]."/' ELSE '' END, ";
-				
-				
-			}else{
-				
-				$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
-				AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN dat.".$arrayexercicios[$i]." ELSE 0 END) > 1943.58) THEN ";
-				
-				$sqlAnosConcat = $sqlAnosConcat."CASE WHEN 
-				(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN '".$arrayexercicios[$i]."/' ELSE '' END) ELSE ";
-				
-				
-			}
+			$sqlAnosConcat = $sqlAnosConcat."CASE WHEN (
+			TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN '".$arrayexercicios[$i]."/' ELSE '' END, ";
+			
+			$sqlCDAConcat = $sqlCDAConcat."CASE WHEN (
+			TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN CONCAT(dat.".$arrayexercicios[$i+3].",';') ELSE '' END, ";
+			
+			
+		}else{
+			
+			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
+			AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN dat.".$arrayexercicios[$i]." ELSE 0 END) > 1943.58) THEN ";
+			
+			$sqlAnosConcat = $sqlAnosConcat."CASE WHEN 
+			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN '".$arrayexercicios[$i]."/' ELSE '' END) ELSE ";
+			
+			$sqlCDAConcat = $sqlCDAConcat."CASE WHEN 
+			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN CONCAT(dat.".$arrayexercicios[$i+3].",';') ELSE '' END) ELSE ";
 			
 		}
+	}
+	
+	$sql1if = $sql1if.$sqlSomatorio.$sqlAnosConcat;
+	
+	//segunda condição do SELECT (anos anteriores + penúltimo ano)
+	$sqlSomatorioComPenultimoExercicio = " + CASE WHEN 
+		(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-6].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7].
+		" NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-8]." ELSE 0 END) > 1943.59) THEN ";
+	
+	$sqlAnosConcatPenultimoExercicio = ", CASE WHEN 
+		(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-6].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]."
+		NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-8]."/' ELSE '' END) ELSE ";
+	
+	$sqlCDAConcatPenultimoExercicio = ", CASE WHEN 
+				(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-6].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]."
+				NOT LIKE '%Exigib%') THEN CONCAT(dat.".$arrayexercicios[$numerocolunas-5].",';') ELSE '' END) ELSE ";
+						
+	
+	$sql2if = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio.substr($sqlAnosConcat,0,strlen($sqlAnosConcat)-7).$sqlAnosConcatPenultimoExercicio;
+	
+	//segunda condição do SELECT (anos anteriores + penúltimo ano + último ano)
+	$sqlSomatorioComUltimoExercicio = " + CASE WHEN 
+		(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3].
+		" NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-4]." ELSE 0 END) > 1943.59) THEN ";
+	
+	$sqlAnosConcatUltimoExercicio = " CASE WHEN 
+		(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]."
+		NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-4]."/' ELSE '' END) ELSE ";
+	
+	$sqlCDAConcatUltimoExercicio = " CASE WHEN 
+		(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]."
+		NOT LIKE '%Exigib%') THEN CONCAT(dat.".$arrayexercicios[$numerocolunas-1].",';') ELSE '' END) ELSE ";
+	
+	
+	$sql3if = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio.substr($sqlAnosConcat,0,strlen($sqlAnosConcat)-7).substr($sqlAnosConcatPenultimoExercicio,0,strlen($sqlAnosConcatPenultimoExercicio)-7).",".$sqlAnosConcatUltimoExercicio."'VALOR INFIMO' END) END) END) AS ANOSREMESSA, ";
+	
+	$sql1ifSoma = $sqlSomatorio." ( ".substr($sqlSomatorio, 13, -17)." ELSE ";
+	$sql2ifSoma = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio."(".substr($sqlSomatorio,13,strlen($sqlSomatorio)-31).substr($sqlSomatorioComPenultimoExercicio, 0, -18).") ELSE ";
+	$sql3ifSoma = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio."(".substr($sqlSomatorio,13,strlen($sqlSomatorio)-31).substr($sqlSomatorioComPenultimoExercicio, 0, -18).substr($sqlSomatorioComUltimoExercicio, 0, -18).") ELSE 0 END) END) END) AS SOMAREMESSA, ";
+	
+	$sql1ifCDA = $sqlSomatorio.$sqlCDAConcat;
+	$sql2ifCDA = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio.substr($sqlCDAConcat,0,strlen($sqlCDAConcat)-7).$sqlCDAConcatPenultimoExercicio;
+	$sql3ifCDA = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio.substr($sqlCDAConcat,0,strlen($sqlCDAConcat)-7).substr($sqlCDAConcatPenultimoExercicio,0,strlen($sqlCDAConcatPenultimoExercicio)-7).",".$sqlCDAConcatUltimoExercicio."'' END) END) END) AS CDA ";
+
+	if ($natureza == "Imobiliáriadat"){
 		
-		$sql1if = $sql1if.$sqlSomatorio.$sqlAnosConcat;
+		$sqlInicio = "SELECT dat.Sequencial, ";
 		
-		//segunda condição do SELECT (anos anteriores + penúltimo ano)
-		$sqlSomatorioComPenultimoExercicio = " + CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-4].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-6]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-5].
-			" NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-6]." ELSE 0 END) > 1943.59) THEN ";
-		
-		$sqlAnosConcatPenultimoExercicio = ", CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-4].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-6]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-5]."
-			NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-6]."/' ELSE '' END) ELSE ";
-			
-		
-		$sql2if = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio.substr($sqlAnosConcat,0,strlen($sqlAnosConcat)-7).$sqlAnosConcatPenultimoExercicio;
-		
-		//segunda condição do SELECT (anos anteriores + penúltimo ano + último ano)
-		$sqlSomatorioComUltimoExercicio = " + CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-1].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-3]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-2].
-			" NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-3]." ELSE 0 END) > 1943.59) THEN ";
-		
-		$sqlAnosConcatUltimoExercicio = " CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-1].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-3]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-2]."
-			NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-3]."/' ELSE '' END) ELSE ";
-		
-		$sql3if = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio.substr($sqlAnosConcat,0,strlen($sqlAnosConcat)-7).substr($sqlAnosConcatPenultimoExercicio,0,strlen($sqlAnosConcatPenultimoExercicio)-7).",".$sqlAnosConcatUltimoExercicio."'VALOR INFIMO' END) END) END) AS ANOSREMESSA ,";
-		
-		$sql1ifSoma = $sqlSomatorio." ( ".substr($sqlSomatorio, 13, -17)." ELSE ";
-		$sql2ifSoma = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio."(".substr($sqlSomatorio,13,strlen($sqlSomatorio)-31).substr($sqlSomatorioComPenultimoExercicio, 0, -18).") ELSE ";
-		$sql3ifSoma = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio."(".substr($sqlSomatorio,13,strlen($sqlSomatorio)-31).substr($sqlSomatorioComPenultimoExercicio, 0, -18).substr($sqlSomatorioComUltimoExercicio, 0, -18).") ELSE 0 END) END) END) AS SOMAREMESSA ";
-		
-		
-		$sql = $sql." ".$sql1if." ".$sql2if." ".$sql3if." ".$sql1ifSoma." ".$sql2ifSoma." ".$sql3ifSoma." FROM
+		$sqlfim = " FROM
 			`baseacompanhamento$natureza` AS dat
 			WHERE
 			(
@@ -297,75 +264,9 @@ function retornaAnosRemessa($natureza, $arrayexercicios, $pdo){
 	
 	} elseif ($natureza == "Mercantildat"){
 	
-		$sql = "SELECT dat.`InscriçãoMercantil` AS InscricaoMercantil, ";
-		$sql1if = "";
-		$sql2if = "";
-		$sql3if = "";
-		$sql4if = "";
-		$sqlSomatorio = "(CASE WHEN ((";
-		$sqlAnosConcat = "CONCAT(";
+		$sqlInicio = "SELECT dat.`InscriçãoMercantil` AS InscricaoMercantil, ";
 		
-		$numerocolunas = count($arrayexercicios);
-					
-		for($i=0; $i<$numerocolunas-6; $i=$i+3){
-			
-			//primeira condição do SELECT (anos anteriores)
-			if($i<count($arrayexercicios)-9){
-				$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
-				AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN dat.".$arrayexercicios[$i]." ELSE 0 END + ";
-				
-				$sqlAnosConcat = $sqlAnosConcat."CASE WHEN (
-				TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN '".$arrayexercicios[$i]."/' ELSE '' END, ";
-				
-				
-			}else{
-				
-				$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
-				AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN dat.".$arrayexercicios[$i]." ELSE 0 END) > 1943.58) THEN ";
-				
-				$sqlAnosConcat = $sqlAnosConcat."CASE WHEN 
-				(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
-				THEN '".$arrayexercicios[$i]."/' ELSE '' END) ELSE ";
-				
-				
-			}
-			
-		}
-		
-		$sql1if = $sql1if.$sqlSomatorio.$sqlAnosConcat;
-		
-		//segunda condição do SELECT (anos anteriores + penúltimo ano)
-		$sqlSomatorioComPenultimoExercicio = " + CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-4].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-6]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-5].
-			" NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-6]." ELSE 0 END) > 1943.59) THEN ";
-		
-		$sqlAnosConcatPenultimoExercicio = ", CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-4].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-6]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-5]."
-			NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-6]."/' ELSE '' END) ELSE ";
-			
-		
-		$sql2if = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio.substr($sqlAnosConcat,0,strlen($sqlAnosConcat)-7).$sqlAnosConcatPenultimoExercicio;
-		
-		//segunda condição do SELECT (anos anteriores + penúltimo ano + último ano)
-		$sqlSomatorioComUltimoExercicio = " + CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-1].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-3]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-2].
-			" NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-3]." ELSE 0 END) > 1943.59) THEN ";
-		
-		$sqlAnosConcatUltimoExercicio = " CASE WHEN 
-			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-1].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-3]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-2]."
-			NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-3]."/' ELSE '' END) ELSE ";
-		
-		$sql3if = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio.substr($sqlAnosConcat,0,strlen($sqlAnosConcat)-7).substr($sqlAnosConcatPenultimoExercicio,0,strlen($sqlAnosConcatPenultimoExercicio)-7).",".$sqlAnosConcatUltimoExercicio."'VALOR INFIMO' END) END) END) AS ANOSREMESSA, ";
-		
-		$sql1ifSoma = $sqlSomatorio." ( ".substr($sqlSomatorio, 13, -17)." ELSE ";
-		$sql2ifSoma = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio."(".substr($sqlSomatorio,13,strlen($sqlSomatorio)-31).substr($sqlSomatorioComPenultimoExercicio, 0, -18).") ELSE ";
-		$sql3ifSoma = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio."(".substr($sqlSomatorio,13,strlen($sqlSomatorio)-31).substr($sqlSomatorioComPenultimoExercicio, 0, -18).substr($sqlSomatorioComUltimoExercicio, 0, -18).") ELSE 0 END) END) END) AS SOMAREMESSA ";
-		
-		
-		$sql = $sql." ".$sql1if." ".$sql2if." ".$sql3if." ".$sql1ifSoma." ".$sql2ifSoma." ".$sql3ifSoma." FROM
+		$sqlfim = " FROM
 			`baseacompanhamento$natureza` AS dat
 			WHERE
 			`Situação` NOT LIKE 'ATV ENCERRADA'
@@ -398,7 +299,62 @@ function retornaAnosRemessa($natureza, $arrayexercicios, $pdo){
 	
 	}
 	
+	$sql = $sqlInicio." ".$sql1if." ".$sql2if." ".$sql3if." ".$sql1ifSoma." ".$sql2ifSoma." ".$sql3ifSoma." ".$sql1ifCDA." ".$sql2ifCDA." ".$sql3ifCDA.$sqlfim;
+	
 	return $sql;
+}
+
+function criarViewAnosRemessa($select, $natureza, $pdo){
+	if($natureza == "Mercantildat"){
+		$criarview = "CREATE OR REPLACE VIEW view_remessaanos_MercDAT AS ".$select;
+	}elseif($natureza == "Imobiliáriadat"){
+		$criarview = "CREATE OR REPLACE VIEW view_remessaanos_ImobDAT AS ".$select;
+	}
+	
+	$view = $pdo->query($criarview);
+	$view->execute();
+}
+
+
+function selectCountAnosRemessa($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT COUNT(*) FROM view_remessaanos_MercDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO' AND ANOSREMESSA NOT LIKE '2017/' AND ANOSREMESSA NOT LIKE '2018/' AND ANOSREMESSA NOT LIKE '2017/2018/'";
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "SELECT COUNT(*) FROM view_remessaanos_ImobDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO' AND ANOSREMESSA NOT LIKE '2017/' AND ANOSREMESSA NOT LIKE '2018/' AND ANOSREMESSA NOT LIKE '2017/2018/'";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+function selectSumAnosRemessa($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT ROUND(SUM(SOMAREMESSA),2) AS TOTAL FROM view_remessaanos_mercDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO' AND ANOSREMESSA NOT LIKE '2017/' AND ANOSREMESSA NOT LIKE '2018/' AND ANOSREMESSA NOT LIKE '2017/2018/'";
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "SELECT ROUND(SUM(SOMAREMESSA),2) AS TOTAL FROM view_remessaanos_imobDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO' AND ANOSREMESSA NOT LIKE '2017/' AND ANOSREMESSA NOT LIKE '2018/' AND ANOSREMESSA NOT LIKE '2017/2018/'";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+function selectTudoViewDAT($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT * FROM view_remessaanos_MercDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO' AND ANOSREMESSA NOT LIKE '2017/' AND ANOSREMESSA NOT LIKE '2018/' AND ANOSREMESSA NOT LIKE '2017/2018/'";
+	}elseif($natureza = "Imobiliáriadat"){
+		$sql = "SELECT * FROM view_remessaanos_ImobDAT WHERE ANOSREMESSA NOT LIKE 'VALOR INFIMO' AND ANOSREMESSA NOT LIKE '2017/' AND ANOSREMESSA NOT LIKE '2018/' AND ANOSREMESSA NOT LIKE '2017/2018/'";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
 }
 
 function retornaPrescritosRemessa($natureza, $arrayexercicios, $pdo){
@@ -504,13 +460,25 @@ function selectTudoViewRemessaPrescrita($natureza, $pdo){
 }
 
 
-function retornaProblemasCadastroRemessa($natureza){
+function retornaProblemasCadastroRemessa($natureza,$arrayexercicios){
+	
+	$numerocolunas = count($arrayexercicios);
+	$sqlSomaNaoPrescritos = "";
+	
+	for($i=0; $i<$numerocolunas; $i=$i+3){
+			
+		$sqlSomaNaoPrescritos = $sqlSomaNaoPrescritos."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
+		AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+		THEN dat.".$arrayexercicios[$i]." ELSE 0 END + ";
+		
+	}
+	
 	
 	if($natureza == "Imobiliáriadat"){
 		
 		$sql = "SELECT 
 				dat.`InscriçãoImobiliária`, dat.Sequencial, dat.`CpfCnpjProprietário`, dat.`NomeProprietário`, dat.Natureza, dat.`EndereçoImóvel`, 
-				dat.Regional, dat.`EndereçoCorrespondência`, dat.`E-mailProprietário`, dat.`TelefoneProprietário`
+				dat.Regional, dat.`EndereçoCorrespondência`, dat.`E-mailProprietário`, dat.`TelefoneProprietário`, (".substr($sqlSomaNaoPrescritos,0,-2).") AS SOMA
 				FROM
 				`baseacompanhamentoimobiliáriadat` AS dat
 				WHERE
@@ -549,7 +517,8 @@ function retornaProblemasCadastroRemessa($natureza){
 				dat.`Situação`,
 				dat.TipoPessoa,
 				dat.`E-mail`,
-				dat.Telefone
+				dat.Telefone,
+				(".substr($sqlSomaNaoPrescritos,0,-2).") AS SOMA
 				FROM
 				baseacompanhamentomercantildat AS dat
 				WHERE
@@ -581,7 +550,7 @@ function retornaProblemasCadastroRemessa($natureza){
 	}
 	
 	return $sql;
-}	
+}
 
 function criarViewProblemasCadastroRemessa($select, $natureza, $pdo){
 	if($natureza == "Mercantildat"){
@@ -598,9 +567,9 @@ function criarViewProblemasCadastroRemessa($select, $natureza, $pdo){
 function selectCountProblemasCadastroRemessa($natureza, $pdo){
 	
 	if($natureza == "Mercantildat"){
-		$sql = "SELECT COUNT(*) FROM view_ProblemasCadastroRemessa_MercDAT";
+		$sql = "SELECT COUNT(*) FROM view_ProblemasCadastroRemessa_MercDAT WHERE SOMA <> 0";
 	}elseif($natureza == "Imobiliáriadat"){
-		$sql = "SELECT COUNT(*) FROM view_ProblemasCadastroRemessa_ImobDAT";
+		$sql = "SELECT COUNT(*) FROM view_ProblemasCadastroRemessa_ImobDAT WHERE SOMA <> 0";
 	}
 	
 	$select = $pdo->query($sql);
@@ -612,9 +581,9 @@ function selectCountProblemasCadastroRemessa($natureza, $pdo){
 function selectSumProblemasCadastroRemessa($natureza, $pdo){
 	
 	if($natureza == "Mercantildat"){
-		$sql = "SELECT ROUND(SUM(SOMA),2) AS TOTAL FROM view_ProblemasCadastroRemessa_MercDAT";
+		$sql = "SELECT ROUND(SUM(SOMA),2) AS TOTAL FROM view_ProblemasCadastroRemessa_MercDAT WHERE SOMA <> 0";
 	}elseif($natureza == "Imobiliáriadat"){
-		$sql = "SELECT ROUND(SUM(SOMA),2) AS TOTAL FROM view_ProblemasCadastroRemessa_ImobDAT";
+		$sql = "SELECT ROUND(SUM(SOMA),2) AS TOTAL FROM view_ProblemasCadastroRemessa_ImobDAT WHERE SOMA <> 0";
 	}
 	
 	$select = $pdo->query($sql);
@@ -622,9 +591,122 @@ function selectSumProblemasCadastroRemessa($natureza, $pdo){
 	return $select->fetchAll(PDO::FETCH_NUM);
 }
 
+function selectCabecalhoViewRemessaProblemasCadastro($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "show COLUMNS FROM view_ProblemasCadastroRemessa_MercDAT";
+		
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "show COLUMNS FROM view_ProblemasCadastroRemessa_ImobDAT";
+	}
+	
+	$buscar = $pdo->prepare($sql);
+	$buscar->execute();
+	return $buscar->fetchAll(PDO::FETCH_NUM);
+}
 
+function selectTudoViewRemessaProblemasCadastro($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT * FROM view_ProblemasCadastroRemessa_MercDAT WHERE SOMA <> 0";
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "SELECT * FROM view_ProblemasCadastroRemessa_ImobDAT WHERE SOMA <> 0";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
+}
 
+function retornaExigSuspensaRemessa($natureza,$arrayexercicios){
+	
+	$numerocolunas = count($arrayexercicios);
+	$sqlExigSuspensaRemessa = "";
+	$sqlSumExigSuspensaRemessa = "";
+	
+	for($i=0; $i<$numerocolunas; $i=$i+3){
+			
+		$sqlExigSuspensaRemessa = $sqlExigSuspensaRemessa."(CASE WHEN dat.".$arrayexercicios[$i+1]." LIKE '%Exigib%' THEN dat.".$arrayexercicios[$i]." ELSE 0 END) AS Susp_Exigib_".$arrayexercicios[$i+1].", "; 
+		$sqlSumExigSuspensaRemessa = $sqlSumExigSuspensaRemessa."(CASE WHEN dat.".$arrayexercicios[$i+1]." LIKE '%Exigib%' THEN dat.".$arrayexercicios[$i]." ELSE 0 END) + "; 
+		
+	}
+	
+	if($natureza == "Imobiliáriadat"){
+		
+		$sql = "SELECT dat.Sequencial AS SEQUENCIAL, ".substr($sqlExigSuspensaRemessa, 0, -2).", (".substr($sqlSumExigSuspensaRemessa,0,-2).") AS SOMA FROM `baseacompanhamento$natureza` AS dat";
+		
+	}elseif($natureza == "Mercantildat"){
+		
+		$sql = "SELECT dat.`InscriçãoMercantil`, ".substr($sqlExigSuspensaRemessa, 0, -2).", (".substr($sqlSumExigSuspensaRemessa,0,-2).") AS SOMA FROM `baseacompanhamento$natureza` AS dat";
+		
+	}
+	
+	return $sql;
+}
 
+function criarViewExigSuspensaRemessa($select, $natureza, $pdo){
+	if($natureza == "Mercantildat"){
+		$criarview = "CREATE OR REPLACE VIEW view_ExigSuspensaRemessa_MercDAT AS ".$select;
+	}elseif($natureza == "Imobiliáriadat"){
+		$criarview = "CREATE OR REPLACE VIEW view_ExigSuspensaRemessa_ImobDAT AS ".$select;
+	}
+	
+	$view = $pdo->query($criarview);
+	$view->execute();
+}
 
+function selectCountExigSuspensaRemessa($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT COUNT(*) FROM view_ExigSuspensaRemessa_MercDAT WHERE SOMA <> 0";
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "SELECT COUNT(*) FROM view_ExigSuspensaRemessa_ImobDAT WHERE SOMA <> 0";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+function selectSumExigSuspensaRemessa($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT ROUND(SUM(SOMA),2) AS TOTAL FROM view_ExigSuspensaRemessa_MercDAT WHERE SOMA <> 0";
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "SELECT ROUND(SUM(SOMA),2) AS TOTAL FROM view_ExigSuspensaRemessa_ImobDAT WHERE SOMA <> 0";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
+}
+
+function selectCabecalhoViewRemessaExigSuspensa($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "show COLUMNS FROM view_ExigSuspensaRemessa_MercDAT";
+		
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "show COLUMNS FROM view_ExigSuspensaRemessa_ImobDAT";
+	}
+	
+	$buscar = $pdo->prepare($sql);
+	$buscar->execute();
+	return $buscar->fetchAll(PDO::FETCH_NUM);
+}
+
+function selectTudoViewRemessaExigSuspensa($natureza, $pdo){
+	
+	if($natureza == "Mercantildat"){
+		$sql = "SELECT * FROM view_ExigSuspensaRemessa_MercDAT WHERE SOMA <> 0";
+	}elseif($natureza == "Imobiliáriadat"){
+		$sql = "SELECT * FROM view_ExigSuspensaRemessa_ImobDAT WHERE SOMA <> 0";
+	}
+	
+	$select = $pdo->query($sql);
+	$select->execute();
+	return $select->fetchAll(PDO::FETCH_NUM);
+}
 	
 ?>
