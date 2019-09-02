@@ -133,7 +133,7 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 								
 							}elseif(count($valorSeparado) == 6){ //relançados e desparcelados
 								
-								$situacao = $valorSeparado[2]." - ".$valorSeparado[5]." - ".$valorSeparado[3];
+								$situacao = $valorSeparado[2]." - ".$valorSeparado[5]." - Processo ".$valorSeparado[4];
 								
 								if(strtotime($dataSituacao) < strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[3])))))){
 									$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))));
@@ -186,7 +186,7 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 
 							}elseif(count($valorSeparado) == 6){
 								
-								$situacao = $valorSeparado[5]." - ".$valorSeparado[3];
+								$situacao = $valorSeparado[2]." - ".$valorSeparado[5]." - Processo ".$valorSeparado[4];
 								
 								if(strtotime($dataSituacao) < strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[3])))))){
 									$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))));
