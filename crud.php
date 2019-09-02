@@ -1,9 +1,6 @@
 ﻿<?php 
 require_once "conexao.php";
 
-verificaPrescrição("2016-12-15");
-
-
 function criarTabelaBaseAcompInsc($arquivo, $natureza, $pdo){
 	$primeira = "CREATE TABLE BaseAcompanhamento".$natureza."(";
 	$cont = count($arquivo)- 1;
@@ -233,20 +230,6 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 			$inserir->execute();
 	}
 	echo "<script>window.location='TelaEnviarArquivo.php?tipo=Remessa';alert('Dados enviados com sucesso!');</script>" ;
-}
-
-function verificaPrescrição($data){
-	
-	///echo $dataInicio = date_create($data);
-	echo $dateFim = date('d-m-Y');
-	//echo $diff=date_diff($dataInicio,$dataInicio);
-	//echo $diff->format("%a");
-	
-	/*if($diff >= 5){
-		return true;
-	}else{
-		return false;
-	}*/
 }
 
 
