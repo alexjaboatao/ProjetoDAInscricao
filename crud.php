@@ -60,40 +60,6 @@ function criarTabelaBaseAcompRemessa($arquivo, $natureza, $pdo){
     echo "<script>alert('Tabela criada com sucesso!');</script>" ;
 }
 
-	
-/*function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
-
-	$cont = count($arquivo);
-	$arraycabecalho = array();
-	
-	for ($i2=0;$i2<$cont;$i2++){
-		$arraycabecalho[$i2] = $arquivo[$i2];
-	}
-	
-	while(($arquivo1=fgetcsv($objeto, 0, ";"))!== false){
-		
-		$cont = count($arquivo1);
-		$colunas = "";
-		$valores = "";
-		
-		for($a=0;$a<$cont;$a++){
-			
-			if($a!= $cont-1){
-				$colunas = $colunas."`".$arraycabecalho[$a]."`,";
-				$valores = $valores."'".addslashes($arquivo1[$a])."',";					
-				
-			}else{
-				$colunas = $colunas."`".$arraycabecalho[$a]."`";
-				$valores = $valores."'".addslashes($arquivo1[$a])."'";
-			}
-		}
-		
-			$insert = "insert into BaseAcompanhamento$natureza(".utf8_encode("$colunas) values ($valores)");
-			$inserir = $pdo->prepare($insert);
-			$inserir->execute();
-	}
-	echo "<script>window.location='TelaEnviarArquivo.php?tipo=Inscrição';alert('Dados enviados com sucesso!');</script>" ;
-}*/
 
 function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
 
