@@ -149,10 +149,12 @@ function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
 							
 							if(strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[2]))))) > strtotime(implode( '-', array_reverse( explode( '/', substr($valorSeparado[4], -10, 10)))))){
 								$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[2]))));
+								$situacao = $situacao.$valorSeparado[1];
 							}else{
 								$dataSituacao = implode( '-', array_reverse( explode( '/', substr($valorSeparado[4], -10, 10))));
+								$situacao = $situacao."Processo ".$valorSeparado[3]." - ".$valorSeparado[4];
 							}
-							$situacao = $situacao.$valorSeparado[1]." - ".$valorSeparado[2]." - ".$valorSeparado[3]." - ".$valorSeparado[4];
+							
 							$numeroCDA = "";
 							
 						}
@@ -160,10 +162,13 @@ function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
 						
 						if(strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[4]))))) > strtotime(implode( '-', array_reverse( explode( '/', substr($valorSeparado[6], -10, 10)))))){
 							$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[4]))));
+							$situacao = $situacao.$valorSeparado[1]." - ".$valorSeparado[2]." - ".$valorSeparado[3];
+						
 						}else{
 							$dataSituacao = implode( '-', array_reverse( explode( '/', substr($valorSeparado[6], -10, 10))));
+							$situacao = $situacao.$valorSeparado[1]." - ".$valorSeparado[2]." - Processo".$valorSeparado[5]." - ".$valorSeparado[6];
 						}
-						$situacao = $situacao.$valorSeparado[1]." - ".$valorSeparado[2]." - ".$valorSeparado[3]." - ".$valorSeparado[4]." - ".$valorSeparado[5]." - ".$valorSeparado[6];
+						
 						$numeroCDA = str_replace("CDA ","", $valorSeparado[1]);
 					}
 				}
@@ -209,7 +214,7 @@ function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
 
 
 function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
-
+	
 	$cont = count($arquivo);
 	$arraycabecalho = array();
 	
@@ -227,173 +232,76 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 		
 		for($a=0;$a<$cont;$a++){
 			
-			//if($natureza=="Imobiliária"){
+			$situacao = "";
+			
+			if($a<=10){ //colunas cabeçalho
 				
-				if($a == $cont-1){
+				$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
+				$valores = $valores."'".addslashes($arquivo1[$a])."',";
+				$incrementacoluna = $incrementacoluna+1;
+				
+			}else{ //colunas exercícios
+				
+				if($arquivo1[$a] == ""){
 					
-					$valorSeparado =  explode("-", $arquivo1[$a]);
-					$valorTurmaPonto = str_replace(".","", $valorSeparado[0]);
-					$valorTurmaTratado = str_replace(",",".", $valorTurmaPonto);
+					$valorTurmaTratado  = 0;
+					$dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
+					$situacao = "";
+					$numeroCDA = "";
 					
-					if (count($valorSeparado)>2) { 
-					    $dataSituacaoBarra = substr($arquivo1[$a], strlen($arquivo1[$a])-10, 10);
-					    $dataSituacao = implode( '-', array_reverse( explode( '/', "$dataSituacaoBarra" ))); 
-					  
-					    if(strpos($arquivo1[$a], "Lan") === false){ //desparcelados
-							
-							$situacao = $valorSeparado[2];
-							
-						}else{
-							
-							if(count($valorSeparado) == 4){ //relançados
-								
-								$situacao = $valorSeparado[3]." - ".$valorSeparado[2];
-								
-							}elseif(count($valorSeparado) == 6){ //relançados e desparcelados
-								
-								$situacao = $valorSeparado[2]." - ".$valorSeparado[5]." - Processo ".$valorSeparado[4];
-								
-								if(strtotime($dataSituacao) < strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[3])))))){
-									$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))));
-								}
-							}
-						}
-					  
-					  $numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-					  
-					}elseif(count($valorSeparado) == 2){
-						$dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-						$situacao = "";
-						$numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-						
-					}else {
-					  $dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-					  $situacao = "";
-					  $numeroCDA = "";
-					}
-					
-					$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`Situacao_".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`DataSituacao_".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`CDA_".$arraycabecalho[$incrementacoluna]."`";
-					$valores = $valores."'".addslashes($valorTurmaTratado)."',";
-					$valores = $valores."'".addslashes($situacao)."',";
-					$valores = $valores."'".addslashes($dataSituacao)."',";
-					$valores = $valores."'".addslashes($numeroCDA)."'";
-					$incrementacoluna = $incrementacoluna+1;
-					
-				}elseif($a>10){
-					
-					$valorSeparado =  explode("-", $arquivo1[$a]);
-					$valorTurmaPonto = str_replace(".","", $valorSeparado[0]);
-					$valorTurmaTratado = str_replace(",",".", $valorTurmaPonto);
-					
-					if (count($valorSeparado)>2) { 
-						$dataSituacaoBarra = substr($arquivo1[$a], strlen($arquivo1[$a])-10, 10);
-						$dataSituacao = implode( '-', array_reverse( explode( '/', "$dataSituacaoBarra" )));
-						
-						if(strpos($arquivo1[$a], "Lan") === false){
-							
-							$situacao = $valorSeparado[2];
-							
-						}else{
-							
-							if(count($valorSeparado) == 4){
-								
-								$situacao = $valorSeparado[3]." - ".$valorSeparado[2];
-
-							}elseif(count($valorSeparado) == 6){
-								
-								$situacao = $valorSeparado[2]." - ".$valorSeparado[5]." - Processo ".$valorSeparado[4];
-								
-								if(strtotime($dataSituacao) < strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[3])))))){
-									$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))));
-								}
-							}
-						}
-					  
-					  $numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-					  
-					}elseif(count($valorSeparado) == 2){
-						$numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-						$dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-						$situacao = "";
-					} else {
-					  $dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-					  $situacao = "";
-					  $numeroCDA = "";
-					}
-					
-					$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`Situacao_".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`DataSituacao_".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`CDA_".$arraycabecalho[$incrementacoluna]."`,";
-					$valores = $valores."'".addslashes($valorTurmaTratado)."',";
-					$valores = $valores."'".addslashes($situacao)."',";
-					$valores = $valores."'".addslashes($dataSituacao)."',";
-					$valores = $valores."'".addslashes($numeroCDA)."',";
-					$incrementacoluna = $incrementacoluna+1;
 				}else{
-					$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
-					$valores = $valores."'".addslashes($arquivo1[$a])."',";
-					$incrementacoluna = $incrementacoluna+1;
 					
+					$valorSeparado =  explode("-", $arquivo1[$a]);
+					$valorTurmaPonto = str_replace(".","", $valorSeparado[0]);
+					$valorTurmaTratado = str_replace(",",".", $valorTurmaPonto);
+					
+					//echo $arquivo1[$a]."||".count($valorSeparado)."<br>";
+					
+					if(trim($valorSeparado[count($valorSeparado)-1]) == "Com Exigibilidade Suspensa"){	
+						$situacao = "Com Exigbilidade Suspensa - ";
+						unset($valorSeparado[count($valorSeparado)-1]);
+					}
+					
+					if(count($valorSeparado) == 2){ //APENAS VALOR
+						$dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
+						$situacao = $situacao."";
+						$numeroCDA = str_replace("CDA ","", $valorSeparado[1]);
+					}elseif(count($valorSeparado) == 4){
+						
+						//echo substr($valorSeparado[2],1,3)."<br>";
+						
+						if(substr($valorSeparado[2],1,4) == "Parc"){ //APENAS PARCELADOS
+							
+							$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))));
+							$situacao = $situacao.$valorSeparado[2];
+							$numeroCDA = str_replace("CDA ","", $valorSeparado[1]);
+							
+						}elseif(substr($valorSeparado[3],1,3) == "Lan"){ //APENAS LANÇADOS
+							
+							$dataSituacao = implode( '-', array_reverse( explode( '/', substr($valorSeparado[3], -10, 10))));
+							$situacao = $situacao.$valorSeparado[3]." - Processo ".$valorSeparado[2];
+							$numeroCDA = str_replace("CDA ","", $valorSeparado[1]);
+							
+						}
+						
+					}elseif(count($valorSeparado) == 6){
+						
+						if(substr($valorSeparado[2],1,4) == "Parc"){ //PARCELADO E RELANÇADO
+							
+							if(strtotime(implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))))) > strtotime(implode( '-', array_reverse( explode( '/', substr($valorSeparado[5], -10, 10)))))){
+								$dataSituacao = implode( '-', array_reverse( explode( '/', trim($valorSeparado[3]))));
+							}else{
+								$dataSituacao = implode( '-', array_reverse( explode( '/', substr($valorSeparado[5], -10, 10))));
+							}
+							$situacao = $situacao.$valorSeparado[2]." - ".$valorSeparado[3]." - Processo ".$valorSeparado[4]." - ".$valorSeparado[5];
+							$numeroCDA = str_replace("CDA ","", $valorSeparado[1]);
+							
+						}
+						
+					}
 				}
 				
-			/*}elseif($natureza=="Mercantil"){
-				
-				if($a == $cont-1){
-					$valorSeparado =  explode("-", $arquivo1[$a]);
-					$valorTurmaPonto = str_replace(".","", $valorSeparado[0]);
-					$valorTurmaTratado = str_replace(",",".", $valorTurmaPonto);
-					
-					if (count($valorSeparado)>2) {
-					  $dataSituacaoBarra = substr($arquivo1[$a], strlen($arquivo1[$a])-10, 10);
-					  $dataSituacao = implode( '-', array_reverse( explode( '/', "$dataSituacaoBarra" )));
-					  $situacao = $valorSeparado[2];
-					  $numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-					  
-					}elseif(count($valorSeparado) == 2){
-						$numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-						$dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-						$situacao = "";
-					} else {
-					  $dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-					  $situacao = "";
-					  $numeroCDA = "";
-					}
-					
-					$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`Situacao_".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`DataSituacao_".$arraycabecalho[$incrementacoluna]."`,";
-					$colunas = $colunas."`CDA_".$arraycabecalho[$incrementacoluna]."`";
-					$valores = $valores."'".addslashes($valorTurmaTratado)."',";
-					$valores = $valores."'".addslashes($situacao)."',";
-					$valores = $valores."'".addslashes($dataSituacao)."',";
-					$valores = $valores."'".addslashes($numeroCDA)."'";
-					$incrementacoluna = $incrementacoluna+1;
-					
-				}elseif($a>10){
-					$valorSeparado = explode("-", $arquivo1[$a]);
-					$valorTurmaPonto = str_replace(".","", $valorSeparado[0]);
-					$valorTurmaTratado = str_replace(",",".", $valorTurmaPonto);
-					
-					if (count($valorSeparado)>2) {
-					  $dataSituacaoBarra = substr($arquivo1[$a], strlen($arquivo1[$a])-10, 10);
-					  $dataSituacao = implode( '-', array_reverse( explode( '/', "$dataSituacaoBarra" )));
-					  $situacao = $valorSeparado[2];
-					  $numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-					  
-					}elseif(count($valorSeparado) == 2){
-						$numeroCDA = str_replace("CDA ","",$valorSeparado[1]);
-						$dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-						$situacao = "";
-						
-					} else {
-					  $dataSituacao = $arraycabecalho[$incrementacoluna]."-02-10";
-					  $situacao = "";
-					  $numeroCDA = "";
-					}
+				if($a != $cont-1){ //colunas exercícios (SQL)
 					
 					$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
 					$colunas = $colunas."`Situacao_".$arraycabecalho[$incrementacoluna]."`,";
@@ -405,13 +313,21 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 					$valores = $valores."'".addslashes($numeroCDA)."',";
 					$incrementacoluna = $incrementacoluna+1;
 					
-				}else{
+				}elseif($a == $cont-1){ //colunas exercícios (SQL)
+					
 					$colunas = $colunas."`".$arraycabecalho[$incrementacoluna]."`,";
-					$valores = $valores."'".addslashes($arquivo1[$a])."',";
+					$colunas = $colunas."`Situacao_".$arraycabecalho[$incrementacoluna]."`,";
+					$colunas = $colunas."`DataSituacao_".$arraycabecalho[$incrementacoluna]."`,";
+					$colunas = $colunas."`CDA_".$arraycabecalho[$incrementacoluna]."`";
+					$valores = $valores."'".addslashes($valorTurmaTratado)."',";
+					$valores = $valores."'".addslashes($situacao)."',";
+					$valores = $valores."'".addslashes($dataSituacao)."',";
+					$valores = $valores."'".addslashes($numeroCDA)."'";
 					$incrementacoluna = $incrementacoluna+1;
-				}
-			}*/
-				
+					
+					
+				}	
+			}	
 		}
 		
 			$insert = "insert into BaseAcompanhamento".$natureza."DAT(".utf8_encode("$colunas) values ($valores)");
@@ -419,6 +335,7 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 			$inserir->execute();
 	}
 	echo "<script>window.location='TelaEnviarArquivo.php?tipo=Remessa';alert('Dados enviados com sucesso!');</script>" ;
+	
 }
 
 
