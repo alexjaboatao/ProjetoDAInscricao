@@ -223,6 +223,130 @@
 						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos retroativos de débitos que necessitam de confirmação sobre a notificação para inscrição em D.A..</h6>
 				</div>
              </div>
+             <div class="float-left">
+                <div class="card" style="width: 21rem; margin-top:20px; margin-left:5%; ">
+                  <div class="card-header" align="center">
+                    <strong>01</strong>
+                  </div>
+						<table align="center">
+							<tr>
+							  <td width="50" align="left">
+								<strong>
+					--------------Colocar o código------------------------------------
+								 </strong>
+							  </td>
+							  <td width="50" align="center" >
+					--------------Colocar o código------------------------------------		
+							  </td>
+							</tr>
+							<tr>
+							  <td width="80" align="left">
+								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+							  </td>
+							  <td width="120" align="center" >
+                              <form action="GeracaoCSV.php">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                </form>
+							  </td>
+							</tr>
+						</table>
+						<br>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos retroativos de débitos que necessitam de confirmação sobre a notificação para inscrição em D.A..</h6>
+				</div>
+             </div>
+             <div class="float-left">
+                <div class="card" style="width: 21rem; margin-top:20px; margin-left:10%; ">
+                  <div class="card-header" align="center">
+                    <strong>02</strong>
+                  </div>
+						<table align="center">
+							<tr>
+							  <td width="50" align="left">
+								<strong>
+					--------------Colocar o código------------------------------------
+								 </strong>
+							  </td>
+							  <td width="50" align="center" >
+					--------------Colocar o código------------------------------------		
+							  </td>
+							</tr>
+							<tr>
+							  <td width="80" align="left">
+								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+							  </td>
+							  <td width="120" align="center" >
+                              <form action="GeracaoCSV.php">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                </form>
+							  </td>
+							</tr>
+						</table>
+						<br>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos retroativos de débitos que necessitam de confirmação sobre a notificação para inscrição em D.A..</h6>
+				</div>
+             </div>
+             <div class="float-left">
+                <div class="card" style="width: 21rem; margin-top:20px; margin-left:15%; ">
+                  <div class="card-header" align="center">
+                    <strong>03</strong>
+                  </div>
+						<table align="center">
+							<tr>
+							  <td width="50" align="left">
+								<strong>
+					--------------Colocar o código------------------------------------
+								 </strong>
+							  </td>
+							  <td width="50" align="center" >
+					--------------Colocar o código------------------------------------		
+							  </td>
+							</tr>
+							<tr>
+							  <td width="80" align="left">
+								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+							  </td>
+							  <td width="120" align="center" >
+                              <form action="GeracaoCSV.php">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                </form>
+							  </td>
+							</tr>
+						</table>
+						<br>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos retroativos de débitos que necessitam de confirmação sobre a notificação para inscrição em D.A..</h6>
+				</div>
+             </div>
+             <div class="float-left">
+                <div class="card" style="width: 21rem; margin-top:20px; margin-left:5%; ">
+                  <div class="card-header" align="center">
+                    <strong>04</strong>
+                  </div>
+						<table align="center">
+							<tr>
+							  <td width="50" align="left">
+								<strong>
+					--------------Colocar o código------------------------------------
+								 </strong>
+							  </td>
+							  <td width="50" align="center" >
+					--------------Colocar o código------------------------------------		
+							  </td>
+							</tr>
+							<tr>
+							  <td width="80" align="left">
+								<button type="submit" id="chamarFormulario3" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Gerar CI</button>
+							  </td>
+							  <td width="120" align="center" >
+                              <form action="GeracaoCSV.php">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Relatório CSV</button>
+                                </form>
+							  </td>
+							</tr>
+						</table>
+						<br>
+						<h6 align="left" style="font-size:9px; color:#F00; margin-left:10px;">Obs.: Lançamentos retroativos de débitos que necessitam de confirmação sobre a notificação para inscrição em D.A..</h6>
+				</div>
+             </div>
         </div>
         </div>
 </div>
