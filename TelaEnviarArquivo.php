@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -53,7 +53,7 @@
 											  
 											  	if ($tabelaImobiliaria !== ""){
 												  ?>
-                                                 <form method="post" action="TelaResultadoInscricaoDA.php">
+                                                 <form method="post" action="TelaResultadoInscricaoDA_v2.php">
                                                  	<input type="hidden" name="natureza" value="Imobiliária">
                                      				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário - Inscrição</button>
                                                  </form>
@@ -65,7 +65,7 @@
 											  foreach ($buscarTabelaMercantil as $tabelaMercantil): endforeach;
 											  
 												 if ($tabelaMercantil !== ""){?>
-                                                 <form method="post" action="TelaResultadoInscricaoDA.php">
+                                                 <form method="post" action="TelaResultadoInscricaoDA_v2.php">
                                                  	<input type="hidden" name="natureza" value="Mercantil">
                                      				<button type="submit" class="btn btn-secondary btn-lg btn-block">Mercantil - Inscrição</button>
                                                  </form>
