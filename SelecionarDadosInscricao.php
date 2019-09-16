@@ -1,5 +1,24 @@
 <?php
 
+function buscarExercicios($pdo, $natureza){
+
+	$sql = "show COLUMNS FROM baseacompanhamento$natureza";
+	$buscar = $pdo->prepare($sql);
+	$buscar->execute();
+	$todascolunas = $buscar->fetchAll(PDO::FETCH_NUM);
+	
+	echo $qtdColunas = count($todascolunas);
+	$arrayCabecalho = array();
+	
+	for($i=11; $i<$qtdColunas; $i=$i+4){
+
+		array_push($arrayCabecalho,$todascolunas[$i][0]);
+	}
+	
+	return $arrayCabecalho;
+}
+
+
 function selectGerarViewInscricao($natureza, $arrayexercicios){
 	
 	$sqlSomatorio = "(";
