@@ -1,13 +1,6 @@
 ﻿<?php 
 require_once "conexao.php";
 
-function buscarExercicio($pdo, $natureza){
-
-	$sql = "show COLUMNS FROM baseacompanhamento$natureza";
-	$buscar = $pdo->prepare($sql);
-	$buscar->execute();
-	return $buscar->fetchAll(PDO::FETCH_NUM);
-}
 
 function anosInscrever($ano, $natureza, $pdo){
 	if ($natureza == "Imobiliária"){

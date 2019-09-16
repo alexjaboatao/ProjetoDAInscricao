@@ -18,7 +18,7 @@
 
 		$pdo = conectar();
 		
-			$natureza = $_POST["natureza"];
+		$natureza = $_POST["natureza"];
 			
 	 ?>
 
@@ -186,8 +186,9 @@
 
          </div>
          <div align="center">
-            <form action="TelaResultadoInscricoesEAN.php">
-                <button type="button" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
+            <form action="TelaResultadosAnaliseInscricoesEAN.php" method="post">
+              	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
             </form>
         </div>
         <br>

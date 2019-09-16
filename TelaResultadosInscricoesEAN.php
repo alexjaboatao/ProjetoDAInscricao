@@ -54,27 +54,20 @@
                               </thead>
                               <tbody align="center">
                                 <tr>
+                                <?php ?>
                                   <td>Mark</td>
-                                  <td>Otto</td>
+                                  <td><a href="#">Otto</a></td>
                                   <td>
                                   	    <form method="post" action="#">
 											<input type="hidden" name="natureza" value="<?php ?>">
 											<input type="hidden" name="matrizExercicios" value="<?php ?>">
 											<input type="hidden" name="tipoacao" value="anosRemessa">
-											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Inscrever</button>
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
                                         </form>
                                    </td>
+                                <?php ?>
                                 </tr>
-                                <tr>
-                                  <td>Jacob</td>
-                                  <td>Thornton</td>
-                                  <td><a href="#">@fat</a></td>
-                                </tr>
-                                <tr>
-                                  <td>Larry</td>
-                                  <td>the Bird</td>
-                                  <td><a href="#">@twitter</a></td>
-                                </tr>
+                                
                               </tbody>
                             </table>
                 
@@ -110,26 +103,17 @@
                               <tbody align="center">
                                 <tr>
                                   <td>Mark</td>
-                                  <td>Otto</td>
+                                  <td><a href="#">Otto</a></td>
                                   <td>
                                   	    <form method="post" action="#">
 											<input type="hidden" name="natureza" value="<?php ?>">
 											<input type="hidden" name="matrizExercicios" value="<?php ?>">
 											<input type="hidden" name="tipoacao" value="anosRemessa">
-											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Inscrever</button>
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:11px">Relatório</button>
                                         </form>
                                    </td>
                                 </tr>
-                                <tr>
-                                  <td>Jacob</td>
-                                  <td>Thornton</td>
-                                  <td><a href="#">@fat</a></td>
-                                </tr>
-                                <tr>
-                                  <td>Larry</td>
-                                  <td>the Bird</td>
-                                  <td><a href="#">@twitter</a></td>
-                                </tr>
+                                
                               </tbody>
                             </table>
                   </div>
@@ -164,26 +148,17 @@
                               <tbody align="center">
                                 <tr>
                                   <td>Mark</td>
-                                  <td>Otto</td>
+                                  <td><a href="#">Otto</a></td>
                                   <td>
                                   	    <form method="post" action="#">
 											<input type="hidden" name="natureza" value="<?php ?>">
 											<input type="hidden" name="matrizExercicios" value="<?php ?>">
 											<input type="hidden" name="tipoacao" value="anosRemessa">
-											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px">Inscrever</button>
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:11px">Relatório</button>
                                         </form>
                                    </td>
                                 </tr>
-                                <tr>
-                                  <td>Jacob</td>
-                                  <td>Thornton</td>
-                                  <td><a href="#">@fat</a></td>
-                                </tr>
-                                <tr>
-                                  <td>Larry</td>
-                                  <td>the Bird</td>
-                                  <td><a href="#">@twitter</a></td>
-                                </tr>
+                                
                               </tbody>
                             </table>
                   </div>
