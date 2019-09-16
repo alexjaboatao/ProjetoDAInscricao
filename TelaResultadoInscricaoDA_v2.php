@@ -17,8 +17,12 @@
 		require_once "SelecionarDadosInscricao.php";
 
 		$pdo = conectar();
-		
 		$natureza = $_POST["natureza"];
+		$arrayexerciciosEDados = buscarColunasExercicosEDados($pdo, $natureza);
+		
+		$select = selectGerarViewInscricao($natureza, $arrayexerciciosEDados);
+		criarViewInscricao($select, $natureza, $pdo);
+		
 			
 	 ?>
 
@@ -80,7 +84,7 @@
            
          </div>
          <div align="center">
-            <form action="TelaResultadosInscricoesEAN.php" method="post">
+            <form action="TelaResultadosCadastroCompletoEAN.php" method="post">
             	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
                 <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
             </form>

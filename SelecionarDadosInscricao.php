@@ -10,35 +10,74 @@ function buscarExercicios($pdo, $natureza){
 	$todascolunas = $buscar->fetchAll(PDO::FETCH_NUM);
 	
 	$qtdColunas = count($todascolunas);
-	$arrayCabecalho = array();
+	$arrayExercicios = array();
 	
 	for($i=11; $i<$qtdColunas; $i=$i+4){
+
+		array_push($arrayExercicios,$todascolunas[$i][0]);
+	}
+	
+	return $arrayExercicios;
+}
+
+function buscarColunasIniciais($pdo, $natureza){
+
+	$sql = "show COLUMNS FROM baseacompanhamento$natureza";
+	$buscar = $pdo->prepare($sql);
+	$buscar->execute();
+
+	$todascolunas = $buscar->fetchAll(PDO::FETCH_NUM);
+	
+	$arrayCabecalho = array();
+	
+	for($i=0; $i<11; $i++){
 
 		array_push($arrayCabecalho,$todascolunas[$i][0]);
 	}
 	
 	return $arrayCabecalho;
+	
 }
 
-function selectGerarViewInscricao($natureza, $arrayexercicios){
+function buscarColunasExercicosEDados($pdo, $natureza){
+
+	$sql = "show COLUMNS FROM baseacompanhamento$natureza";
+	$buscar = $pdo->prepare($sql);
+	$buscar->execute();
+
+	$todascolunas = $buscar->fetchAll(PDO::FETCH_NUM);
+	$qtdColunas = count($todascolunas);
+	$arrayExercicosEDados = array();
+	
+	for($i=11; $i<$qtdColunas; $i++){
+
+		array_push($arrayExercicosEDados,$todascolunas[$i][0]);
+	}
+	
+	return $arrayExercicosEDados;
+	
+}
+
+
+function selectGerarViewInscricao($natureza, $arrayColunas){
 	
 	$sqlSomatorio = "(";
 	
-	$numerocolunas = count($arrayexercicios);
+	$numerocolunas = count($arrayColunas);
 				
 	for($i=0; $i<$numerocolunas; $i=$i+4){
 		
-		if($i<count($arrayexercicios)-4){
-			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , ean.`".$arrayexercicios[$i+2]."`, CURRENT_DATE()) >= 5 
-			AND ean.`".$arrayexercicios[$i]."` <> 0 AND ean.`".$arrayexercicios[$i+1]."` NOT LIKE '%Exigib%') 
-			THEN ean.`".$arrayexercicios[$i]."` ELSE 0 END + ";
+		if($i<count($arrayColunas)-4){
+			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , ean.`".$arrayColunas[$i+2]."`, CURRENT_DATE()) >= 5 
+			AND ean.`".$arrayColunas[$i]."` <> 0 AND ean.`".$arrayColunas[$i+1]."` NOT LIKE '%Exigib%') 
+			THEN ean.`".$arrayColunas[$i]."` ELSE 0 END + ";
 			
 			
 		}else{
 			
-			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , ean.`".$arrayexercicios[$i+2]."`, CURRENT_DATE()) >= 5 
-			AND ean.`".$arrayexercicios[$i]."` <> 0 AND ean.`".$arrayexercicios[$i+1]."` NOT LIKE '%Exigib%') 
-			THEN ean.`".$arrayexercicios[$i]."` ELSE 0 END) ";
+			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , ean.`".$arrayColunas[$i+2]."`, CURRENT_DATE()) >= 5 
+			AND ean.`".$arrayColunas[$i]."` <> 0 AND ean.`".$arrayColunas[$i+1]."` NOT LIKE '%Exigib%') 
+			THEN ean.`".$arrayColunas[$i]."` ELSE 0 END) ";
 			
 		}
 	}
@@ -83,7 +122,7 @@ function selectViewCadastroCompletoSemInterrupcao($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT viewCC.`Sequencial` FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -104,7 +143,7 @@ function selectViewCadastroCompletoSemInterrupcao($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT viewCC.`InscriçãoMercantil` FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -136,7 +175,7 @@ function selectViewCadastroCompletoDesparcelado($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT viewCC.`Sequencial` FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -159,7 +198,7 @@ function selectViewCadastroCompletoDesparcelado($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT viewCC.`InscriçãoMercantil` FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -194,7 +233,7 @@ function selectViewCadastroCompletoRelancado($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT viewCC.`Sequencial` FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -217,7 +256,7 @@ function selectViewCadastroCompletoRelancado($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT viewCC.`InscriçãoMercantil` FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -251,7 +290,7 @@ function selectViewAnaliseInscricaoCPFBrancoNomeSobrenome($exercicio, $natureza,
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -265,7 +304,7 @@ function selectViewAnaliseInscricaoCPFBrancoNomeSobrenome($exercicio, $natureza,
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -290,7 +329,7 @@ function selectViewAnaliseInscricaoCPFInvalidoNomeSobrenome($exercicio, $naturez
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -311,7 +350,7 @@ function selectViewAnaliseInscricaoCPFInvalidoNomeSobrenome($exercicio, $naturez
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -343,7 +382,7 @@ function selectViewAnaliseInscricaoCPFBrancoApenasNome($exercicio, $natureza, $p
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -357,7 +396,7 @@ function selectViewAnaliseInscricaoCPFBrancoApenasNome($exercicio, $natureza, $p
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -381,7 +420,7 @@ function selectViewAnaliseInscricaoCPFInvalidoApenasNome($exercicio, $natureza, 
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -402,7 +441,7 @@ function selectViewAnaliseInscricaoCPFInvalidoApenasNome($exercicio, $natureza, 
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -434,7 +473,7 @@ function selectViewAnaliseInscricaoCPFValidoApenasNome($exercicio, $natureza, $p
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -456,7 +495,7 @@ function selectViewAnaliseInscricaoCPFValidoApenasNome($exercicio, $natureza, $p
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -489,7 +528,7 @@ function selectViewAnaliseInscricaoCDAsBaixadas($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -502,7 +541,7 @@ function selectViewAnaliseInscricaoCDAsBaixadas($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -525,7 +564,7 @@ function selectViewCNPJPrefeituraNaoPrescritosAcimaInfimo($exercicio, $natureza,
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -537,7 +576,7 @@ function selectViewCNPJPrefeituraNaoPrescritosAcimaInfimo($exercicio, $natureza,
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -559,7 +598,7 @@ function selectViewCNPJPrefeituraNaoPrescritosValorInfimo($exercicio, $natureza,
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -571,7 +610,7 @@ function selectViewCNPJPrefeituraNaoPrescritosValorInfimo($exercicio, $natureza,
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -593,7 +632,7 @@ function selectViewCNPJPrefeituraPrescritos($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND  
@@ -604,7 +643,7 @@ function selectViewCNPJPrefeituraPrescritos($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
@@ -625,7 +664,7 @@ function selectViewCNPJPrefeituraExigSuspensa($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND  
@@ -635,7 +674,7 @@ function selectViewCNPJPrefeituraExigSuspensa($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -655,7 +694,7 @@ function selectViewAnaliseNaoInscricaoCPFBrancoNomeSobrenomeValorInfimo($exercic
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -668,7 +707,7 @@ function selectViewAnaliseNaoInscricaoCPFBrancoNomeSobrenomeValorInfimo($exercic
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -692,7 +731,7 @@ function selectViewAnaliseNaoInscricaoCPFInvalidoNomeSobrenomeValorInfimo($exerc
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -712,7 +751,7 @@ function selectViewAnaliseNaoInscricaoCPFInvalidoNomeSobrenomeValorInfimo($exerc
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -742,7 +781,7 @@ function selectViewAnaliseNaoInscricaoCPFBrancoApenasNomeValorInfimo($exercicio,
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -755,7 +794,7 @@ function selectViewAnaliseNaoInscricaoCPFBrancoApenasNomeValorInfimo($exercicio,
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -779,7 +818,7 @@ function selectViewAnaliseNaoInscricaoCPFInvalidoApenasNomeValorInfimo($exercici
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -799,7 +838,7 @@ function selectViewAnaliseNaoInscricaoCPFInvalidoApenasNomeValorInfimo($exercici
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -829,7 +868,7 @@ function selectViewAnaliseNaoInscricaoCPFValidoApenasNomeValorInfimo($exercicio,
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -850,7 +889,7 @@ function selectViewAnaliseNaoInscricaoCPFValidoApenasNomeValorInfimo($exercicio,
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -882,7 +921,7 @@ function selectViewAnaliseNaoInscricaoCPFValidoNomeSobrenomeValorInfimo($exercic
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -904,7 +943,7 @@ function selectViewAnaliseNaoInscricaoCPFValidoNomeSobrenomeValorInfimo($exercic
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND 
@@ -936,7 +975,7 @@ function selectViewAnaliseNaoInscricaoAtividadeEncerradaPrescrito($exercicio, $n
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			`Sequencial` LIKE '';";
@@ -944,7 +983,7 @@ function selectViewAnaliseNaoInscricaoAtividadeEncerradaPrescrito($exercicio, $n
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
@@ -964,7 +1003,7 @@ function selectViewAnaliseNaoInscricaoAtividadeEncerradaNaoPrescrito($exercicio,
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			`Sequencial` LIKE '';";
@@ -972,7 +1011,7 @@ function selectViewAnaliseNaoInscricaoAtividadeEncerradaNaoPrescrito($exercicio,
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
@@ -993,7 +1032,7 @@ function selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosSemCDA($exercicio, $na
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND  
@@ -1005,7 +1044,7 @@ function selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosSemCDA($exercicio, $na
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
@@ -1027,7 +1066,7 @@ function selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($exercicio, $na
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND  
@@ -1039,7 +1078,7 @@ function selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($exercicio, $na
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
@@ -1061,7 +1100,7 @@ function selectViewAnaliseNaoInscricaoExigSuspensa($exercicio, $natureza, $pdo){
 	
 	if ($natureza == "Imobiliária"){
 		
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, `$exercicio` FROM
 			view_cadastroCompleto_ImobEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND  
@@ -1071,7 +1110,7 @@ function selectViewAnaliseNaoInscricaoExigSuspensa($exercicio, $natureza, $pdo){
 	
 	} elseif ($natureza == "Mercantil"){
 	
-		$sqlView = "SELECT * FROM
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, `$exercicio` FROM
 			view_cadastroCompleto_MercEAN AS viewCC 
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
