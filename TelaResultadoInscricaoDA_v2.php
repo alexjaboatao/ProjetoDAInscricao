@@ -19,6 +19,7 @@
 		$pdo = conectar();
 		
 			$natureza = $_POST["natureza"];
+			
 	 ?>
 
  <div class="container">
