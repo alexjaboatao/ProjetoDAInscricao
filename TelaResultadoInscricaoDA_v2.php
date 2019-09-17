@@ -218,6 +218,11 @@
                             <li>Soma dos Débitos abaixo do Valor Ínfimo</li>
                             <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
                            </ul>
+						   <hr>
+							<form action="TelaResultadosValorInfimoEAN.php" method="post">
+								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Detalhar Resultados</button>
+							</form>
                   </div>
                </div>
            </div>
@@ -230,7 +235,12 @@
                             <li>Débitos Sem Suspensão de Exigibilidade</li>
                             <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
                            </ul>
-                           <br><br><br>
+                           <br><br>
+						   <hr>
+							<form action="TelaResultadosAtividadeEncerradaEAN.php" method="post">
+								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Detalhar Resultados</button>
+							</form>
                   </div>
                </div>
            </div>
@@ -244,7 +254,12 @@
                             <li>Débitos Sem Suspensão de Exigibilidade</li>
                             <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
                            </ul>
-                           <br><br>
+                           <br>
+						   <hr>
+							<form action="TelaResultadosPassiveisPrescricaoEAN.php" method="post">
+								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Detalhar Resultados</button>
+							</form>
                   </div>
                </div>
            </div>
@@ -256,18 +271,17 @@
                            <ul>
                             <li>Débitos Com Suspensão de Exigibilidade</li>
                            </ul>
-                           <br><br><br><br><br>
+                           <br><br><br><br>
+						   <hr>
+							<form action="TelaResultadosAnaliseNaoInscricoesEAN.php" method="post">
+								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
+							</form>
                   </div>
                </div>
            </div>
 
          </div>
-        <div align="center">
-            <form action="TelaResultadosAnaliseNaoInscricoesEAN.php" method="post">
-              	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-                <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
-            </form>
-        </div>
         <br>
      </div>  
         
