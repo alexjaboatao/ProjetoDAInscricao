@@ -103,7 +103,7 @@
          <div class="card-body" align="center">
            <div class="float-left" style="margin-left:2%">
                <div class="card" style="width: 21rem; margin-top:20px;">
-                 <a href="#"> <h6 class="card-header">CPF/CNPJ em Branco +<br> Apenas 1 Nome</h6></a>
+                 <h6 class="card-header">CPF/CNPJ em Branco +<br> Apenas 1 Nome</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                   	<h6>Critérios:</h6>
                            <ul>
@@ -117,7 +117,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 21rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">CPF/CNPJ Inválido +<br> Apenas 1 Nome</h6></a>
+                  <h6 class="card-header">CPF/CNPJ Inválido +<br> Apenas 1 Nome</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                    	<h6>Critérios:</h6>
                           <ul>
@@ -131,7 +131,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
-                 <a href="#"> <h6 class="card-header">CPF/CNPJ Válido +<br> Apenas 1 Nome</h6></a>
+                 <h6 class="card-header">CPF/CNPJ Válido +<br> Apenas 1 Nome</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                  		<h6>Critérios:</h6>
                            <ul>
@@ -146,7 +146,7 @@
            </div>
            <div class="float-left" style="margin-left:2%">
                <div class="card" style="width: 21rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">CPF/CNPJ em Branco +<br> Nome e Sobrenome</h6></a>
+                  <h6 class="card-header">CPF/CNPJ em Branco +<br> Nome e Sobrenome</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                   	<h6>Critérios:</h6>
                            <ul>
@@ -160,7 +160,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 21rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">CPF/CNPJ Inválido +<br> Nome e Sobrenome</h6></a>
+                  <h6 class="card-header">CPF/CNPJ Inválido +<br> Nome e Sobrenome</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                    	<h6>Critérios:</h6>
                            <ul>
@@ -174,7 +174,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
-                  <a href="#"><h6 class="card-header">CDA's <br>Baixadas</h6></a>
+                  <h6 class="card-header">CDA's <br>Baixadas</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                  		<h6>Critérios:</h6>
                           <ul>
@@ -209,7 +209,7 @@
          <div class="card-body" align="center">
            <div class="float-left" style="margin-left:2.4%">
                <div class="card" style="width: 15rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">Débitos abaixo do Valor Ínfimo</h6></a>
+                  <h6 class="card-header">Débitos abaixo do Valor Ínfimo</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                   	<h6>Critérios:</h6>
                            <ul>
@@ -223,7 +223,7 @@
            </div>
            <div class="float-left" style="margin-left:1.7%;">
                <div class="card" style="width: 15rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">CMC com ATIVIDADE ENCERRADA com Débitos</h6></a>
+                  <h6 class="card-header">CMC com ATIVIDADE ENCERRADA com Débitos</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                    	<h6>Critérios:</h6>
                            <ul>
@@ -236,7 +236,7 @@
            </div>
            <div class="float-left" style="margin-left:1.7%;">
                <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <a href="#"><h6 class="card-header">Débitos Passíveis de Prescrição</h6></a>
+                  <h6 class="card-header">Débitos Passíveis de Prescrição</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                  		<h6>Critérios:</h6>
                            <ul>
@@ -250,7 +250,7 @@
            </div>
            <div class="float-left" style="margin-left:1.7%;">
                <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <a href="#"><h6 class="card-header">Débitos com Exigibilidade Suspensa</h6></a>
+                  <h6 class="card-header">Débitos com Exigibilidade Suspensa</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                  		<h6>Critérios:</h6>
                            <ul>
@@ -263,8 +263,9 @@
 
          </div>
         <div align="center">
-            <form action="TelaResultadoInscricoesEAN.php">
-                <button type="button" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
+            <form action="TelaResultadosAnaliseNaoInscricoesEAN.php" method="post">
+              	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
             </form>
         </div>
         <br>
@@ -281,7 +282,7 @@
          <div class="card-body" align="center">
            <div class="float-left" style="margin-left:2%">
                <div class="card" style="width: 15rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">Débitos Não Prescrito Acima do Ínfimo</h6></a>
+                  <h6 class="card-header">Débitos Não Prescrito Acima do Ínfimo</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                   	<h6>Critérios:</h6>
                     	   <ul>
@@ -295,7 +296,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 15rem; margin-top:20px;">
-                  <a href="#"><h6 class="card-header">Débitos Não Prescritos Abaixo do valor Ínfimo</h6></a>
+                  <h6 class="card-header">Débitos Não Prescritos Abaixo do valor Ínfimo</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                    	<h6>Critérios:</h6>
                             <ul>
@@ -309,7 +310,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <a href="#"><h6 class="card-header">Débitos <br>Prescritos</h6></a>
+                  <h6 class="card-header">Débitos <br>Prescritos</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                  		<h6>Critérios:</h6>
                            <ul>
@@ -323,7 +324,7 @@
            </div>
            <div class="float-left" style="margin-left:1%;">
                <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <a href="#"><h6 class="card-header">Débitos Com Exigibilidade Suspensa</h6></a>
+                  <h6 class="card-header">Débitos Com Exigibilidade Suspensa</h6>
                   <div class="card-body" align="left" style="font-size:11px;">
                  		<h6>Critérios:</h6>
                            <ul>
@@ -336,8 +337,9 @@
 
          </div>
          <div align="center">
-            <form action="TelaResultadoInscricoesEAN.php">
-                <button type="button" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
+            <form action="TelaResultadosLancadoPrefEAN.php" method="post">
+              	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+                <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
             </form>
         </div>
         <br>
