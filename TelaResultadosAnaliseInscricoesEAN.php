@@ -69,8 +69,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseInscricaoCPFBrancoApenasNome($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseInscricaoCPFBrancoApenasNome($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=AI4'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -136,8 +136,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseInscricaoCPFInvalidoApenasNome($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseInscricaoCPFInvalidoApenasNome($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=AI5'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -201,8 +201,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseInscricaoCPFValidoApenasNome($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseInscricaoCPFValidoApenasNome($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=AI6'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -266,8 +266,8 @@
 									
 									<?php 
 									
-										echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseInscricaoCPFBrancoNomeSobrenome($colunasExercicios[$i], $natureza, $pdo));
-										//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+										$qtdResultados = count(selectViewAnaliseInscricaoCPFBrancoNomeSobrenome($colunasExercicios[$i], $natureza, $pdo));
+										echo '<a href="TelaRelacaoInscricoes.php?DA=AI7'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 									
 									?> 
 									
@@ -334,8 +334,8 @@
 									
 									<?php 
 									
-										echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseInscricaoCPFInvalidoNomeSobrenome($colunasExercicios[$i], $natureza, $pdo));
-										//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+										$qtdResultados = count(selectViewAnaliseInscricaoCPFInvalidoNomeSobrenome($colunasExercicios[$i], $natureza, $pdo));
+										echo '<a href="TelaRelacaoInscricoes.php?DA=AI8'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 									
 									?> 
 									
@@ -399,8 +399,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseInscricaoCDAsBaixadas($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseInscricaoCDAsBaixadas($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=AI9'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										

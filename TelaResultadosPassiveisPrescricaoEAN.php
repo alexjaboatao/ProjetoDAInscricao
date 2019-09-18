@@ -69,8 +69,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=NI9'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -136,8 +136,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosSemCDA($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosSemCDA($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=N10'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										

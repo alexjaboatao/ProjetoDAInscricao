@@ -71,8 +71,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCNPJPrefeituraNaoPrescritosAcimaInfimo($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCNPJPrefeituraNaoPrescritosAcimaInfimo($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=P14'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -135,8 +135,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCNPJPrefeituraNaoPrescritosValorInfimo($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCNPJPrefeituraNaoPrescritosValorInfimo($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=P15'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -200,8 +200,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCNPJPrefeituraPrescritos($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCNPJPrefeituraPrescritos($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=P16'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -265,8 +265,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCNPJPrefeituraExigSuspensa($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCNPJPrefeituraExigSuspensa($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=P17'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										

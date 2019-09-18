@@ -27,12 +27,12 @@
 <?php
 require_once "menu.php";
 require_once "conexao.php";
-require_once "selecionarDados.php";
+require_once "selecionarDadosInscricao.php";
 $pdo = conectar();
 $tratarInscricao = $_GET['DA'];
-$tipo = substr($tratarInscricao, 0, 1);
-$ex = substr($tratarInscricao, 1, 4);
-$natureza = substr($tratarInscricao, 5);
+$tipo = substr($tratarInscricao, 0, 3);
+$ex = substr($tratarInscricao, 3, 4);
+$natureza = substr($tratarInscricao, 7);
 
 ?>
 
@@ -52,102 +52,466 @@ $natureza = substr($tratarInscricao, 5);
 		
        </div>
            <div class="card-body">
-			<?php if($tipo == "S"){ $relacaoInscrever = anosInscrever($ex,$natureza,$pdo);  ?>
+			<?php if($tipo == "AI4"){ $relacaoResultado = selectViewAnaliseInscricaoCPFBrancoApenasNome($exercicio, $natureza, $pdo);  ?>
               
 				<div class="card">
 					<div class="card-header" align="center" >
-						<h5><strong>Relação sem interrupção prescricional</strong> <button class="btn btn-primary" onClick="primeira('copy')" id="copiar">Copy</button></h5>
+						<h5><strong>Análise Para Inscrição<br> CPF/CNPJ em branco + Apenas 1 Nome</strong> <button class="btn btn-primary" onClick="primeira('copy')" id="copiar">Copy</button></h5>
 					</div>
 					
 					<?php if($natureza == "Imobiliária"){ ?>
 		
-						<textarea id="area" class="form-control"><?php if(!empty($relacaoInscrever)){foreach ($relacaoInscrever as $relacao){echo $relacao[1].";";}}?></textarea>
+						<textarea id="area" class="form-control"><?php if(!empty($relacaoResultado)){foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
 					
 					<?php } else if($natureza == "Mercantil"){ ?>
 					
-						<textarea id="area" class="form-control"><?php if(!empty($relacaoInscrever)){foreach ($relacaoInscrever as $relacao){echo $relacao[0].";";}}?></textarea>
+						<textarea id="area" class="form-control"><?php if(!empty($relacaoResultado)){foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
 					
 					 <?php }?>
 					
 					
 				</div>
             
-            <?php } else if($tipo == "P") { $relacaoInscreverParc = anosDesparcelados($ex,$natureza,$pdo); ?>
+            <?php } elseif($tipo == "AI5") { $relacaoResultado = selectViewAnaliseInscricaoCPFInvalidoApenasNome($ex,$natureza,$pdo); ?>
             
                 <div class="card" >
                     <div class="card-header" align="center">
-                        <h5><strong>Relação Desparcelados</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                        <h5><strong>Análise Para Inscrição<br> CPF/CNPJ Inválido + Apenas 1 Nome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
 					
 					<?php if($natureza == "Imobiliária"){ ?>
 		
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoInscreverParc)){ foreach ($relacaoInscreverParc as $relacaoParc){echo $relacaoParc[1].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
 					
 					<?php } else if($natureza == "Mercantil"){ ?>
 					
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoInscreverParc)){ foreach ($relacaoInscreverParc as $relacaoParc){echo $relacaoParc[0].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
 					
 					 <?php }?>
 					
                 </div>
 			
-			<?php } else if($tipo == "C") { $relacaoProblemasCadastroCPFCNPJ = retornarProblemasCadastroCPFCNPJ($ex,$natureza,$pdo); ?>
+			<?php } elseif($tipo == "AI6") { $relacaoResultado = selectViewAnaliseInscricaoCPFValidoApenasNome($ex,$natureza,$pdo); ?>
             
                 <div class="card" >
                     <div class="card-header" align="center">
-                        <h5><strong>Relação Débitos com Problemas Cadastrais no CPF/CNPJ</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                        <h5><strong>Análise Para Inscrição<br> CPF/CNPJ Válido + Apenas 1 Nome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
 					
 					<?php if($natureza == "Imobiliária"){ ?>
 		
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoProblemasCadastroCPFCNPJ)){ foreach ($relacaoProblemasCadastroCPFCNPJ as $inscricaoProblemaCadastro){echo $inscricaoProblemaCadastro[1].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
 					
 					<?php } else if($natureza == "Mercantil"){ ?>
 					
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoProblemasCadastroCPFCNPJ)){ foreach ($relacaoProblemasCadastroCPFCNPJ as $inscricaoProblemaCadastro){echo $inscricaoProblemaCadastro[0].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
 					
 					 <?php }?>
 					
                 </div>
 			
-			<?php } else if($tipo == "L") { $relacaoDebitosLancadosCNPJPrefeitura = retornarDebitosLancadosCNPJPrefeitura($ex,$natureza,$pdo); ?>
+			<?php } elseif($tipo == "AI7") { $relacaoResultado = selectViewAnaliseInscricaoCPFBrancoNomeSobrenome($ex,$natureza,$pdo); ?>
             
                 <div class="card" >
                     <div class="card-header" align="center">
-                        <h5><strong>Relação Débitos Lançados no CNPJ da Prefeitura</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                        <h5><strong>Análise Para Inscrição<br> CPF/CNPJ em branco + Nome e Sobrenome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
 					
 					<?php if($natureza == "Imobiliária"){ ?>
 		
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosCNPJPrefeitura)){ foreach ($relacaoDebitosLancadosCNPJPrefeitura as $inscricaoLancPrefeitura){echo $inscricaoLancPrefeitura[1].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
 					
 					<?php } else if($natureza == "Mercantil"){ ?>
 					
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosCNPJPrefeitura)){ foreach ($relacaoDebitosLancadosCNPJPrefeitura as $inscricaoLancPrefeitura){echo $inscricaoLancPrefeitura[0].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
 					
 					 <?php }?>
 				
                 </div>
 			
-			<?php } else if($tipo == "R") { $relacaoDebitosLancadosRetroativamente = retornarLancamentosRetroativos($ex,$natureza,$pdo); ?>
+			<?php } elseif($tipo == "AI8") { $relacaoResultado = selectViewAnaliseInscricaoCPFInvalidoNomeSobrenome($ex,$natureza,$pdo); ?>
             
                 <div class="card" >
                     <div class="card-header" align="center">
-                        <h5><strong>Relação Débitos Lançados Retroativamente</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                        <h5><strong>Análise Para Inscrição<br> CPF/CNPJ Inválido + Nome e Sobrenome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
                     </div>
 					
 					<?php if($natureza == "Imobiliária"){ ?>
 		
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosRetroativamente)){ foreach ($relacaoDebitosLancadosRetroativamente as $inscricaoLancRetroativo){echo $inscricaoLancRetroativo[1].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
 					
 					<?php } else if($natureza == "Mercantil"){ ?>
 					
-						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoDebitosLancadosRetroativamente)){ foreach ($relacaoDebitosLancadosRetroativamente as $inscricaoLancRetroativo){echo $inscricaoLancRetroativo[0].";";}}?></textarea>
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
 					
 					 <?php }?>
 					
                 </div>
-            <?php }?>
+            
+			
+			<?php } elseif($tipo == "AI9") { $relacaoResultado = selectViewAnaliseInscricaoCDAsBaixadas($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Análise Para Inscrição<br> CDA's Baixadas</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+				
+                </div>
+			
+			<?php } elseif($tipo == "CC1") { $relacaoResultado = selectViewCadastroCompletoSemInterrupcao($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Inscrição<br>Débitos sem Interrupção Prescricional</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+			
+			<?php } elseif($tipo == "CC2") { $relacaoResultado = selectViewCadastroCompletoDesparcelado($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Inscrição<br>Débitos Desparcelados</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+			
+			<?php } elseif($tipo == "CC3") { $relacaoResultado = selectViewCadastroCompletoRelancado($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Inscrição<br>Débitos Relançados</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+			
+			<?php } elseif($tipo == "P14") { $relacaoResultado = selectViewCNPJPrefeituraNaoPrescritosAcimaInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Lançados CNPJ Prefeitura<br>Débitos Prescritos Acima do Valor Ínfimo</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "P15") { $relacaoResultado = selectViewCNPJPrefeituraNaoPrescritosValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Lançados CNPJ Prefeitura<br>Débitos Não Prescritos Abaixo do Ínfimo</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "P16") { $relacaoResultado = selectViewCNPJPrefeituraPrescritos($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Lançados CNPJ Prefeitura<br>Débitos Prescritos</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "P17") { $relacaoResultado = selectViewCNPJPrefeituraExigSuspensa($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Lançados CNPJ Prefeitura<br>Débitos com Exigibilidade Suspensa</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+
+			<?php } elseif($tipo == "ES1") { $relacaoResultado = selectViewAnaliseNaoInscricaoExigSuspensa($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Lançados CNPJ Prefeitura<br>Débitos com Exigibilidade Suspensa</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI1") { $relacaoResultado = selectViewAnaliseNaoInscricaoCPFBrancoApenasNomeValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Abaixo do Valor Ínfimo<br>CPF/CNPJ Branco + Apenas 1 Nome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI2") { $relacaoResultado = selectViewAnaliseNaoInscricaoCPFInvalidoApenasNomeValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Abaixo do Valor Ínfimo<br>CPF/CNPJ Inválido + Apenas 1 Nome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI3") { $relacaoResultado = selectViewAnaliseNaoInscricaoCPFValidoApenasNomeValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Abaixo do Valor Ínfimo<br>CPF/CNPJ Válido + Apenas 1 Nome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI4") { $relacaoResultado = selectViewAnaliseNaoInscricaoCPFValidoNomeSobrenomeValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Abaixo do Valor Ínfimo<br>CPF/CNPJ Válido + Nome e Sobrenome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI5") { $relacaoResultado = selectViewAnaliseNaoInscricaoCPFBrancoNomeSobrenomeValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Abaixo do Valor Ínfimo<br>CPF/CNPJ Branco + Nome e Sobrenome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI6") { $relacaoResultado = selectViewAnaliseNaoInscricaoCPFInvalidoNomeSobrenomeValorInfimo($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Abaixo do Valor Ínfimo<br>CPF/CNPJ Inválido + Nome e Sobrenome</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI7") { $relacaoResultado = selectViewAnaliseNaoInscricaoAtividadeEncerradaPrescrito($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>CMC em atividade encerrada com débitos<br>Débitos Prescritos</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI8") { $relacaoResultado = selectViewAnaliseNaoInscricaoAtividadeEncerradaNaoPrescrito($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>CMC em atividade encerrada com débitos<br>Débitos Não Prescritos</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "NI9") { $relacaoResultado = selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Passíveis de Prescrição<br>Com Histórico de CDA</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+				
+			<?php } elseif($tipo == "N10") { $relacaoResultado = selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosSemCDA($ex,$natureza,$pdo); ?>
+            
+                <div class="card" >
+                    <div class="card-header" align="center">
+                        <h5><strong>Débitos Passíveis de Prescrição<br>Sem Histórico de CDA</strong> <button class="btn btn-primary" onClick="segunda('copy')" id="copiarDesparc">Copy</button></h5>
+                    </div>
+					
+					<?php if($natureza == "Imobiliária"){ ?>
+		
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[1].";";}}?></textarea>
+					
+					<?php } else if($natureza == "Mercantil"){ ?>
+					
+						<textarea id="areaDesparc" class="form-control"><?php if(!empty($relacaoResultado)){ foreach ($relacaoResultado as $relacao){echo $relacao[0].";";}}?></textarea>
+					
+					 <?php }?>
+					
+                </div>
+			
+			<?php }?>
+			
         </div>
      </div>
 </div>

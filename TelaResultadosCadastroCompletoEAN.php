@@ -70,8 +70,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCadastroCompletoSemInterrupcao($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCadastroCompletoSemInterrupcao($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=CC1'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -136,8 +136,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCadastroCompletoDesparcelado($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCadastroCompletoDesparcelado($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=CC2'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										
@@ -201,8 +201,8 @@
 										
 										<?php 
 										
-											echo $qtdInscricaoSemInterrupcao = count(selectViewCadastroCompletoRelancado($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewCadastroCompletoRelancado($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=CC3'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										
 										?> 
 										

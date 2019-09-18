@@ -70,8 +70,8 @@
 									<td>
 										
 										<?php 
-											echo $qtdInscricaoSemInterrupcao = count(selectViewAnaliseNaoInscricaoExigSuspensa($colunasExercicios[$i], $natureza, $pdo));
-											//echo '<a href="TelaRelacaoInscricoes.php?DA=S'.$buscarExercicio[$i][0].$natureza.' ">'.$qtdInscricaoSemInterrupcao.'<br></a>';
+											$qtdResultados = count(selectViewAnaliseNaoInscricaoExigSuspensa($colunasExercicios[$i], $natureza, $pdo));
+											echo '<a href="TelaRelacaoInscricoes.php?DA=ES1'.$colunasExercicios[$i].$natureza.' ">'.$qtdResultados.'<br></a>';
 										?> 
 										
 									</td>
