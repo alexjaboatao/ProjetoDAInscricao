@@ -112,6 +112,7 @@
                             <li>Soma dos Débitos acima do Valor Ínfimo</li>
                             <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
                            </ul>
+						   <br>
                   </div>
                </div>
            </div>
@@ -126,6 +127,7 @@
                             <li>Soma dos Débitos acima do Valor Ínfimo</li>
                             <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
                            </ul>
+						   <br>
                   </div>
                </div>
            </div>
@@ -155,6 +157,7 @@
                             <li>Soma dos Débitos acima do Valor Ínfimo</li>
                             <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
                            </ul>
+						   <br>
                   </div>
                </div>
            </div>
@@ -169,6 +172,7 @@
                             <li>Soma dos Débitos acima do Valor Ínfimo</li>
                             <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
                            </ul>
+						   <br>
                   </div>
                </div>
            </div>
@@ -221,7 +225,7 @@
 						   <hr>
 							<form action="TelaResultadosValorInfimoEAN.php" method="post">
 								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Detalhar Resultados</button>
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
 							</form>
                   </div>
                </div>
@@ -239,7 +243,7 @@
 						   <hr>
 							<form action="TelaResultadosAtividadeEncerradaEAN.php" method="post">
 								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Detalhar Resultados</button>
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
 							</form>
                   </div>
                </div>
@@ -258,7 +262,7 @@
 						   <hr>
 							<form action="TelaResultadosPassiveisPrescricaoEAN.php" method="post">
 								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Detalhar Resultados</button>
+								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
 							</form>
                   </div>
                </div>

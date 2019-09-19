@@ -106,7 +106,7 @@ function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
 					//echo $arquivo1[$a]."||".count($valorSeparado)."<br>";
 					
 					if(trim($valorSeparado[count($valorSeparado)-1]) == "Com Exigibilidade Suspensa"){	
-						$situacao = "Com Exigbilidade Suspensa - ";
+						$situacao = "Com Exigibilidade Suspensa - ";
 						unset($valorSeparado[count($valorSeparado)-1]);
 					}
 					
@@ -208,7 +208,7 @@ function incluirDadosBaseAcompInsc($arquivo, $natureza, $objeto, $pdo){
 			$inserir->execute();
 	}
 	
-	echo "<script>window.location='TelaEnviarArquivo.php?tipo=Inscrição';alert('Dados enviados com sucesso!');</script>" ;
+	echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Inscrição';alert('Dados enviados com sucesso!');</script>" ;
 	
 }
 
@@ -258,7 +258,7 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 					//echo $arquivo1[$a]."||".count($valorSeparado)."<br>";
 					
 					if(trim($valorSeparado[count($valorSeparado)-1]) == "Com Exigibilidade Suspensa"){	
-						$situacao = "Com Exigbilidade Suspensa - ";
+						$situacao = "Com Exigibilidade Suspensa - ";
 						unset($valorSeparado[count($valorSeparado)-1]);
 					}
 					
@@ -334,7 +334,7 @@ function incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo){
 			$inserir = $pdo->prepare($insert);
 			$inserir->execute();
 	}
-	echo "<script>window.location='TelaEnviarArquivo.php?tipo=Remessa';alert('Dados enviados com sucesso!');</script>" ;
+	echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Remessa';alert('Dados enviados com sucesso!');</script>" ;
 	
 }
 

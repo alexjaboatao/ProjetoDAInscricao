@@ -803,7 +803,7 @@ function selectViewAnaliseNaoInscricaoCPFBrancoApenasNomeValorInfimo($exercicio,
 			`Situação` NOT LIKE 'ATV ENCERRADA' AND 
 			viewCC.SOMA_NAOPRESCRITA_EAN <= 75.15 
 			AND CpfCnpj LIKE '' AND 
-			TIMESTAMPDIFF(YEAR , viewCC.`DataSituacao_".$exercicio."`, CURRENT_DATE()) < 5 AND;";
+			TIMESTAMPDIFF(YEAR , viewCC.`DataSituacao_".$exercicio."`, CURRENT_DATE()) < 5;";
 	
 	}
 	
@@ -1085,8 +1085,8 @@ function selectViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($exercicio, $na
 			TIMESTAMPDIFF(YEAR , viewCC.`DataSituacao_".$exercicio."`, CURRENT_DATE()) >= 5 AND 
 			viewCC.Situacao_".$exercicio." NOT LIKE '%Exigib%' AND 
 			viewCC.Situacao_".$exercicio." LIKE '%CDA%' AND 
-			`Situação` NOT LIKE 'ATV ENCERRADA'
-			AND CpfCnpj NOT LIKE '10.377.679/0001-96';";
+			`Situação` NOT LIKE 'ATV ENCERRADA' AND 
+			CpfCnpj NOT LIKE '10.377.679/0001-96';";
 	
 	}
 	
@@ -1115,7 +1115,7 @@ function selectViewAnaliseNaoInscricaoExigSuspensa($exercicio, $natureza, $pdo){
 			WHERE
 			viewCC.`".$exercicio."` > 0 AND
 			viewCC.Situacao_".$exercicio." LIKE '%Exigib%' AND 
-			AND CpfCnpj NOT LIKE '10.377.679/0001-96';";
+			CpfCnpj NOT LIKE '10.377.679/0001-96';";
 	
 	}
 	

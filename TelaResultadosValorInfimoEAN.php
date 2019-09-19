@@ -76,10 +76,10 @@
 										
 									</td>
 									<td>
-										<form method="post" action="#">
-											<input type="hidden" name="natureza" value="<?php ?>">
-											<input type="hidden" name="matrizExercicios" value="<?php ?>">
-											<input type="hidden" name="tipoacao" value="anosRemessa">
+										<form method="post" action="GeracaoCSVInscricao.php">
+											<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+											<input type="hidden" name="exercicio" value="<?php echo $colunasExercicios[$i]?>">
+											<input type="hidden" name="tipoacao" value="NIbrancoUmNome">
 											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
 										</form>
 									</td>
@@ -143,10 +143,10 @@
 										
 									</td>
 									<td>
-										<form method="post" action="#">
-											<input type="hidden" name="natureza" value="<?php ?>">
-											<input type="hidden" name="matrizExercicios" value="<?php ?>">
-											<input type="hidden" name="tipoacao" value="anosRemessa">
+										<form method="post" action="GeracaoCSVInscricao.php">
+											<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+											<input type="hidden" name="exercicio" value="<?php echo $colunasExercicios[$i]?>">
+											<input type="hidden" name="tipoacao" value="NIinvalidoUmNome">
 											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
 										</form>
 									</td>
@@ -208,10 +208,10 @@
 										
 									</td>
 									<td>
-										<form method="post" action="#">
-											<input type="hidden" name="natureza" value="<?php ?>">
-											<input type="hidden" name="matrizExercicios" value="<?php ?>">
-											<input type="hidden" name="tipoacao" value="anosRemessa">
+										<form method="post" action="GeracaoCSVInscricao.php">
+											<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+											<input type="hidden" name="exercicio" value="<?php echo $colunasExercicios[$i]?>">
+											<input type="hidden" name="tipoacao" value="NIvalidoUmNome">
 											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
 										</form>
 									</td>
@@ -273,10 +273,10 @@
 										
 									</td>
 									<td>
-										<form method="post" action="#">
-											<input type="hidden" name="natureza" value="<?php ?>">
-											<input type="hidden" name="matrizExercicios" value="<?php ?>">
-											<input type="hidden" name="tipoacao" value="anosRemessa">
+										<form method="post" action="GeracaoCSVInscricao.php">
+											<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+											<input type="hidden" name="exercicio" value="<?php echo $colunasExercicios[$i]?>">
+											<input type="hidden" name="tipoacao" value="NIvalidoNomeSobre">
 											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
 										</form>
 									</td>
@@ -339,10 +339,10 @@
 									
 								</td>
 								<td>
-									<form method="post" action="#">
-										<input type="hidden" name="natureza" value="<?php ?>">
-										<input type="hidden" name="matrizExercicios" value="<?php ?>">
-										<input type="hidden" name="tipoacao" value="anosRemessa">
+									<form method="post" action="GeracaoCSVInscricao.php">
+										<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+										<input type="hidden" name="exercicio" value="<?php echo $colunasExercicios[$i]?>">
+										<input type="hidden" name="tipoacao" value="NIbrancoNomeSobre">
 										<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
 									</form>
 								</td>
@@ -407,10 +407,10 @@
 									
 								</td>
 								<td>
-									<form method="post" action="#">
-										<input type="hidden" name="natureza" value="<?php ?>">
-										<input type="hidden" name="matrizExercicios" value="<?php ?>">
-										<input type="hidden" name="tipoacao" value="anosRemessa">
+									<form method="post" action="GeracaoCSVInscricao.php">
+										<input type="hidden" name="natureza" value="<?php echo $natureza?>">
+										<input type="hidden" name="exercicio" value="<?php echo $colunasExercicios[$i]?>">
+										<input type="hidden" name="tipoacao" value="NIinvalidoNomeSobre">
 										<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:10px">Relatório</button>
 									</form>
 								</td>
