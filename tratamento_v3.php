@@ -35,11 +35,11 @@
 				
 				if($tipo == "Inscrição"){
 					
-					echo "<script>window.location='TelaEnviarArquivo.php?tipo=Inscrição';alert('Selecione o arquivo Base de Acompanhamento EAN');</script>" ;
+					echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Inscrição';alert('Selecione o arquivo Base de Acompanhamento EAN');</script>" ;
 						
 				}elseif($tipo == "Remessa"){
 					
-					echo "<script>window.location='TelaEnviarArquivo.php?tipo=Remessa';alert('Selecione o arquivo Base de Acompanhamento DAT');</script>" ;
+					echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Remessa';alert('Selecione o arquivo Base de Acompanhamento DAT');</script>" ;
 				}
 				
 			}
@@ -48,7 +48,7 @@
 			fclose($objeto);			
 
 		}else{
-			echo "<script>window.location='TelaEnviarArquivo.php';alert('Não foi enviado arquivo!');</script>" ;
+			echo "<script>window.location='TelaEnviarArquivo_v2.php';alert('Não foi enviado arquivo!');</script>" ;
 		}
 		
 		function carregarTabelaInscricao($natureza, $pdo, $arquivo, $objeto){

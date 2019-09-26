@@ -7,8 +7,9 @@
 	<script src="bootstrap-4.3.1-dist/js/bootstrap.js"></script>
 	
 	<script lang="javascript" src="js/jquery-3.4.1.min.js"></script>
-
+	
 </head>
+
 <body>
 
 	<?php 
@@ -22,6 +23,7 @@
 		
 
 	 ?>
+	 
 <div class="container">
  		    <h5 align="center"><strong>Débitos Para Inscrição em Dívida Ativa <strong style="color: #C00"><?php echo $natureza; ?></strong></strong></h5><hr>
   	<div class="card">

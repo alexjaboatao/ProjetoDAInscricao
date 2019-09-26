@@ -68,7 +68,7 @@
 													 if ($tabelaImobiliaria !== ""){
 												   
 											     ?>
-                                                 <form method="post" action="TelaResultadoRemessaDA.php">
+                                                 <form method="post" action="TelaResultadoRemessaDA_v2.php">
                                                  	<input type="hidden" name="natureza" value="Imobiliáriadat">
 													<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<count($buscarTabelaImobiliaria); $i++){echo $buscarTabelaImobiliaria[$i][0].",";}?>">
                                      				<button type="submit" class="btn btn-primary btn-lg btn-block">Imobiliário - Remessa</button>
@@ -81,7 +81,7 @@
 											  
 												 	if ($tabelaMercantil !== ""){
 												 ?>
-                                                 <form method="post" action="TelaResultadoRemessaDA.php">
+                                                 <form method="post" action="TelaResultadoRemessaDA_v2.php">
                                                  	<input type="hidden" name="natureza" value="Mercantildat">
 													<input type="hidden" name="matrizExercicios" value="<?php for($i=11; $i<count($buscarTabelaMercantil); $i++){echo $buscarTabelaMercantil[$i][0].",";}?>">
 													<input type="hidden" name="tipoacao" value="anosRemessa">
