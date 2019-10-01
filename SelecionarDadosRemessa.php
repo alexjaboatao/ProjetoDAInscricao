@@ -38,6 +38,10 @@ function selectGerarViewRemessa($natureza, $arrayexercicios, $pdo){
 	$sqlSomatorioExigSuspensa = "(";
 	$sqlCDAExigSuspensa = "CONCAT(";
 	
+	$sqlAnosConcatInfimo = "CONCAT(";
+	$sqlSomatorioInfimo = "(CASE WHEN (";
+	$sqlCDAConcatInfimo = "CONCAT(";
+	
 	$numerocolunas = count($arrayexercicios);
 				
 	for($i=0; $i<$numerocolunas-8; $i=$i+4){
@@ -81,6 +85,20 @@ function selectGerarViewRemessa($natureza, $arrayexercicios, $pdo){
 			TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) >= 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
 			THEN CONCAT(dat.".$arrayexercicios[$i+3].",';') ELSE '' END, ";
 			
+			///////////////////////////////////////
+			
+			$sqlSomatorioInfimo = $sqlSomatorioInfimo."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
+			AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN dat.".$arrayexercicios[$i]." ELSE 0 END + ";
+			
+			$sqlAnosConcatInfimo = $sqlAnosConcatInfimo."CASE WHEN (
+			TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN '".$arrayexercicios[$i]."/' ELSE '' END, ";
+			
+			$sqlCDAConcatInfimo = $sqlCDAConcatInfimo."CASE WHEN (
+			TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN CONCAT(dat.".$arrayexercicios[$i+3].",';') ELSE '' END, ";
+			
 		}else{
 			
 			$sqlSomatorio = $sqlSomatorio."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
@@ -119,6 +137,20 @@ function selectGerarViewRemessa($natureza, $arrayexercicios, $pdo){
 			$sqlCDAPrescrito = $sqlCDAPrescrito."CASE WHEN (
 			TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) >= 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
 			THEN CONCAT(dat.".$arrayexercicios[$i+3].",';') ELSE '' END) AS CDA_PRESCRITO, ";
+			
+			/////////////////////////////////
+			
+			$sqlSomatorioInfimo = $sqlSomatorioInfimo."CASE WHEN (TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 
+			AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN dat.".$arrayexercicios[$i]." ELSE 0 END + ";
+			
+			$sqlAnosConcatInfimo = $sqlAnosConcatInfimo."CASE WHEN 
+			( TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN '".$arrayexercicios[$i]."/' ELSE '' END";
+			
+			$sqlCDAConcatInfimo = $sqlCDAConcatInfimo."CASE WHEN 
+			(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$i+2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$i]." <> 0 AND dat.".$arrayexercicios[$i+1]." NOT LIKE '%Exigib%') 
+			THEN CONCAT(dat.".$arrayexercicios[$i+3].",';') ELSE '' END) ELSE ";
 			
 		}
 	}
@@ -165,17 +197,30 @@ function selectGerarViewRemessa($natureza, $arrayexercicios, $pdo){
 	$sql2ifCDA = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).$sqlSomatorioComPenultimoExercicio.substr($sqlCDAConcat,0,strlen($sqlCDAConcat)-7).$sqlCDAConcatPenultimoExercicio;
 	$sql3ifCDA = substr($sqlSomatorio,0,strlen($sqlSomatorio)-18).substr($sqlSomatorioComPenultimoExercicio,0,strlen($sqlSomatorioComPenultimoExercicio)-18).$sqlSomatorioComUltimoExercicio.substr($sqlCDAConcat,0,strlen($sqlCDAConcat)-7).substr($sqlCDAConcatPenultimoExercicio,0,strlen($sqlCDAConcatPenultimoExercicio)-7).",".$sqlCDAConcatUltimoExercicio."'' END) END) END) AS CDA_NAOPRESCRITO, ";
 	
-	
+	/////////////////////////////////////////////////
 	
 	$sqlAnosConcatExigSuspensa = $sqlAnosConcatExigSuspensa."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]." LIKE '%Exigib%') 
 			THEN '".$arrayexercicios[$numerocolunas-8]."/' ELSE '' END, "."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]." LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-4]."/' ELSE '' END) AS ANOS_EXIGSUSP, ";
 	
 	$sqlSomatorioExigSuspensa = $sqlSomatorioExigSuspensa."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]." LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-8]." ELSE 0 END + CASE WHEN (dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]." LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-4]." ELSE 0 END) AS SOMA_EXIGSUSP, ";
 		
-	$sqlCDAExigSuspensa = $sqlCDAExigSuspensa."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]." LIKE '%Exigib%') THEN CONCAT(dat.".$arrayexercicios[$numerocolunas-5].",';') ELSE '' END, "."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]." LIKE '%Exigib%') THEN CONCAT(dat.".$arrayexercicios[$numerocolunas-1].",';') ELSE '' END) AS CDA_EXIGSUSP ";
-			
+	$sqlCDAExigSuspensa = $sqlCDAExigSuspensa."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]." LIKE '%Exigib%') THEN CONCAT(dat.".$arrayexercicios[$numerocolunas-5].",';') ELSE '' END, "."CASE WHEN (dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]." LIKE '%Exigib%') THEN CONCAT(dat.".$arrayexercicios[$numerocolunas-1].",';') ELSE '' END) AS CDA_EXIGSUSP, ";
 	
+	///////////////////////////////////////////////
+	
+	$sqlSomatorioInfimo = $sqlSomatorioInfimo." CASE WHEN 
+	(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-6].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]." NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-8]." ELSE 0 END + "." CASE WHEN 
+		(TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]." NOT LIKE '%Exigib%') THEN dat.".$arrayexercicios[$numerocolunas-4]." ELSE 0 END) <= 1943.59 THEN ";
+	
+	$sqlAnosConcatInfimo = $sqlAnosConcatInfimo.", CASE WHEN 
+		( TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-6].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-8]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-7]." NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-8]."/' ELSE '' END, "." CASE WHEN 
+		( TIMESTAMPDIFF(YEAR , dat.".$arrayexercicios[$numerocolunas-2].", CURRENT_DATE()) < 5 AND dat.".$arrayexercicios[$numerocolunas-4]." <> 0 AND dat.".$arrayexercicios[$numerocolunas-3]." NOT LIKE '%Exigib%') THEN '".$arrayexercicios[$numerocolunas-4]."/' ELSE '' END) ELSE '' END) AS ANOS_INFIMO ";
 
+	$sqlAnosConcatInfimo = $sqlSomatorioInfimo.$sqlAnosConcatInfimo;
+	
+	$sqlSomatorioInfimo = $sqlSomatorioInfimo.substr($sqlSomatorioInfimo,10,strlen($sqlSomatorioInfimo)-27)." ELSE 'ACIMA ÍNFIMO' END) AS SOMA_INFIMO, ";
+	
+	
 	if ($natureza == "Imobiliáriadat"){
 		
 		$sqlInicio = "SELECT *, (LENGTH(dat.`NomeProprietário`)-LENGTH(replace(dat.`NomeProprietário`,' ',''))+1) AS QTD_NOMES,";
@@ -194,7 +239,7 @@ function selectGerarViewRemessa($natureza, $arrayexercicios, $pdo){
 	}
 	
 	
-	$sql = $sqlInicio." ".$sql1if." ".$sql2if." ".$sql3if." ".$sql1ifSoma." ".$sql2ifSoma." ".$sql3ifSoma." ".$sql1ifCDA." ".$sql2ifCDA." ".$sql3ifCDA." ".$sqlAnosConcatPrescrito." ".$sqlSomatorioPrescrito." ".$sqlCDAPrescrito." ".$sqlAnosConcatExigSuspensa." ".$sqlSomatorioExigSuspensa." ".$sqlCDAExigSuspensa." ".$sqlfim;
+	$sql = $sqlInicio." ".$sql1if." ".$sql2if." ".$sql3if." ".$sql1ifSoma." ".$sql2ifSoma." ".$sql3ifSoma." ".$sql1ifCDA." ".$sql2ifCDA." ".$sql3ifCDA." ".$sqlAnosConcatPrescrito." ".$sqlSomatorioPrescrito." ".$sqlCDAPrescrito." ".$sqlAnosConcatExigSuspensa." ".$sqlSomatorioExigSuspensa." ".$sqlCDAExigSuspensa." ".$sqlSomatorioInfimo." ".$sqlAnosConcatInfimo." ".$sqlfim;
 	
 	return $sql;
 }
@@ -255,7 +300,8 @@ function selectViewTratadosRemessa($natureza, $pdo){
 			AND (length(CpfCnpj)>=14 AND length(`CpfCnpj`)<=18) 
 			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
 			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
-			);";
+			) 
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 			
 	}
 	
@@ -307,7 +353,8 @@ function somaCountViewTratadosRemessa($natureza, $pdo){
 			AND (length(CpfCnpj)>=14 AND length(`CpfCnpj`)<=18) 
 			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
 			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
-			);";
+			)
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 			
 	}
 	
@@ -344,7 +391,8 @@ function selectViewAnaliseRemessaCPFBrancoApenasNome($natureza, $pdo){
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
 			viewCC.QTD_NOMES < 2 AND  
-			CpfCnpj LIKE '';";
+			CpfCnpj LIKE '' AND 
+			viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 	
 	}
 	
@@ -382,7 +430,8 @@ function somaCountViewAnaliseRemessaCPFBrancoApenasNome($natureza, $pdo){
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
 			viewCC.QTD_NOMES < 2 AND  
-			CpfCnpj LIKE '';";
+			CpfCnpj LIKE '' AND 
+			viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 	
 	}
 	
@@ -438,7 +487,7 @@ function selectViewAnaliseRemessaCPFInvalidoApenasNome($natureza, $pdo){
 			length(`CpfCnpj`)>18
 			)
 			AND length(`CpfCnpj`) <> 0
-			;";
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 	
 	}
 	
@@ -494,7 +543,7 @@ function somaCountViewAnaliseRemessaCPFInvalidoApenasNome($natureza, $pdo){
 			length(`CpfCnpj`)>18
 			)
 			AND length(`CpfCnpj`) <> 0
-			;";
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 	
 	}
 	
@@ -502,6 +551,683 @@ function somaCountViewAnaliseRemessaCPFInvalidoApenasNome($natureza, $pdo){
 	$sql->execute();
 	return $sql->fetchAll(PDO::FETCH_NUM);
 	
+}
+
+
+
+function selectViewAnaliseRemessaCPFValidoApenasNome($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES < 2 AND  
+			(
+			`CpfCnpjProprietário` != '' 
+			AND `CpfCnpjProprietário` NOT LIKE '999.999.999-99' 
+			AND `CpfCnpjProprietário` NOT LIKE '000.000.000-00' 
+			AND `CpfCnpjProprietário` NOT LIKE '00.000.000/0000-00' 
+			AND `CpfCnpjProprietário` NOT LIKE '99.999.999/9999-99' 
+			AND (length(`CpfCnpjProprietário`)>=14 AND length(`CpfCnpjProprietário`)<=18) 
+			AND `CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96'
+			);";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES < 2 AND  
+			(
+			CpfCnpj != '' 
+			AND CpfCnpj NOT LIKE '999.999.999-99' 
+			AND CpfCnpj NOT LIKE '000.000.000-00' 
+			AND CpfCnpj NOT LIKE '00.000.000/0000-00' 
+			AND CpfCnpj NOT LIKE '99.999.999/9999-99' 
+			AND (length(CpfCnpj)>=14 AND length(CpfCnpj)<=18) 
+			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewAnaliseRemessaCPFValidoApenasNome($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES < 2 AND  
+			(
+			`CpfCnpjProprietário` != '' 
+			AND `CpfCnpjProprietário` NOT LIKE '999.999.999-99' 
+			AND `CpfCnpjProprietário` NOT LIKE '000.000.000-00' 
+			AND `CpfCnpjProprietário` NOT LIKE '00.000.000/0000-00' 
+			AND `CpfCnpjProprietário` NOT LIKE '99.999.999/9999-99' 
+			AND (length(`CpfCnpjProprietário`)>=14 AND length(`CpfCnpjProprietário`)<=18) 
+			AND `CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96'
+			);";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES < 2 AND  
+			(
+			CpfCnpj != '' 
+			AND CpfCnpj NOT LIKE '999.999.999-99' 
+			AND CpfCnpj NOT LIKE '000.000.000-00' 
+			AND CpfCnpj NOT LIKE '00.000.000/0000-00' 
+			AND CpfCnpj NOT LIKE '99.999.999/9999-99' 
+			AND (length(CpfCnpj)>=14 AND length(CpfCnpj)<=18) 
+			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function selectViewAnaliseRemessaCPFBrancoNomeSobrenome($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			`CpfCnpjProprietário` LIKE '';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			CpfCnpj LIKE '' AND 
+			viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewAnaliseRemessaCPFBrancoNomeSobrenome($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			`CpfCnpjProprietário` LIKE '';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			CpfCnpj LIKE '' AND 
+			viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function selectViewAnaliseRemessaCPFInvalidoNomeSobrenome($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			( 
+			`CpfCnpjProprietário` LIKE '999.999.999-99' OR 
+			`CpfCnpjProprietário` LIKE '000.000.000-00' OR 
+			`CpfCnpjProprietário` LIKE '00.000.000/0000-00' OR 
+			`CpfCnpjProprietário` LIKE '99.999.999/9999-99' OR 
+			length(`CpfCnpjProprietário`)<14 OR 
+			length(`CpfCnpjProprietário`)>18 
+			)
+			AND length(`CpfCnpjProprietário`) <> 0
+			;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			(
+			`CpfCnpj` LIKE '999.999.999-99' OR 
+			`CpfCnpj` LIKE '000.000.000-00' OR 
+			`CpfCnpj` LIKE '00.000.000/0000-00' OR 
+			`CpfCnpj` LIKE '99.999.999/9999-99' OR 
+			length(`CpfCnpj`)<14 OR 
+			length(`CpfCnpj`)>18
+			)
+			AND length(`CpfCnpj`) <> 0
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewAnaliseRemessaCPFInvalidoNomeSobrenome($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			(
+			`CpfCnpjProprietário` LIKE '999.999.999-99' OR 
+			`CpfCnpjProprietário` LIKE '000.000.000-00' OR 
+			`CpfCnpjProprietário` LIKE '00.000.000/0000-00' OR 
+			`CpfCnpjProprietário` LIKE '99.999.999/9999-99' OR 
+			length(`CpfCnpjProprietário`)<14 OR 
+			length(`CpfCnpjProprietário`)>18 
+			)
+			AND length(`CpfCnpjProprietário`) <> 0
+			;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
+			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/2018/' AND
+			viewCC.QTD_NOMES >= 2 AND  
+			(
+			`CpfCnpj` LIKE '999.999.999-99' OR 
+			`CpfCnpj` LIKE '000.000.000-00' OR 
+			`CpfCnpj` LIKE '00.000.000/0000-00' OR 
+			`CpfCnpj` LIKE '99.999.999/9999-99' OR 
+			length(`CpfCnpj`)<14 OR 
+			length(`CpfCnpj`)>18
+			)
+			AND length(`CpfCnpj`) <> 0
+			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function selectViewNaoRemeterValorInfimo($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_INFIMO, ANOS_INFIMO FROM view_Remessa_ImobDAT AS viewCC 
+		WHERE viewCC.`ANOS_INFIMO` NOT LIKE ''
+		AND `CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_INFIMO, ANOS_INFIMO 
+		FROM view_Remessa_MercDAT AS viewCC 
+		WHERE viewCC.`ANOS_INFIMO` NOT LIKE '' AND 
+		viewCC.`Situação` NOT LIKE 'ATV ENCERRADA'
+		AND CpfCnpj NOT LIKE '10.377.679/0001-96';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewNaoRemeterValorInfimo($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_INFIMO), count(SOMA_INFIMO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE viewCC.`ANOS_INFIMO` NOT LIKE '';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_INFIMO), count(SOMA_INFIMO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE viewCC.`ANOS_INFIMO` NOT LIKE '' AND 
+			viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function selectViewNaoRemeterAtivEncerrada($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, ValorTotal FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.`Sequencial` LIKE '' AND
+			viewCC.`ValorTotal` > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, ValorTotal FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.`Situação` LIKE 'ATV ENCERRADA' AND
+			viewCC.`ValorTotal` > 0;";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewNaoRemeterAtivEncerrada($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(ValorTotal), count(ValorTotal) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE viewCC.`Sequencial` LIKE '' AND
+			viewCC.`ValorTotal` > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(ValorTotal), count(ValorTotal) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE viewCC.`Situação` LIKE 'ATV ENCERRADA' AND
+			viewCC.`ValorTotal` > 0;";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function selectViewNaoRemeterPrescritos($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_PRESCRITO, ANOS_PRESCRITO, CDA_PRESCRITO FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_PRESCRITO > 0 AND 
+			`CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_PRESCRITO, ANOS_PRESCRITO, CDA_PRESCRITO FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_PRESCRITO > 0 AND 
+			CpfCnpj NOT LIKE '10.377.679/0001-96';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewNaoRemeterPrescritos($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_PRESCRITO), count(SOMA_PRESCRITO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_PRESCRITO > 0 AND 
+			`CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_PRESCRITO), count(SOMA_PRESCRITO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_PRESCRITO > 0 AND 
+			CpfCnpj NOT LIKE '10.377.679/0001-96';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function selectViewNaoRemeterExigSuspensa($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_EXIGSUSP, ANOS_EXIGSUSP, CDA_EXIGSUSP FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_EXIGSUSP > 0 AND 
+			`CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_EXIGSUSP, ANOS_EXIGSUSP, CDA_EXIGSUSP FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_EXIGSUSP > 0 AND 
+			CpfCnpj NOT LIKE '10.377.679/0001-96';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+
+function somaCountViewNaoRemeterExigSuspensa($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_EXIGSUSP), count(SOMA_EXIGSUSP) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_EXIGSUSP > 0 AND 
+			`CpfCnpjProprietário` NOT LIKE '10.377.679/0001-96';";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_EXIGSUSP), count(SOMA_EXIGSUSP) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			viewCC.SOMA_EXIGSUSP > 0 AND 
+			CpfCnpj NOT LIKE '10.377.679/0001-96';";
+	
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+	
+}
+
+function selectViewCNPJPrefNaoPrescrito($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			SOMA_NAOPRESCRITO > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			SOMA_NAOPRESCRITO > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
+function somaCountViewCNPJPrefNaoPrescrito($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			SOMA_NAOPRESCRITO > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			SOMA_NAOPRESCRITO > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
+function selectViewCNPJPrefPrescrito($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_PRESCRITO, ANOS_PRESCRITO, CDA_PRESCRITO FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			SOMA_PRESCRITO > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_PRESCRITO, ANOS_PRESCRITO, CDA_PRESCRITO FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			SOMA_PRESCRITO > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
+function somaCountViewCNPJPrefPrescrito($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_PRESCRITO), count(SOMA_PRESCRITO) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			SOMA_PRESCRITO > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_PRESCRITO), count(SOMA_PRESCRITO) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			SOMA_PRESCRITO > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
+function selectViewCNPJPrefExigSusp($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, SOMA_EXIGSUSP, ANOS_EXIGSUSP, CDA_EXIGSUSP FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			SOMA_EXIGSUSP > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_EXIGSUSP, ANOS_EXIGSUSP, CDA_EXIGSUSP FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			SOMA_EXIGSUSP > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
+function somaCountViewCNPJPrefExigSusp($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(SOMA_EXIGSUSP), count(SOMA_EXIGSUSP) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			SOMA_EXIGSUSP > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(SOMA_EXIGSUSP), count(SOMA_EXIGSUSP) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			SOMA_EXIGSUSP > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
 }
 
 
