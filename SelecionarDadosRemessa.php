@@ -1231,4 +1231,58 @@ function somaCountViewCNPJPrefExigSusp($natureza, $pdo){
 }
 
 
+function selectViewCNPJPref($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT InscriçãoImobiliária, Sequencial, CpfCnpjProprietário, NomeProprietário, Natureza, EndereçoImóvel, Regional, ValorTotal FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			`ValorTotal` > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, ValorTotal FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			`ValorTotal` > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
+function somaCountViewCNPJPref($natureza, $pdo){
+	
+	if ($natureza == "Imobiliáriadat"){
+		
+		$sqlView = "SELECT SUM(ValorTotal), count(ValorTotal) FROM
+			view_Remessa_ImobDAT AS viewCC 
+			WHERE
+			`CpfCnpjProprietário` LIKE '10.377.679/0001-96' AND
+			`ValorTotal` > 0;";
+		
+	
+	} elseif ($natureza == "Mercantildat"){
+	
+		$sqlView = "SELECT SUM(ValorTotal), count(ValorTotal) FROM
+			view_Remessa_MercDAT AS viewCC 
+			WHERE
+			CpfCnpj LIKE '10.377.679/0001-96' AND
+			`ValorTotal` > 0;";
+			
+	}
+	
+	$sql = $pdo->query($sqlView);
+	$sql->execute();
+	return $sql->fetchAll(PDO::FETCH_NUM);
+}
+
+
 ?>

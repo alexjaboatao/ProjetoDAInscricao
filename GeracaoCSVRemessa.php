@@ -44,14 +44,8 @@ if($tipoacao == "tratadosRemessa"){
 }elseif($tipoacao == "NaoRemeterExigSuspensa"){
 	gerarCSVNaoRemeterExigSuspensa($natureza, $pdo);
 	
-}elseif($tipoacao == "CnpjPrefNaoPrescrito"){
-	gerarCSVCnpjPrefNaoPrescrito($natureza, $pdo);
-	
-}elseif($tipoacao == "CnpjPrefPrescrito"){
-	gerarCSVCnpjPrefPrescrito($natureza, $pdo);
-	
-}elseif($tipoacao == "CnpjPrefExigSuspensa"){
-	gerarCSVCnpjPrefExigSuspensa($natureza, $pdo);
+}elseif($tipoacao == "CnpjPref"){
+	gerarCSVCnpjPref($natureza, $pdo);
 	
 }
 
@@ -293,67 +287,19 @@ function gerarCSVNaoRemeterExigSuspensa($natureza, $pdo){
 }
 
 
-function gerarCSVCnpjPrefNaoPrescrito($natureza, $pdo){
+function gerarCSVCnpjPref($natureza, $pdo){
 	
 	ini_set('memory_limit', '-1');
 	$saida = fopen('php://output', 'w');
 	
 	if($natureza == "Mercantildat"){
-		fputcsv($saida, array("InscriçãoMercantil", "CpfCnpj", "RazãoSocial", "Endereço", "Situação", "TipoPessoa", "SOMA_NAOPRESCRITO", "ANOS_NAOPRESCRITO", "CDA_NAOPRESCRITO"), ";"); 
+		fputcsv($saida, array("InscriçãoMercantil", "CpfCnpj", "RazãoSocial", "Endereço", "Situação", "TipoPessoa", "ValorTotal"), ";"); 
 		
 	}elseif ($natureza == "Imobiliáriadat"){
-		fputcsv($saida, array("InscriçãoImobiliária", "Sequencial", "CpfCnpjProprietário", "NomeProprietário", "Natureza", "EndereçoImóvel", "Regional", "SOMA_NAOPRESCRITO", "ANOS_NAOPRESCRITO", "CDA_NAOPRESCRITO"), ";"); 
+		fputcsv($saida, array("InscriçãoImobiliária", "Sequencial", "CpfCnpjProprietário", "NomeProprietário", "Natureza", "EndereçoImóvel", "Regional", "ValorTotal"), ";"); 
 	}
 	
-	$linhas = selectViewCNPJPrefNaoPrescrito($natureza, $pdo);
-	
-	if(!empty($linhas)){ 
-		foreach ($linhas as $linha){
-		
-			fputcsv($saida, $linha, ';');
-		
-		}
-	}
-}
-
-
-function gerarCSVCnpjPrefPrescrito($natureza, $pdo){
-	
-	ini_set('memory_limit', '-1');
-	$saida = fopen('php://output', 'w');
-	
-	if($natureza == "Mercantildat"){
-		fputcsv($saida, array("InscriçãoMercantil", "CpfCnpj", "RazãoSocial", "Endereço", "Situação", "TipoPessoa", "SOMA_PRESCRITO", "ANOS_PRESCRITO", "CDA_PRESCRITO"), ";"); 
-		
-	}elseif ($natureza == "Imobiliáriadat"){
-		fputcsv($saida, array("InscriçãoImobiliária", "Sequencial", "CpfCnpjProprietário", "NomeProprietário", "Natureza", "EndereçoImóvel", "Regional", "SOMA_PRESCRITO", "ANOS_PRESCRITO", "CDA_PRESCRITO"), ";"); 
-	}
-	
-	$linhas = selectViewCNPJPrefPrescrito($natureza, $pdo);
-	
-	if(!empty($linhas)){ 
-		foreach ($linhas as $linha){
-		
-			fputcsv($saida, $linha, ';');
-		
-		}
-	}
-}
-
-
-function gerarCSVCnpjPrefExigSuspensa($natureza, $pdo){
-	
-	ini_set('memory_limit', '-1');
-	$saida = fopen('php://output', 'w');
-	
-	if($natureza == "Mercantildat"){
-		fputcsv($saida, array("InscriçãoMercantil", "CpfCnpj", "RazãoSocial", "Endereço", "Situação", "TipoPessoa", "SOMA_EXIGSUSP", "ANOS_EXIGSUSP", "CDA_EXIGSUSP"), ";"); 
-		
-	}elseif ($natureza == "Imobiliáriadat"){
-		fputcsv($saida, array("InscriçãoImobiliária", "Sequencial", "CpfCnpjProprietário", "NomeProprietário", "Natureza", "EndereçoImóvel", "Regional", "SOMA_EXIGSUSP", "ANOS_EXIGSUSP", "CDA_EXIGSUSP"), ";"); 
-	}
-	
-	$linhas = selectViewCNPJPrefExigSusp($natureza, $pdo);
+	$linhas = selectViewCNPJPref($natureza, $pdo);
 	
 	if(!empty($linhas)){ 
 		foreach ($linhas as $linha){
