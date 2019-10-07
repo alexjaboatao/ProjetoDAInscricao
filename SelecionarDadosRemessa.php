@@ -384,8 +384,6 @@ function selectViewAnaliseRemessaCPFBrancoApenasNome($natureza, $pdo){
 		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
@@ -421,8 +419,6 @@ function somaCountViewAnaliseRemessaCPFBrancoApenasNome($natureza, $pdo){
 	} elseif ($natureza == "Mercantildat"){
 	
 		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
@@ -469,8 +465,6 @@ function selectViewAnaliseRemessaCPFInvalidoApenasNome($natureza, $pdo){
 	} elseif ($natureza == "Mercantildat"){
 	
 		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
@@ -527,8 +521,6 @@ function somaCountViewAnaliseRemessaCPFInvalidoApenasNome($natureza, $pdo){
 		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
@@ -583,8 +575,6 @@ function selectViewAnaliseRemessaCPFValidoApenasNome($natureza, $pdo){
 		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
@@ -637,8 +627,6 @@ function somaCountViewAnaliseRemessaCPFValidoApenasNome($natureza, $pdo){
 		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2017/' AND
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE '2018/' AND
@@ -651,6 +639,7 @@ function somaCountViewAnaliseRemessaCPFValidoApenasNome($natureza, $pdo){
 			AND CpfCnpj NOT LIKE '00.000.000/0000-00' 
 			AND CpfCnpj NOT LIKE '99.999.999/9999-99' 
 			AND (length(CpfCnpj)>=14 AND length(CpfCnpj)<=18) 
+			)
 			AND CpfCnpj NOT LIKE '10.377.679/0001-96'
 			AND viewCC.`Situação` NOT LIKE 'ATV ENCERRADA';";
 	
@@ -681,8 +670,6 @@ function selectViewAnaliseRemessaCPFBrancoNomeSobrenome($natureza, $pdo){
 	} elseif ($natureza == "Mercantildat"){
 	
 		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
@@ -720,8 +707,6 @@ function somaCountViewAnaliseRemessaCPFBrancoNomeSobrenome($natureza, $pdo){
 	} elseif ($natureza == "Mercantildat"){
 	
 		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
@@ -768,8 +753,6 @@ function selectViewAnaliseRemessaCPFInvalidoNomeSobrenome($natureza, $pdo){
 	} elseif ($natureza == "Mercantildat"){
 	
 		$sqlView = "SELECT InscriçãoMercantil, CpfCnpj, RazãoSocial, Endereço, Situação, TipoPessoa, SOMA_NAOPRESCRITO, ANOS_NAOPRESCRITO, CDA_NAOPRESCRITO FROM
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 
@@ -824,8 +807,6 @@ function somaCountViewAnaliseRemessaCPFInvalidoNomeSobrenome($natureza, $pdo){
 	} elseif ($natureza == "Mercantildat"){
 	
 		$sqlView = "SELECT SUM(SOMA_NAOPRESCRITO), count(SOMA_NAOPRESCRITO) FROM
-			view_Remessa_MercDAT AS viewCC 
-			WHERE
 			view_Remessa_MercDAT AS viewCC 
 			WHERE
 			viewCC.`ANOS_NAOPRESCRITO` NOT LIKE 'VALOR INFIMO' AND 

@@ -36,11 +36,25 @@
 								<tr width="80" style="font-size:12px" align="left" >
                                   <td>
 									<strong>QTD de Sequenciais/CMC: <?php ?></strong>
+									<strong style="font-size:13px; color: #F00;">
+										<?php  
+										$qtdeTotal = 0;
+										$somaTotal = 0;
+										
+										for($i=0;$i<count($colunasExercicios);$i++){
+											$retornoSelect = countSumViewAnaliseNaoInscricaoDemaisCNPJPrescritosComCDA($colunasExercicios[$i], $natureza, $pdo);
+											$qtdeTotal = $qtdeTotal + $retornoSelect[0][0];
+											$retornoSelect[0][0];
+											$somaTotal = $somaTotal + $retornoSelect[0][1];
+										}
+										echo $qtdeTotal;?>
+									</strong>
                                   </td>
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor Total da Inscrição: R$ <?php  ?></strong>
+									<strong>Valor Total da Inscrição: </strong><strong style="font-size:13px; color: #F00;">
+									<?php echo " R$ ".number_format($somaTotal,2,",",".");?></strong>
                                   </td>
                                 </tr>
                             </table>
@@ -103,11 +117,25 @@
 
                                   <td>
 									<strong>QTD de Sequenciais/CMC: <?php ?></strong>
+									<strong style="font-size:13px; color: #F00;">
+										<?php  
+										$qtdeTotal = 0;
+										$somaTotal = 0;
+										
+										for($i=0;$i<count($colunasExercicios);$i++){
+											$retornoSelect = countSumViewAnaliseNaoInscricaoDemaisCNPJPrescritosSemCDA($colunasExercicios[$i], $natureza, $pdo);
+											$qtdeTotal = $qtdeTotal + $retornoSelect[0][0];
+											$retornoSelect[0][0];
+											$somaTotal = $somaTotal + $retornoSelect[0][1];
+										}
+										echo $qtdeTotal;?>
+									</strong>
                                   </td>
                                 </tr>
                                 <tr width="80" style="font-size:12px">
                                   <td>
-									<strong>Valor Total da Inscrição: R$ <?php  ?></strong>
+									<strong>Valor Total da Inscrição: </strong><strong style="font-size:13px; color: #F00;">
+									<?php echo " R$ ".number_format($somaTotal,2,",",".");?></strong>
                                   </td>
                                 </tr>
                             </table>

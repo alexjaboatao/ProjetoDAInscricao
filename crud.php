@@ -18,9 +18,13 @@ function criarTabelaBaseAcompInsc($arquivo, $natureza, $pdo){
 			
 		}else{
 			
-			$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
+			if($i == 10){
+				$segunda = $segunda."`".$arquivo[$i]."` decimal (10,2) NOT NULL,";
+			}else{
+				$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
+				
+			}
 		}
-						
 	}
 
 	$segunda = $segunda." PRIMARY KEY ($arquivo[0])";
@@ -48,9 +52,12 @@ function criarTabelaBaseAcompRemessa($arquivo, $natureza, $pdo){
 			
 		}else{
 			
-			$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
-		}
-						
+			if($i == 10){
+				$segunda = $segunda."`".$arquivo[$i]."` decimal (10,2) NOT NULL,";
+			}else{
+				$segunda = $segunda."`".$arquivo[$i]."` varchar(255) NOT NULL,";
+			}
+		}			
 	}
 
 	$segunda = $segunda." PRIMARY KEY ($arquivo[0])";
