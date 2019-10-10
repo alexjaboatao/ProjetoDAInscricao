@@ -17,351 +17,360 @@
 
 		$pdo = conectar();
 		$natureza = $_POST["natureza"];
-		$arrayexerciciosEDados = buscarColunasExercicosEDados($pdo, $natureza);
 		
-		$select = selectGerarViewInscricao($natureza, $arrayexerciciosEDados);
-		criarViewInscricao($select, $natureza, $pdo);
-				
+		if($tableExists = $pdo->query("SHOW TABLES LIKE 'baseacompanhamento$natureza'")->rowCount() > 0){
+			
+			$arrayexerciciosEDados = buscarColunasExercicosEDados($pdo, $natureza);
+			$select = selectGerarViewInscricao($natureza, $arrayexerciciosEDados);
+			criarViewInscricao($select, $natureza, $pdo);
+			
+		?>
+		
+			<div class="container">
+				<h5 align="center"><strong>Débitos Para Inscrição em Dívida Ativa <strong style="color: #C00"><?php echo $natureza; ?></strong></strong></h5><hr>
+				<div class="card">
+					<div class="card-header" align="center">
+						<h5><strong>Inscrição - Cadastro Completo</strong></h4></strong></h5>
+					</div>
+					 <div class="card-body" align="center">
+					   <div class="float-left" style="margin-left:2%">
+						   <div class="card" style="width: 21rem; margin-top:20px;">
+							  <h6 class="card-header">Débitos<br> Sem Interrupção Prescricional</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Com CPF Válido</li>
+										<li>Com Nome e pelo menos um Sobrenome</li>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 21rem; margin-top:20px;">
+							  <h6 class="card-header">Débitos<br> Desparcelados</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Com CPF Válido</li>
+										<li>Com Nome e pelo menos um Sobrenome</li>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
+							  <h6 class="card-header">Débitos <br>Relançados</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									   <ul>
+										<li>Com CPF Válido</li>
+										<li>Com Nome e pelo menos um Sobrenome</li>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+					   
+					 </div>
+					 <div align="center">
+						<form action="TelaResultadosCadastroCompletoEAN.php" method="post">
+							<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+							<button id="btnFetch" type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
+						</form>
+					</div>
+					<br>
+				 </div>  
+					
+			</div>  
+			<br>
+			<div class="container">
+						
+				<div class="card">
+					<div class="card-header" align="center">
+						<h5><strong>Análise para Inscrição</strong></h4></strong></h5>
+					</div>
+					 <div class="card-body" align="center">
+					   <div class="float-left" style="margin-left:2%">
+						   <div class="card" style="width: 21rem; margin-top:20px;">
+							 <h6 class="card-header">CPF/CNPJ em Branco +<br> Apenas 1 Nome</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 21rem; margin-top:20px;">
+							  <h6 class="card-header">CPF/CNPJ Inválido +<br> Apenas 1 Nome</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									  <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
+							 <h6 class="card-header">CPF/CNPJ Válido +<br> Apenas 1 Nome</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
+										<li>Excluído o CNPJ da Prefeitura</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:2%">
+						   <div class="card" style="width: 21rem; margin-top:20px;">
+							  <h6 class="card-header">CPF/CNPJ em Branco +<br> Nome e Sobrenome</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 21rem; margin-top:20px;">
+							  <h6 class="card-header">CPF/CNPJ Inválido +<br> Nome e Sobrenome</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
+							  <h6 class="card-header">CDA's <br>Baixadas</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									  <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
+										<li>Excluído o CNPJ da Prefeitura</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+
+					 </div>
+					 <div align="center">
+						<form action="TelaResultadosAnaliseInscricoesEAN.php" method="post">
+							<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+							<button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
+						</form>
+					</div>
+					<br>
+				 </div>  
+					
+			</div> 
+			<br>
+			<div class="container">
+					   
+				<div class="card">
+					<div class="card-header" align="center">
+						<h5><strong>Análise para Não Inscrição</strong></h4></strong></h5>
+					</div>
+					 <div class="card-body" align="center">
+					   <div class="float-left" style="margin-left:2.4%">
+						   <div class="card" style="width: 15rem; margin-top:20px;">
+							  <h6 class="card-header">Débitos abaixo do Valor Ínfimo</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos abaixo do Valor Ínfimo</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <hr>
+										<form action="TelaResultadosValorInfimoEAN.php" method="post">
+											<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
+										</form>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1.7%;">
+						   <div class="card" style="width: 15rem; margin-top:20px;">
+							  <h6 class="card-header">CMC com ATIVIDADE ENCERRADA com Débitos</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br><br>
+									   <hr>
+										<form action="TelaResultadosAtividadeEncerradaEAN.php" method="post">
+											<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
+										</form>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1.7%;">
+						   <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
+							  <h6 class="card-header">Débitos Passíveis de Prescrição</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br>
+									   <hr>
+										<form action="TelaResultadosPassiveisPrescricaoEAN.php" method="post">
+											<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
+										</form>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1.7%;">
+						   <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
+							  <h6 class="card-header">Débitos com Exigibilidade Suspensa</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Com Suspensão de Exigibilidade</li>
+									   </ul>
+									   <br><br><br><br>
+									   <hr>
+										<form action="TelaResultadosAnaliseNaoInscricoesEAN.php" method="post">
+											<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+											<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
+										</form>
+							  </div>
+						   </div>
+					   </div>
+					 </div>
+					<br>
+				 </div>  
+			</div> 
+			<br>
+			<div class="container">
+					   
+				<div class="card">
+					<div class="card-header" align="center">
+						<h5><strong>Débitos Lançados CNPJ da Prefeitura</strong></h4></strong></h5>
+					</div>
+					 <div class="card-body" align="center">
+					   <div class="float-left" style="margin-left:2%">
+						   <div class="card" style="width: 15rem; margin-top:20px;">
+							  <h6 class="card-header">Débitos Não Prescrito Acima do Ínfimo</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos acima do Valor Ínfimo</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 15rem; margin-top:20px;">
+							  <h6 class="card-header">Débitos Não Prescritos Abaixo do valor Ínfimo</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+								<h6>Critérios:</h6>
+										<ul>
+										<li>Débitos Não Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Soma dos Débitos abaixo do Valor Ínfimo</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
+							  <h6 class="card-header">Débitos <br>Prescritos</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Prescritos</li>
+										<li>Débitos Sem Suspensão de Exigibilidade</li>
+										<li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
+									   </ul>
+									   <br><br>
+							  </div>
+						   </div>
+					   </div>
+					   <div class="float-left" style="margin-left:1%;">
+						   <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
+							  <h6 class="card-header">Débitos Com Exigibilidade Suspensa</h6>
+							  <div class="card-body" align="left" style="font-size:11px;">
+									<h6>Critérios:</h6>
+									   <ul>
+										<li>Débitos Com Suspensão de Exigibilidade</li>
+									   </ul>
+									   <br><br><br><br><br>
+							  </div>
+						   </div>
+					   </div>
+
+					 </div>
+					 <div align="center">
+						<form action="TelaResultadosLancadoPrefEAN.php" method="post">
+							<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
+							<button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
+						</form>
+					</div>
+					<br>
+				 </div>  
+					
+			</div> 
+			<br>
+		
+		<?php
+		
+		}else{
+			echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Remessa';alert('Carregue uma Base de Acompanhamento EAN através da opção Upload dos Arquivos');</script>" ;
+		}		
 			
 	 ?>
 
- <div class="container">
- 		    <h5 align="center"><strong>Débitos Para Inscrição em Dívida Ativa <strong style="color: #C00"><?php echo $natureza; ?></strong></strong></h5><hr>
-  	<div class="card">
-    	<div class="card-header" align="center">
-            <h5><strong>Inscrição - Cadastro Completo</strong></h4></strong></h5>
-        </div>
-         <div class="card-body" align="center">
-           <div class="float-left" style="margin-left:2%">
-               <div class="card" style="width: 21rem; margin-top:20px;">
-                  <h6 class="card-header">Débitos<br> Sem Interrupção Prescricional</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                  	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Com CPF Válido</li>
-                            <li>Com Nome e pelo menos um Sobrenome</li>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 21rem; margin-top:20px;">
-                  <h6 class="card-header">Débitos<br> Desparcelados</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                   	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Com CPF Válido</li>
-                            <li>Com Nome e pelo menos um Sobrenome</li>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
-                  <h6 class="card-header">Débitos <br>Relançados</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                           <ul>
-                            <li>Com CPF Válido</li>
-                            <li>Com Nome e pelo menos um Sobrenome</li>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-           
-         </div>
-         <div align="center">
-            <form action="TelaResultadosCadastroCompletoEAN.php" method="post">
-            	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-				<button id="btnFetch" type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
-            </form>
-        </div>
-        <br>
-     </div>  
-        
-</div>  
-<br>
- <div class="container">
- 		    
-  	<div class="card">
-    	<div class="card-header" align="center">
-            <h5><strong>Análise para Inscrição</strong></h4></strong></h5>
-        </div>
-         <div class="card-body" align="center">
-           <div class="float-left" style="margin-left:2%">
-               <div class="card" style="width: 21rem; margin-top:20px;">
-                 <h6 class="card-header">CPF/CNPJ em Branco +<br> Apenas 1 Nome</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                  	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-						   <br>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 21rem; margin-top:20px;">
-                  <h6 class="card-header">CPF/CNPJ Inválido +<br> Apenas 1 Nome</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                   	<h6>Critérios:</h6>
-                          <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-						   <br>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
-                 <h6 class="card-header">CPF/CNPJ Válido +<br> Apenas 1 Nome</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
-                            <li>Excluído o CNPJ da Prefeitura</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:2%">
-               <div class="card" style="width: 21rem; margin-top:20px;">
-                  <h6 class="card-header">CPF/CNPJ em Branco +<br> Nome e Sobrenome</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                  	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-						   <br>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 21rem; margin-top:20px;">
-                  <h6 class="card-header">CPF/CNPJ Inválido +<br> Nome e Sobrenome</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                   	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-						   <br>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 21rem; margin-top:20px; font-size:12px ">
-                  <h6 class="card-header">CDA's <br>Baixadas</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                          <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente a Ativ. Encerrada (Mercantil)</li>
-                            <li>Excluído o CNPJ da Prefeitura</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-
-         </div>
-         <div align="center">
-            <form action="TelaResultadosAnaliseInscricoesEAN.php" method="post">
-              	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-                <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
-            </form>
-        </div>
-        <br>
-     </div>  
-        
-</div> 
-<br>
- <div class="container">
- 		   
-  	<div class="card">
-    	<div class="card-header" align="center">
-            <h5><strong>Análise para Não Inscrição</strong></h4></strong></h5>
-        </div>
-         <div class="card-body" align="center">
-           <div class="float-left" style="margin-left:2.4%">
-               <div class="card" style="width: 15rem; margin-top:20px;">
-                  <h6 class="card-header">Débitos abaixo do Valor Ínfimo</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                  	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos abaixo do Valor Ínfimo</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-						   <hr>
-							<form action="TelaResultadosValorInfimoEAN.php" method="post">
-								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
-							</form>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1.7%;">
-               <div class="card" style="width: 15rem; margin-top:20px;">
-                  <h6 class="card-header">CMC com ATIVIDADE ENCERRADA com Débitos</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                   	<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                           <br><br>
-						   <hr>
-							<form action="TelaResultadosAtividadeEncerradaEAN.php" method="post">
-								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
-							</form>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1.7%;">
-               <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <h6 class="card-header">Débitos Passíveis de Prescrição</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                           <br>
-						   <hr>
-							<form action="TelaResultadosPassiveisPrescricaoEAN.php" method="post">
-								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
-							</form>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1.7%;">
-               <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <h6 class="card-header">Débitos com Exigibilidade Suspensa</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Com Suspensão de Exigibilidade</li>
-                           </ul>
-                           <br><br><br><br>
-						   <hr>
-							<form action="TelaResultadosAnaliseNaoInscricoesEAN.php" method="post">
-								<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-								<button type="submit" class="btn btn-primary btn-lg btn-block" style="font-size:12px;" >Consultar Resultados</button>
-							</form>
-                  </div>
-               </div>
-           </div>
-
-         </div>
-        <br>
-     </div>  
-        
-</div> 
-<br>
- <div class="container">
- 		   
-  	<div class="card">
-    	<div class="card-header" align="center">
-            <h5><strong>Débitos Lançados CNPJ da Prefeitura</strong></h4></strong></h5>
-        </div>
-         <div class="card-body" align="center">
-           <div class="float-left" style="margin-left:2%">
-               <div class="card" style="width: 15rem; margin-top:20px;">
-                  <h6 class="card-header">Débitos Não Prescrito Acima do Ínfimo</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                  	<h6>Critérios:</h6>
-                    	   <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos acima do Valor Ínfimo</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 15rem; margin-top:20px;">
-                  <h6 class="card-header">Débitos Não Prescritos Abaixo do valor Ínfimo</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                   	<h6>Critérios:</h6>
-                            <ul>
-                            <li>Débitos Não Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Soma dos Débitos abaixo do Valor Ínfimo</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <h6 class="card-header">Débitos <br>Prescritos</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Prescritos</li>
-                            <li>Débitos Sem Suspensão de Exigibilidade</li>
-                            <li>Situação Diferente de Ativ. Encerrada (Mercantil)</li>
-                           </ul>
-                           <br><br>
-                  </div>
-               </div>
-           </div>
-           <div class="float-left" style="margin-left:1%;">
-               <div class="card" style="width: 15rem; margin-top:20px; font-size:12px ">
-                  <h6 class="card-header">Débitos Com Exigibilidade Suspensa</h6>
-                  <div class="card-body" align="left" style="font-size:11px;">
-                 		<h6>Critérios:</h6>
-                           <ul>
-                            <li>Débitos Com Suspensão de Exigibilidade</li>
-                           </ul>
-                           <br><br><br><br><br>
-                  </div>
-               </div>
-           </div>
-
-         </div>
-         <div align="center">
-            <form action="TelaResultadosLancadoPrefEAN.php" method="post">
-              	<input type="hidden" name="natureza" value="<?php echo $natureza; ?>">
-                <button type="submit" class="btn btn-primary btn-lg btn-block" style="width:50%;">Consultar Resultados</button>
-            </form>
-        </div>
-        <br>
-     </div>  
-        
-</div> 
-<br>
+ 
 </html>

@@ -10,7 +10,6 @@
 <?php 
 require_once "menu.php";
 require_once "conexao.php";
-require_once "selecionarDados.php";
 ?>
     <div class="container">
     	<h2 class="font-italic" align="center" style="color:#e3f2fd;"><strong>Análise da Dívida Ativa</strong></h2>

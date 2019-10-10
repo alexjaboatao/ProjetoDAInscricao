@@ -37,7 +37,7 @@
                  		<table >
 								<tr width="60" style="font-size:12px" align="left" >
                                   <td>
-									<strong>QTD de Sequenciais/CMC: <?php ?></strong>
+									<strong>QTD de Débitos: <?php ?></strong>
 									<strong style="font-size:13px; color: #F00;">
 										<?php  
 										$qtdeTotal = 0;
@@ -65,8 +65,8 @@
                               <thead>
                                 <tr>
                                   <th scope="col" style="text-align: center">Exercício</th>
-                                  <th scope="col" style="text-align: center">Qtd Seq/CMC</th>
-                                  <th scope="col" style="text-align: center">Inscrever Seq/CMC</th>
+                                  <th scope="col" style="text-align: center">Qtd Débitos</th>
+                                  <th scope="col" style="text-align: center">Seq/CMC</th>
                                 </tr>
                               </thead>
                               <tbody align="center">

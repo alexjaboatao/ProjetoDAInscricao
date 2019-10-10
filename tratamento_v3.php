@@ -14,13 +14,19 @@
 		$nomearquivo = $_FILES["arquivo"]["tmp_name"];	
 		$tipo = $_POST["tipo"];
 		
-		
 		if (!empty($nomearquivo)){
 			
 			$localizacao = substr($_FILES["arquivo"]["name"], strlen($_FILES["arquivo"]["name"])-7,3);
 			$objeto = fopen ($nomearquivo, 'r');		
 			$arquivo = fgetcsv($objeto, 0, ";");
-			$natureza = utf8_encode(substr ($arquivo[0], 9, 11));
+			
+			if($localizacao == "EAN" or $localizacao == "DAT"){
+				$natureza = utf8_encode(substr ($arquivo[0], 9, 11));
+			}elseif(substr($_FILES["arquivo"]["name"], 0, 16) == "ListCerAINFRACAO"){
+				$natureza = "autoConfDat";
+			}
+			
+			
 			$pdo = conectar();
 				
 			if($localizacao == "EAN" && $tipo == "Inscrição"){
@@ -31,15 +37,19 @@
 				
 				carregarTabelaRemessa($natureza, $pdo, $arquivo, $objeto);
 				
-			} else {
+			} elseif(substr($_FILES["arquivo"]["name"], 0, 16) == "ListCerAINFRACAO" && $tipo == "Remessa"){
+			
+				carregarTabelaRemessaAutoConf($natureza, $pdo, $arquivo, $objeto);
+			
+			}else {
 				
 				if($tipo == "Inscrição"){
 					
-					echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Inscrição';alert('Selecione o arquivo Base de Acompanhamento EAN');</script>" ;
+					echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Inscrição';alert('Selecione o arquivo correto!');</script>" ;
 						
 				}elseif($tipo == "Remessa"){
 					
-					echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Remessa';alert('Selecione o arquivo Base de Acompanhamento DAT');</script>" ;
+					echo "<script>window.location='TelaEnviarArquivo_v2.php?tipo=Remessa';alert('Selecione o arquivo correto!');</script>" ;
 				}
 				
 			}
@@ -66,6 +76,12 @@
 			incluirDadosBaseAcompRemessa($arquivo, $natureza, $objeto, $pdo);
 		
 			
+		}
+		
+		function carregarTabelaRemessaAutoConf($natureza, $pdo, $arquivo, $objeto){
+			
+			criarTabelaAutoConf($arquivo, $natureza, $pdo);
+			incluirDadosAutoConfRemessa ($arquivo, $natureza, $objeto, $pdo);
 		}
 
         ?>

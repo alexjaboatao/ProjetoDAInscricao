@@ -364,5 +364,153 @@ function deletarTabelaBaseAcompRemessa($natureza, $pdo){
 	echo "<script>alert('Tabela excluída!');</script>";
 	
 }
+
+
+function criarTabelaAutoConf($arquivo, $natureza, $pdo){
+	
+	$sql = utf8_encode("CREATE OR REPLACE TABLE base".$natureza." (
+			`$arquivo[0]` VARCHAR(255),
+			`$arquivo[1]` DATE,
+			`$arquivo[2]` VARCHAR(255),
+			`$arquivo[3]` DATE,
+			`$arquivo[4]` VARCHAR(255),
+			`$arquivo[5]` VARCHAR(255),
+			`$arquivo[6]` VARCHAR(255),
+			`$arquivo[7]` VARCHAR(255),
+			`$arquivo[8]` DATE,
+			`$arquivo[9]` VARCHAR(255),
+			`$arquivo[10]` DATE,
+			`$arquivo[11]` VARCHAR(255),
+			`$arquivo[12]` DOUBLE,
+			`$arquivo[13]` VARCHAR(255),
+			`$arquivo[14]` VARCHAR(255),
+			`$arquivo[15]` VARCHAR(255),
+			`$arquivo[16]` VARCHAR(255),
+			`$arquivo[17]` INT,
+			`$arquivo[18]` DOUBLE,
+			`$arquivo[19]` DOUBLE,
+			`$arquivo[20]` DOUBLE,
+			`$arquivo[21]` DOUBLE,
+			`$arquivo[22]` VARCHAR(255),
+			`$arquivo[23]` VARCHAR(255),
+			`$arquivo[24]` VARCHAR(255),
+			`$arquivo[25]` VARCHAR(255),
+			`$arquivo[26]` VARCHAR(255),
+			`$arquivo[27]` VARCHAR(255),
+			`$arquivo[28]` VARCHAR(255),
+			`$arquivo[29]` VARCHAR(255),
+			qtdAnosInscricao INT,
+			anoUltimoParcTratado INT,
+			analisePrescricao VARCHAR(255) 
+			)");
+			
+			$criarTabela = $pdo->prepare($sql);
+			$criarTabela->execute();
+			
+}
+
+function incluirDadosAutoConfRemessa ($arquivo, $natureza, $objeto, $pdo){
+	
+	$cont = count($arquivo);
+	$colunas = "";
+	for($i=0; $i< $cont; $i++){
+		$arquivoTratado = "`".$arquivo[$i]."`,";
+		  $colunas = $colunas.$arquivoTratado;
+
+	}
+
+	while(($arquivo1=fgetcsv($objeto, 0, ";"))!== false){
+		
+		$dataCertidao = implode( '-', array_reverse( explode( '/', $arquivo1[1])));
+		$dataJudicial = implode( '-', array_reverse( explode( '/', $arquivo1[3])));
+		$dataSituacao = implode( '-', array_reverse( explode( '/', $arquivo1[8])));
+		$dataBaixa = implode( '-', array_reverse( explode( '/', $arquivo1[10])));
+		$valorBaixa = str_replace(",",".", str_replace(".","", $arquivo1[12]));
+		$valorTotalAtual = str_replace(",",".", str_replace(".","", $arquivo1[18]));
+		$valorPricipal = str_replace(",",".", str_replace(".","", $arquivo1[19]));
+		$valorMulta = str_replace(",",".", str_replace(".","", $arquivo1[20]));
+		$valorJuros = str_replace(",",".", str_replace(".","", $arquivo1[21]));
+		$dataNegativacao = implode( '-', array_reverse( explode( '/', $arquivo1[29] )));
+		
+		// Saber qual foi o ano do último parcelamento
+		
+		echo $anoUltimoParc = substr(trim($arquivo1[27]), -3, -1)."<br>";
+		
+		if ($arquivo1[27] == ""){
+			$anoUltimoParcTratado = 0;
+		} elseif($anoUltimoParc > 50 && $arquivo1[27] != ""){
+			$anoUltimoParcTratado = "19".$anoUltimoParc;
+		}else{
+			$anoUltimoParcTratado = "20".$anoUltimoParc;
+		}
+		
+		// Quantidade de anos que foi criado a CDA?
+		
+		$data = $arquivo1[1];								
+		$datatratada1 = explode("/",$data);
+		$data1 = ($datatratada1[2]."-".$datatratada1[1]."-".$datatratada1[0]);
+		$data2 = date("Y-m-d");
+		$dif = strtotime($data2) - strtotime($data1);
+		$qtdAnosInscricao = floor(($dif / 86400)/365);
+
+		// Analisar a Prescrição e quais os Auto/ Not/ Conf podem ser remetidos à Procuradoria/////////////////////////////			
+		
+		if (($qtdAnosInscricao >= 5 && $anoUltimoParcTratado == 0 && $arquivo1[6] == "Secretaria" && $arquivo1[7] == "Em Aberto") or 
+			($qtdAnosInscricao >= 5 && $anoUltimoParcTratado < 2015 && $arquivo1[6] == "Secretaria" && $arquivo1[7] == "Em Aberto")){
+			$analisar = "Prescrito";
+		} elseif ($arquivo1[6] == "Secretaria" && $arquivo1[7] != "Em Aberto") {
+			$analisar = "Quitada, Parcelada ou Exigibilidade suspensa";
+		} elseif ($arquivo1[6] == "Procuradoria"){
+			$analisar = "Procuradoria";
+		} elseif ($arquivo1[6] == "Judicial"){
+			$analisar = "Judicial";
+		} else {
+			$analisar = "Analisar remessa";
+		}
+		
+		
+		$valores = "";
+		$row = count($arquivo1);
+		for($a=0; $a<$row;$a++){
+			$valores = $valores."'".$arquivo1[$a]."',";
+		}
+		
+		$insert = utf8_encode("insert into base".$natureza." ($colunas"."`qtdAnosInscricao`,"."`anoUltimoParcTratado`,"."`analisePrescricao`) values ('$arquivo1[0]','$dataCertidao','$arquivo1[2]','$arquivo1[3]','$arquivo1[4]','$arquivo1[5]','$arquivo1[6]','$arquivo1[7]','$dataJudicial','$arquivo1[9]','$dataBaixa','$arquivo1[11]','$valorBaixa','$arquivo1[13]','$arquivo1[14]','".addslashes($arquivo1[15])."','$arquivo1[16]','$arquivo1[17]','$valorTotalAtual','$valorPricipal','$valorMulta','$valorJuros','$arquivo1[22]','$arquivo1[23]','$arquivo1[24]','$arquivo1[25]','$arquivo1[26]','$arquivo1[27]','$arquivo1[28]','$dataNegativacao','$qtdAnosInscricao','$anoUltimoParcTratado','$analisar')");
+				
+		$inserir = $pdo->prepare($insert);
+		$inserir->execute();
+		
+		}
+	}
+
+/*function criarTabelaAutoConf($arquivo, $natureza, $pdo){
+	
+	$primeira = "CREATE TABLE CertDiv".$natureza."(";
+	$cont = count($arquivo)- 1;
+	$segunda = "";
+	
+	for ($i=0;$i<$cont;$i++){
+		
+		if($i == 0){
+			if($arquivo[$i] == "ValorTotalAtual" or $arquivo[$i] == "ValorPrincipal" or $arquivo[$i] == "Multa" or $arquivo[$i] == "Juros" or $arquivo[$i] == "ValorBaixa"){
+				
+				
+			}elseif($arquivo[$i] == "Data Certidão" or $arquivo[$i] == "Data Situação" or $arquivo[$i] == "Data Baixa"){
+				
+				
+			}elseif($arquivo[$i] == "Histórico Parcelamento"){
+				
+				
+			}else{
+				
+				
+			}
+			
+		}else{
+			
+		}
+		
+	}
+}*/
 	
 ?>
